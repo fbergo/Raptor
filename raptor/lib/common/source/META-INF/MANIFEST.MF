@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Created-By: Ant 1.4.1
+
+Name: free/freechess/timeseal/TimesealingSocket$a.class
+Digest-Algorithms: SHA-1 MD5 
+SHA-1-Digest: upr/YdW8Doay0VRfruxrRvSAegE=
+MD5-Digest: cwu25AwCoSsETDUJ/TB9FA==
+
+Name: free/freechess/timeseal/TimesealingSocket.class
+Digest-Algorithms: SHA-1 MD5 
+SHA-1-Digest: HmW9NkcRdz3qJzd1CwrBG/A5BXk=
+MD5-Digest: z3/lR3jGxJZhY8B0ANhoyQ==
+
+Name: free/a/a.class
+Digest-Algorithms: SHA-1 MD5 
+SHA-1-Digest: rgNB7ncvTr3OBP6CsAde/iS6Te0=
+MD5-Digest: TnWhJMgVgASBSyMUli+mKg==
+
+Name: free/a/b.class
+Digest-Algorithms: SHA-1 MD5 
+SHA-1-Digest: wfdxAyygK65C8G+PTYBpev5cN0Y=
+MD5-Digest: lrOXlTdzZF2AVveqs8TogQ==
+
+Name: free/a/c.class
+Digest-Algorithms: SHA-1 MD5 
+SHA-1-Digest: Gq6FnvNP4kpmUQFapsQnI/jbVGs=
+MD5-Digest: htgsXz8jRPPyJlLldSAcgg==
+
