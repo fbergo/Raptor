@@ -226,7 +226,7 @@ public class TimesealingSocket extends Socket
     }
 
     private volatile long initialTIme;
-    private static final String key = "TIMESTAMP|FICS timeseal implementation by Alexander Maryanovsky|" + System.getProperty("java.vendor") + " " + System.getProperty("java.version") + ", " + System.getProperty("os.name") + " " + System.getProperty("os.version") + "|";
+    private static final String key = "TIMESTAMP|iv|IHATEJIN|";
     private final c _flddo;
     private OutputStream _fldif;
     private volatile Thread a;
