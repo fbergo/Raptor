@@ -506,6 +506,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 									public void execute() {
 										startStopButton.setText(local
 												.getString("uciAnalW_54"));
+										bestMoves.clearTable();
 									}
 								});
 
