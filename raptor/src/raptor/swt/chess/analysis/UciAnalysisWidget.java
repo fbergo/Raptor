@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -51,9 +50,7 @@ import raptor.engine.uci.UCIInfo;
 import raptor.engine.uci.UCIInfoListener;
 import raptor.engine.uci.UCIMove;
 import raptor.engine.uci.info.BestLineFoundInfo;
-import raptor.engine.uci.info.CPULoadInfo;
 import raptor.engine.uci.info.DepthInfo;
-import raptor.engine.uci.info.NodesPerSecondInfo;
 import raptor.engine.uci.info.NodesSearchedInfo;
 import raptor.engine.uci.info.ScoreInfo;
 import raptor.engine.uci.info.TimeInfo;
@@ -64,7 +61,6 @@ import raptor.service.ThreadService;
 import raptor.service.UCIEngineService;
 import raptor.swt.RaptorTable;
 import raptor.swt.RaptorTable.RaptorTableAdapter;
-import raptor.swt.SWTUtils;
 import raptor.swt.chess.ChessBoardController;
 import raptor.swt.chess.EngineAnalysisWidget;
 import raptor.util.RaptorLogger;
@@ -76,14 +72,11 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 			.getLog(UciAnalysisWidget.class);
 
 	protected ChessBoardController controller;
-	protected Composite composite, topLine, labelComposite;
-	protected UCIEngine currentEngine;
-	protected Label nodesPerSecondLabel;
-	protected Label cpuPercentageLabel;
+	protected Composite composite, topLine;
+	protected UCIEngine engine;
 	protected Combo engineCombo;
 	protected RaptorTable bestMoves;
-	protected Button startStopButton, propertiesButton;
-	protected boolean isInStart = false;
+	protected Button startStopButton;
 	protected static L10n local = L10n.getInstance();
 	protected UCIInfoListener listener = new UCIInfoListener() {
 		public void engineSentBestMove(UCIBestMove uciBestMove) {
@@ -98,8 +91,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 							String time = null;
 							String depth = null;
 							String nodes = null;
-							String cpu = null;
-							String nps = null;
 							List<String> pvs = new ArrayList<String>(3);
 
 							for (UCIInfo info : infos) {
@@ -115,7 +106,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 									} else {
 										double scoreAsDouble = controller
 												.getGame().isWhitesMove()
-												|| !currentEngine
+												|| !engine
 														.isMultiplyBlackScoreByMinus1() ? scoreInfo
 												.getValueInCentipawns() / 100.0
 												: -scoreInfo
@@ -137,22 +128,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 									nodes = RaptorStringUtils.formatAsNumber(""
 											+ nodesSearchedInfo
 													.getNodesSearched() / 1000);
-								} else if (info instanceof CPULoadInfo) {
-									CPULoadInfo cpuLoad = (CPULoadInfo) info;
-									cpu = "CPU%: "
-											+ new BigDecimal(
-													cpuLoad.getCpuUsage() / 1000.0 * 100)
-													.setScale(
-															0,
-															BigDecimal.ROUND_HALF_UP)
-													.toString();
-								} else if (info instanceof NodesPerSecondInfo) {
-									NodesPerSecondInfo nodesPerSecondInfo = (NodesPerSecondInfo) info;
-									nps = "NPS(K): "
-											+ RaptorStringUtils.formatAsNumber(""
-													+ nodesPerSecondInfo
-															.getNodesPerSecond()
-													/ 1000);
 								} else if (info instanceof TimeInfo) {
 									TimeInfo timeInfo = (TimeInfo) info;
 									time = new BigDecimal(timeInfo
@@ -228,8 +203,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 								final String finalDepth = depth;
 								final String finalNodes = nodes;
 								final List<String> finalPVs = pvs;
-								final String finalCPU = cpu;
-								final String finalNPS = nps;
 
 								Raptor.getInstance()
 										.getDisplay()
@@ -314,18 +287,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 																				finalNodes);
 															}
 														}
-														if (finalCPU != null) {
-															cpuPercentageLabel
-																	.setText(finalCPU);
-															topLine.layout(
-																	true, true);
-														}
-														if (finalNPS != null) {
-															nodesPerSecondLabel
-																	.setText(finalNPS);
-															topLine.layout(
-																	true, true);
-														}
 													}
 												});
 							}
@@ -340,8 +301,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 					@Override
 					public void execute() {
 						bestMoves.clearTable();
-						nodesPerSecondLabel.setText("NPS(K):");
-						cpuPercentageLabel.setText("CPU%:");
 					}
 				});
 	}
@@ -352,8 +311,8 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
-				if (currentEngine != null) {
-					currentEngine.quit();
+				if (engine != null) {
+					engine.quit();
 				}
 			}
 		});
@@ -379,19 +338,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-
-		labelComposite = new Composite(topLine, SWT.NONE);
-		labelComposite.setLayout(SWTUtils
-				.createMarginlessRowLayout(SWT.VERTICAL));
-		nodesPerSecondLabel = new Label(labelComposite, SWT.LEFT);
-		nodesPerSecondLabel.setToolTipText(local.getString("uciAnalW_10"));
-		nodesPerSecondLabel.setText(StringUtils.rightPad(
-				local.getString("uciAnalW_11"), 15));
-
-		cpuPercentageLabel = new Label(labelComposite, SWT.LEFT);
-		cpuPercentageLabel.setText(StringUtils.rightPad(
-				local.getString("uciAnalW_12"), 10));
-		cpuPercentageLabel.setToolTipText(local.getString("uciAnalW_30"));
 
 		startStopButton = new Button(topLine, SWT.FLAT);
 		startStopButton.setText(local.getString("uciAnalW_31"));
@@ -455,7 +401,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		});
 
 		updateEnginesCombo();
-		// updateCustomButtons();
 
 		updateFromPrefs();
 		return composite;
@@ -487,10 +432,10 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 						}
 					}
 				});
-		if (currentEngine != null) {
+		if (engine != null) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
-					currentEngine.quit();
+					engine.quit();
 				}
 			});
 		}
@@ -500,28 +445,19 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		this.controller = controller;
 	}
 
-	public void start() {
-		if (composite.isVisible()) {
-			start(false);
-		}
-	}
-
 	public void stop() {
-		if (currentEngine != null) {
+		if (engine != null) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
-					if (currentEngine.isConnected()) {
-						currentEngine.stop();
-						currentEngine.isReady();
-						Raptor.getInstance().getDisplay()
-								.asyncExec(new RaptorRunnable() {
-									@Override
-									public void execute() {
-										startStopButton.setText(local
-												.getString("uciAnalW_44"));
-									}
-								});
-					}
+					engine.quit();
+					Raptor.getInstance().getDisplay()
+							.asyncExec(new RaptorRunnable() {
+								@Override
+								public void execute() {
+									startStopButton.setText(local
+											.getString("uciAnalW_44"));
+								}
+							});
 				}
 			});
 		}
@@ -530,15 +466,8 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 	public void updateFromPrefs() {
 		Color background = Raptor.getInstance().getPreferences()
 				.getColor(PreferenceKeys.BOARD_BACKGROUND_COLOR);
-		Color foreground = Raptor.getInstance().getPreferences()
-				.getColor(PreferenceKeys.BOARD_CONTROL_COLOR);
 		composite.setBackground(background);
 		topLine.setBackground(background);
-		labelComposite.setBackground(background);
-		nodesPerSecondLabel.setBackground(background);
-		nodesPerSecondLabel.setForeground(foreground);
-		cpuPercentageLabel.setBackground(background);
-		cpuPercentageLabel.setForeground(foreground);
 	}
 
 	public void updateToGame() {
@@ -547,50 +476,30 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		}
 	}
 
-	protected void start(boolean override) {
-		if (currentEngine != null && (!isInStart || override)) {
-			isInStart = true;
+	public void start() {
+		if (composite.isVisible()) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
 					if (LOG.isDebugEnabled()) {
 						LOG.debug("In UciAnalysisWidget.start("
-								+ currentEngine.getUserName() + ")");
+								+ engine.getUserName() + ")");
 					}
 					try {
-						if (!currentEngine.isConnected()) {
-							currentEngine.connect();
+						if (!engine.isConnected()) {
+							engine.connect();
 						}
-						Raptor.getInstance()
-								.getDisplay()
-								.asyncExec(
-										new RaptorRunnable(controller
-												.getConnector()) {
-											@Override
-											public void execute() {
-												clear();
-											}
-										});
-						currentEngine.stop();
 
 						if (controller.getGame().getVariant() == Variant.fischerRandom
-								&& currentEngine.hasOption("UCI_Chess960")) {
-							UCICheck opt = (UCICheck) currentEngine
+								&& engine.hasOption("UCI_Chess960")) {
+							UCICheck opt = (UCICheck) engine
 									.getOption("UCI_Chess960");
 							opt.setValue("true");
-						} else if (controller.getGame().getVariant() != Variant.fischerRandom
-								&& currentEngine.hasOption("UCI_Chess960")) {
-							UCICheck opt = (UCICheck) currentEngine
-									.getOption("UCI_Chess960");
-							opt.setValue("false");
 						}
 
-						currentEngine.newGame();
-						currentEngine.setPosition(controller.getGame().toFen(),
-								null);
-						currentEngine.isReady();
-						currentEngine.go(
-								currentEngine.getGoAnalysisParameters(),
-								listener);
+						engine.newGame();
+						engine.setPosition(controller.getGame().toFen(), null);
+						engine.isReady();
+						engine.go(engine.getGoAnalysisParameters(), listener);
 						Raptor.getInstance().getDisplay()
 								.asyncExec(new RaptorRunnable() {
 									@Override
@@ -603,7 +512,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 					} catch (Throwable t) {
 						LOG.error("Error starting engine", t);
 					} finally {
-						isInStart = false;
 					}
 				}
 			});
@@ -633,13 +541,13 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		ThreadService.getInstance().run(new Runnable() {
 			public void run() {
 				try {
-					currentEngine = UCIEngineService.getInstance().getEngine()
+					engine = UCIEngineService.getInstance().getEngine()
 							.getDeepCopy();
 					if (LOG.isDebugEnabled()) {
 						LOG.debug("Changing engine to : "
-								+ currentEngine.getUserName());
+								+ engine.getUserName());
 					}
-					start(true);
+					start();
 				} catch (Throwable t) {
 					LOG.error("Error switching chess engines", t);
 				}

@@ -323,16 +323,7 @@ public class UCIEngine {
 	 * Returns true if there is a connection to the UCIEngine, false otherwise.
 	 */
 	public boolean isConnected() {
-		if (process != null) {
-			try {
-				process.exitValue();
-				resetConnectionState();
-				return false;
-			} catch (IllegalThreadStateException itse) {
-				return true;
-			}
-		}
-		return false;
+		return process != null;
 	}
 
 	public boolean isDefault() {
@@ -682,6 +673,7 @@ public class UCIEngine {
 		try {
 			if (isConnected()) {
 				process.destroy();
+				process = null;
 
 				if (in != null) {
 					try {
