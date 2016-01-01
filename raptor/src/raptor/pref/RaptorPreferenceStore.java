@@ -1,7 +1,7 @@
 /**
  * New BSD License
  * http://www.opensource.org/licenses/bsd-license.php
- * Copyright 2009-2011 RaptorProject (http://code.google.com/p/raptor-chess-interface/)
+ * Copyright 2009-2016 RaptorProject (https://github.com/Raptor-Fics-Interface/Raptor)
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,6 @@ import raptor.Quadrant;
 import raptor.Raptor;
 import raptor.chat.ChatEvent;
 import raptor.chat.ChatType;
-import raptor.international.L10n;
 import raptor.layout.ClassicLayout;
 import raptor.service.SeekService.SeekType;
 import raptor.service.ThemeService;
@@ -70,14 +69,14 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 			Raptor.USER_RAPTOR_DIR, "raptor.properties");
 	// When changing this field, don't forget to update the values in
 	// raptor.updater.UpdateManager and the buildfile either
-	public static final int[] APP_VERSION = {0, 99, 0, 1};
+	public static final int[] APP_VERSION = { 0, 99, 0, 1 };
 	protected String defaultMonospacedFontName;
 	protected String defaultFontName;
 	protected int defaultLargeFontSize;
 	protected int defaultSmallFontSize;
 	protected int defaultMediumFontSize;
 	protected int defaultTinyFontSize;
-	private boolean isDefFontLoaded; 
+	private boolean isDefFontLoaded;
 
 	private IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 
@@ -125,13 +124,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 			}
 		}
 	};
-	
-	public static String getVersion() {
-		return "" + (APP_VERSION[0] == 0 ? "" : APP_VERSION[0])
-				+ "." + APP_VERSION[1]
-				+ (APP_VERSION[2] == 0 ? "" : "u" + APP_VERSION[2])
-				+ (APP_VERSION[3] == 0 ? "" : "f" + APP_VERSION[3]);
-	}
 
 	protected void resetChessSetIfDeleted() {
 		String chessSet = getString(BOARD_CHESS_SET_NAME);
@@ -146,11 +138,11 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		super();
 		FileInputStream fileIn = null;
 		FileOutputStream fileOut = null;
-		
+
 		try {
 			LOG.info("Loading RaptorPreferenceStore store "
 					+ PREFERENCE_PROPERTIES_FILE);
-			loadDefaults();			
+			loadDefaults();
 			if (RAPTOR_PROPERTIES.exists()) {
 				load(fileIn = new FileInputStream(RAPTOR_PROPERTIES));
 				resetChessSetIfDeleted();
@@ -303,46 +295,23 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 	}
 
 	public String getDefaultMonospacedFont() {
-		/*FontData[] fonts = Raptor.getInstance().getDisplay()
-				.getFontList(null, true);
-		String[] preferredFontNames = null;
-
-		String osName = System.getProperty("os.name");
-		if (osName.startsWith("Mac OS")) {
-			preferredFontNames = SWTUtils.OSX_MONOSPACED_FONTS;
-		} else if (osName.startsWith("Windows")) {
-			preferredFontNames = SWTUtils.WINDOWS_MONOSPACED_FONTS;
-		} else {
-			preferredFontNames = SWTUtils.OTHER_MONOSPACED_FONTS;
-		}
-
-		String result = null;
-		outer: for (int i = 0; i < preferredFontNames.length; i++) {
-			for (FontData fontData : fonts) {
-				if (fontData.getName().equalsIgnoreCase(preferredFontNames[i])) {
-					result = preferredFontNames[i];
-					break outer;
-				}
-			}
-		}
-		if (result == null) {
-			result = "Courier";
-		}*/
 		if (OSUtils.isLikelyOSX())
-            return "Monaco";
+			return "Monaco";
 		else if (OSUtils.isLikelyWindows())
 			return "Lucida Console";
-        else {  
-        	if(!isDefFontLoaded) {
-        			isDefFontLoaded = Raptor.getInstance().getDisplay().loadFont(Raptor.RESOURCES_DIR+"Inconsolata.ttf");            
-                    Font fnt = new Font(Raptor.getInstance().getDisplay(), "Inconsolata", 15, SWT.NORMAL);
-                    Raptor.getInstance().getFontRegistry()
-					.put(CHAT_OUTPUT_FONT, fnt.getFontData());
-                    Raptor.getInstance().getFontRegistry()
-					.put(CHAT_INPUT_FONT, fnt.getFontData());       
-            }
-            return "Inconsolata";
-        }
+		else {
+			if (!isDefFontLoaded) {
+				isDefFontLoaded = Raptor.getInstance().getDisplay()
+						.loadFont(Raptor.RESOURCES_DIR + "Inconsolata.ttf");
+				Font fnt = new Font(Raptor.getInstance().getDisplay(),
+						"Inconsolata", 15, SWT.NORMAL);
+				Raptor.getInstance().getFontRegistry()
+						.put(CHAT_OUTPUT_FONT, fnt.getFontData());
+				Raptor.getInstance().getFontRegistry()
+						.put(CHAT_INPUT_FONT, fnt.getFontData());
+			}
+			return "Inconsolata";
+		}
 	}
 
 	protected FontData[] zoomFont(String key, double zoomFactor) {
@@ -420,21 +389,22 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 	}
 
 	public void applyDefaultTheme() {
-		Theme theme = ThemeService.getInstance().getTheme("Raptor");		
+		Theme theme = ThemeService.getInstance().getTheme("Raptor");
 		for (String propertyName : theme.getProperties().keySet()) {
 			setDefault(propertyName, theme.getProperties().get(propertyName));
-		}		
+		}
 	}
 
 	public void applyDefaultLayout() {
 		Map<String, String> map = new ClassicLayout()
-				.getPreferenceAdjustments();		
+				.getPreferenceAdjustments();
 		for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
 			String value = stringStringEntry.getValue();
 			if (value == null) {
 				setToDefault(stringStringEntry.getKey());
 			} else {
-				setDefault(stringStringEntry.getKey(), stringStringEntry.getValue());
+				setDefault(stringStringEntry.getKey(),
+						stringStringEntry.getValue());
 			}
 		}
 	}
@@ -445,18 +415,15 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		defaultMonospacedFontName = getDefaultMonospacedFont();
 
 		setDefaultMonitorBasedSizes();
-		
+
 		// Action
 		setDefault(ACTION_SEPARATOR_SEQUENCE, 400);
 
-		// App settings.		
-		setDefault(APP_NAME, "Raptor "+getVersion()+" ("
-				+System.getProperty("java.vendor")+" " 
-				+System.getProperty("java.version")+"; "
-				+System.getProperty("os.name")+"; " + L10n.currentLocale.getISO3Language()+")");
-		putValue("app-version", getVersion());	
+		// App settings.
+		setDefault(APP_NAME, "Raptor 1.0 beta");
+		putValue("app-version", "1.0 beta");
 		putValue("app-update", "true");
-		
+
 		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS,
 				!OSUtils.isLikelyWindowsXP());
 		setDefault(APP_SASH_WIDTH, 8);
@@ -471,7 +438,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		PreferenceConverter.setDefault(this, APP_STATUS_BAR_COLOR, new RGB(0,
 				0, 0));
 		setDefault(APP_HOME_URL,
-				"http://code.google.com/p/raptor-chess-interface/");
+				"https://github.com/Raptor-Fics-Interface/Raptor");
 		setDefault(APP_SOUND_ENABLED, true);
 		setDefault(APP_USER_TAGS,
 				"+Partner,-Partner,Cool,Dupe,Friend,Jerk,Lagger,Noob,Premover,Troll,Strange");
@@ -490,18 +457,10 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(APP_IS_LOGGING_CONSOLE, false);
 		setDefault(APP_IS_LOGGING_PERSON_TELLS, false);
 		setDefault(APP_IS_LOGGING_CHANNEL_TELLS, false);
-		setDefault(PreferenceKeys.APP_SHOW_STATUS_BAR, false);		
-		
+		setDefault(PreferenceKeys.APP_SHOW_STATUS_BAR, false);
+
 		// Layout 1 settings.
 		setDefault(APP_WINDOW_BOUNDS, new Rectangle(0, 0, -1, -1));
-		// setDefault(APP_QUAD9_QUAD12345678_SASH_WEIGHTS, new int[] { 10, 90
-		// });
-		// setDefault(APP_QUAD1_QUAD2345678_SASH_WEIGHTS, new int[] { 50, 50 });
-		// setDefault(APP_QUAD2345_QUAD678_SASH_WEIGHTS, new int[] { 70, 30 });
-		// setDefault(APP_QUAD2_QUAD3_QUAD4_QUAD5_SASH_WEIGHTS, new int[] { 25,
-		// 25, 25, 25 });
-		// setDefault(APP_QUAD67_QUAD8_SASH_WEIGHTS, new int[] { 70, 30 });
-		// setDefault(APP_QUAD6_QUAD7_SASH_WEIGHTS, new int[] { 50, 50 });
 		setDefault(APP_ZOOM_FACTOR, 1.0);
 
 		if (OSUtils.isLikelyWindows() && !OSUtils.isLikelyWindows7()) {
@@ -569,11 +528,10 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(BOARD_SQUARE_BACKGROUND_IMAGE_EFFECT,
 				SquareBackgroundImageEffect.RandomCrop.toString());
 		setDefault(BOARD_TRAVERSE_WITH_MOUSE_WHEEL, true);
-		
-		
-		PreferenceConverter
-				.setDefault(this, BOARD_LIGHT_SQUARE_SOLID_BACKGROUND_COLOR,
-						new RGB(178, 180, 78));
+
+		PreferenceConverter.setDefault(this,
+				BOARD_LIGHT_SQUARE_SOLID_BACKGROUND_COLOR,
+				new RGB(178, 180, 78));
 		PreferenceConverter.setDefault(this,
 				BOARD_DARK_SQUARE_SOLID_BACKGROUND_COLOR, new RGB(94, 145, 91));
 
@@ -605,7 +563,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		PreferenceConverter.setDefault(this, BOARD_PREMOVES_FONT,
 				new FontData[] { new FontData(defaultFontName,
 						defaultTinyFontSize, 0) });
-		
+
 		// Controller button preferences.
 		setDefault(PLAYING_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION,
 				PlayingMouseAction.None.toString());
@@ -644,7 +602,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 				InactiveMouseAction.None.toString());
 		setDefault(INACTIVE_CONTROLLER + LEFT_DOUBLE_CLICK_MOUSE_BUTTON_ACTION,
 				InactiveMouseAction.None.toString());
-		
+
 		// BugArena
 		setDefault(BUG_ARENA_PARTNERS_INDEX, 0);
 		setDefault(BUG_ARENA_MAX_PARTNERS_INDEX,
@@ -704,17 +662,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(GAMES_TABLE_SHOW_NONSTANDARD, true);
 		setDefault(GAMES_TABLE_SHOW_PRIVATE, true);
 
-		// Arrows
-		// PreferenceConverter.setDefault(this, ARROW_OBS_OPP_COLOR, new
-		// RGB(255,
-		// 0, 255));
-		// PreferenceConverter
-		// .setDefault(this, ARROW_MY_COLOR, new RGB(0, 0, 255));
-		// PreferenceConverter.setDefault(this, ARROW_PREMOVE_COLOR, new RGB(0,
-		// 0,
-		// 255));
-		// PreferenceConverter.setDefault(this, ARROW_OBS_COLOR,
-		// new RGB(0, 0, 255));
 		setDefault(ARROW_SHOW_ON_OBS_AND_OPP_MOVES, true);
 		setDefault(ARROW_SHOW_ON_MOVE_LIST_MOVES, true);
 		setDefault(ARROW_SHOW_ON_MY_PREMOVES, true);
@@ -723,19 +670,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(ARROW_FADE_AWAY_MODE, true);
 		setDefault(ARROW_WIDTH_PERCENTAGE, 15);
 
-		// Highlights
-		// PreferenceConverter.setDefault(this, HIGHLIGHT_OBS_OPP_COLOR, new
-		// RGB(
-		// 255, 0, 255));
-		// PreferenceConverter.setDefault(this, HIGHLIGHT_MY_COLOR, new RGB(0,
-		// 0,
-		// 255));
-		// PreferenceConverter.setDefault(this, HIGHLIGHT_PREMOVE_COLOR, new
-		// RGB(
-		// 0, 0, 255));
-		// PreferenceConverter.setDefault(this, HIGHLIGHT_OBS_COLOR, new RGB(0,
-		// 0,
-		// 255));
 		setDefault(HIGHLIGHT_SHOW_ON_OBS_AND_OPP_MOVES, true);
 		setDefault(HIGHLIGHT_SHOW_ON_MOVE_LIST_MOVES, true);
 		setDefault(HIGHLIGHT_SHOW_ON_MY_PREMOVES, true);
@@ -744,9 +678,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(HIGHLIGHT_ANIMATION_DELAY, 1000L);
 		setDefault(HIGHLIGHT_WIDTH_PERCENTAGE, 3);
 
-		// Game Results
-		// PreferenceConverter.setDefault(this, RESULTS_COLOR, new RGB(255, 0,
-		// 0));
 		PreferenceConverter.setDefault(this, RESULTS_FONT,
 				new FontData[] { new FontData(defaultMonospacedFontName, 40,
 						SWT.BOLD) });
@@ -781,111 +712,9 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		PreferenceConverter.setDefault(this, CHAT_OUTPUT_FONT,
 				new FontData[] { new FontData(defaultMonospacedFontName,
 						defaultMediumFontSize, 0) });
-		
+
 		applyDefaultTheme();
 		applyDefaultLayout();
-
-		//
-		// PreferenceConverter.setDefault(this, BOARD_BACKGROUND_COLOR, new
-		// RGB(0,
-		// 0, 0));
-		// PreferenceConverter.setDefault(this, BOARD_COORDINATES_COLOR, new
-		// RGB(
-		// 0, 0, 0));
-		// PreferenceConverter.setDefault(this, BOARD_ACTIVE_CLOCK_COLOR, new
-		// RGB(
-		// 0, 255, 0));
-		// PreferenceConverter.setDefault(this, BOARD_INACTIVE_CLOCK_COLOR,
-		// new RGB(128, 128, 128));
-		// PreferenceConverter.setDefault(this, BOARD_CONTROL_COLOR, new
-		// RGB(128,
-		// 128, 128));
-		// PreferenceConverter.setDefault(this, BOARD_LAG_OVER_20_SEC_COLOR,
-		// new RGB(255, 0, 0));
-		// PreferenceConverter.setDefault(this, BOARD_PIECE_JAIL_LABEL_COLOR,
-		// new RGB(0, 255, 0));
-		// PreferenceConverter.setDefault(this,
-		// BOARD_PIECE_JAIL_BACKGROUND_COLOR,
-		// new RGB(0, 0, 0));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.CHALLENGE
-		// + "-color", new RGB(100, 149, 237));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.CSHOUT
-		// + "-color", new RGB(221, 160, 221));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.SHOUT
-		// + "-color", new RGB(221, 160, 221));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.KIBITZ
-		// + "-color", new RGB(100, 149, 237));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.WHISPER
-		// + "-color", new RGB(100, 149, 237));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.OUTBOUND
-		// + "-color", new RGB(128, 128, 128));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.PARTNER_TELL
-		// + "-color", new RGB(255, 0, 0));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.DRAW_REQUEST
-		// + "-color", new RGB(255, 0, 0));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.ABORT_REQUEST
-		// + "-color", new RGB(255, 0, 0));
-		// PreferenceConverter
-		// .setDefault(this, CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO
-		// + ChatType.TELL + "-color", new RGB(255, 0, 0));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.CHANNEL_TELL
-		// + "-" + 1 + "-color", new RGB(255, 200, 0));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.CHANNEL_TELL
-		// + "-" + 4 + "-color", new RGB(0, 255, 0));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.CHANNEL_TELL
-		// + "-" + 50 + "-color", new RGB(255, 175, 175));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.CHANNEL_TELL
-		// + "-" + 53 + "-color", new RGB(255, 0, 255));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.INTERNAL
-		// + "-color", new RGB(255, 0, 0));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO
-		// + ChatType.PLAYING_STATISTICS + "-color", new RGB(100,
-		// 149, 237));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.QTELL
-		// + "-color", new RGB(128, 128, 128));
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.FINGER
-		// + "-color", new RGB(128, 128, 128));
-		//
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.HISTORY
-		// + "-color", new RGB(128, 128, 128));
-		//
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.GAMES
-		// + "-color", new RGB(128, 128, 128));
-		//
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.BUGWHO_ALL
-		// + "-color", new RGB(128, 128, 128));
-		//
-		// PreferenceConverter.setDefault(this,
-		// CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO
-		// + ChatType.NOTIFICATION_ARRIVAL + "-color", new RGB(
-		// 255, 0, 0));
-		//
-		// PreferenceConverter.setDefault(this, CHAT_PROMPT_COLOR, new RGB(128,
-		// 128, 128));
-		// PreferenceConverter.setDefault(this, CHAT_QUOTE_UNDERLINE_COLOR,
-		// new RGB(0, 255, 0));
-		// PreferenceConverter.setDefault(this, CHAT_LINK_UNDERLINE_COLOR,
-		// new RGB(11, 133, 238));
 
 		// Bug house buttons settings.
 		PreferenceConverter.setDefault(this, BUG_BUTTONS_FONT,
@@ -967,69 +796,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(FICS_TERTIARY_PORT, 5000);
 		setDefault(FICS_TERTIARY_TIMESEAL_ENABLED, true);
 		setDefault(FICS_REMOVE_BLANK_LINES, false);
-		
-		// Fics Timeseal
-		// Timeseal 2 forced for OSX, Timeseal 1 for other OSes.
-		// For some reason windows/linux have timeseal2 issues.
-		setDefault(FICS_TIMESEAL_IS_TIMESEAL_2, OSUtils.isLikelyOSX());
-
-		// Bics
-		setDefault(BICS_KEEP_ALIVE, false);
-		setDefault(BICS_AUTO_CONNECT, false);
-		setDefault(BICS_LOGIN_SCRIPT, "set autoflag 1\n\n");
-		setDefault(BICS_AUTO_CONNECT, false);
-		setDefault(BICS_PROFILE, "Primary");
-		setDefault(BICS_CLOSE_TABS_ON_DISCONNECT, false);
-		setDefault(BICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP, true);
-		setDefault(BICS_KEEP_ALIVE_COMMAND,
-				"set busy is away from the keyboard.");
-		setDefault(BICS_CHANNEL_COMMANDS,
-				"+channel $channel,-channel $channel,in $channel");
-		setDefault(BICS_PERSON_QUICK_COMMANDS,
-				"finger $person,follow $person,partner $person");
-		setDefault(
-				BICS_PERSON_COMMANDS,
-				"history $person,journal $person,"
-						+ "observe $person,oldpstat $userName $person,pstat $userName $person,"
-						+ "stored $person,variables $person,separator,"
-						+ "+censor $person,-censor $person,+gnotify $person,-gnotify $person,+noplay $person,-noplay $person,+notify $person,-notify $person,separator,"
-						+ "match $person 1 0 zh,match $person 3 0 zh,match $person 1 0 zh fr,match $person 3 0 zh fr,match $person 2 0 bughouse,"
-						+ "match $person 2 0 bughouse fr, match $person 2 0 bughouse w5");
-		setDefault(BICS_GAME_COMMANDS,
-				"observe $gameId,allobservers $gameId,moves $gameId");
-		setDefault(
-				BICS_REGULAR_EXPRESSIONS_TO_BLOCK,
-				"defprompt set\\.,gameinfo set\\.,ms set\\.,startpos set\\.,"
-						+ "pendinfo set\\.,nowrap set\\.,smartmove set\\.,premove set\\.,"
-						+ "Style 12 set\\.,Your prompt will now not show the time\\.,"
-						+ "You will not see seek ads\\.,You will not see seek ads.\\.,"
-						+ "Auto-flagging enabled\\.,lock set\\.");
-
-		// Bics Primary
-		setDefault(BICS_PRIMARY_USER_NAME, "");
-		setDefault(BICS_PRIMARY_PASSWORD, "");
-		setDefault(BICS_PRIMARY_IS_NAMED_GUEST, false);
-		setDefault(BICS_PRIMARY_IS_ANON_GUEST, false);
-		setDefault(BICS_PRIMARY_SERVER_URL, "chess.sipay.ru");
-		setDefault(BICS_PRIMARY_PORT, 5000);
-		setDefault(BICS_PRIMARY_TIMESEAL_ENABLED, true);
-		// Bics Secondary
-		setDefault(BICS_SECONDARY_USER_NAME, "");
-		setDefault(BICS_SECONDARY_PASSWORD, "");
-		setDefault(BICS_SECONDARY_IS_NAMED_GUEST, false);
-		setDefault(BICS_SECONDARY_IS_ANON_GUEST, false);
-		setDefault(BICS_SECONDARY_SERVER_URL, "chess.sipay.ru");
-		setDefault(BICS_SECONDARY_PORT, 5000);
-		setDefault(BICS_SECONDARY_TIMESEAL_ENABLED, true);
-		// Bics Tertiary
-		setDefault(BICS_TERTIARY_USER_NAME, "");
-		setDefault(BICS_TERTIARY_PASSWORD, "");
-		setDefault(BICS_TERTIARY_IS_NAMED_GUEST, false);
-		setDefault(BICS_TERTIARY_IS_ANON_GUEST, false);
-		setDefault(BICS_TERTIARY_SERVER_URL, "chess.sipay.ru");
-		setDefault(BICS_TERTIARY_PORT, 5000);
-		setDefault(BICS_TERTIARY_TIMESEAL_ENABLED, true);
-		setDefault(BICS_REMOVE_BLANK_LINES, false);
+		setDefault(FICS_TIMESEAL_IS_TIMESEAL_2, true);
 
 		// Quadrant settings.
 		setDefault("fics-" + MAIN_TAB_QUADRANT, Quadrant.VI);
@@ -1043,40 +810,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault("fics-" + GAME_CHAT_TAB_QUADRANT, Quadrant.VI);
 		setDefault("fics-" + GAMES_TAB_QUADRANT, Quadrant.VIII);
 		setDefault("fics-" + GAME_BOT_QUADRANT, Quadrant.VIII);
-
-		setDefault("fics2-" + MAIN_TAB_QUADRANT, Quadrant.VII);
-		setDefault("fics2-" + CHANNEL_TAB_QUADRANT, Quadrant.VII);
-		setDefault("fics2-" + PERSON_TAB_QUADRANT, Quadrant.VII);
-		setDefault("fics2-" + REGEX_TAB_QUADRANT, Quadrant.VII);
-		setDefault("fics2-" + PARTNER_TELL_TAB_QUADRANT, Quadrant.VII);
-		setDefault("fics2-" + BUG_WHO_QUADRANT, Quadrant.VIII);
-		setDefault("fics2-" + SEEK_TABLE_QUADRANT, Quadrant.VIII);
-		setDefault("fics2-" + BUG_BUTTONS_QUADRANT, Quadrant.IX);
-		setDefault("fics2-" + GAME_CHAT_TAB_QUADRANT, Quadrant.VII);
-		setDefault("fics2-" + GAMES_TAB_QUADRANT, Quadrant.VIII);
-		setDefault("fics2-" + GAME_BOT_QUADRANT, Quadrant.VIII);
-
-		setDefault("bics-" + MAIN_TAB_QUADRANT, Quadrant.VI);
-		setDefault("bics-" + CHANNEL_TAB_QUADRANT, Quadrant.VI);
-		setDefault("bics-" + PERSON_TAB_QUADRANT, Quadrant.VI);
-		setDefault("bics-" + REGEX_TAB_QUADRANT, Quadrant.VI);
-		setDefault("bics-" + PARTNER_TELL_TAB_QUADRANT, Quadrant.VI);
-		setDefault("bics-" + BUG_WHO_QUADRANT, Quadrant.VIII);
-		setDefault("bics-" + SEEK_TABLE_QUADRANT, Quadrant.VIII);
-		setDefault("bics-" + BUG_BUTTONS_QUADRANT, Quadrant.IX);
-		setDefault("bics-" + GAME_CHAT_TAB_QUADRANT, Quadrant.VI);
-		setDefault("bics-" + GAMES_TAB_QUADRANT, Quadrant.VIII);
-
-		setDefault("bics2-" + MAIN_TAB_QUADRANT, Quadrant.VII);
-		setDefault("bics2-" + CHANNEL_TAB_QUADRANT, Quadrant.VII);
-		setDefault("bics2-" + PERSON_TAB_QUADRANT, Quadrant.VII);
-		setDefault("bics2-" + REGEX_TAB_QUADRANT, Quadrant.VII);
-		setDefault("bics2-" + PARTNER_TELL_TAB_QUADRANT, Quadrant.VII);
-		setDefault("bics2-" + BUG_WHO_QUADRANT, Quadrant.VIII);
-		setDefault("bics2-" + SEEK_TABLE_QUADRANT, Quadrant.VIII);
-		setDefault("bics2-" + BUG_BUTTONS_QUADRANT, Quadrant.IX);
-		setDefault("bics2-" + GAME_CHAT_TAB_QUADRANT, Quadrant.VII);
-		setDefault("bics2-" + GAMES_TAB_QUADRANT, Quadrant.VIII);
 
 		LOG.info("Loaded defaults " + PREFERENCE_PROPERTIES_FILE);
 	}

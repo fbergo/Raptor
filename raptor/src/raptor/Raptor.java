@@ -1,7 +1,7 @@
 /**
  * New BSD License
  * http://www.opensource.org/licenses/bsd-license.php
- * Copyright 2009-2011 RaptorProject (http://code.google.com/p/raptor-chess-interface/)
+ * Copyright 2009-2016 RaptorProject (https://github.com/Raptor-Fics-Interface/Raptor)
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -39,7 +39,6 @@ import raptor.pref.PreferenceKeys;
 import raptor.pref.RaptorPreferenceStore;
 import raptor.service.ActionScriptService;
 import raptor.service.AliasService;
-import raptor.service.CheckUpdates;
 import raptor.service.ChessBoardCacheService;
 import raptor.service.ConnectorService;
 import raptor.service.DictionaryService;
@@ -58,7 +57,6 @@ import raptor.swt.RaptorCursorRegistry;
 import raptor.swt.RaptorImageRegistry;
 import raptor.util.BrowserUtils;
 import raptor.util.FileUtils;
-import raptor.util.OSUtils;
 import raptor.util.RaptorLogger;
 import raptor.util.RaptorRunnable;
 

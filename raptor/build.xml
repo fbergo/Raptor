@@ -10,7 +10,7 @@
 	    IMPORTANT to run the application you will need to specify your environment here.
 	    This is the folder located in projectFiles/swt to use for your compile,run.
 	  -->
-	<property name="swtEnv" value="Linux_x86_GTK2" />
+	<property name="swtEnv" value="MacCocoa64" />
 
 	<property name="version" value="v99" />
 	<property name="dist.dir" value="install" />
@@ -207,55 +207,6 @@
 			<arg value="internet-enable" />
 			<arg value="-yes" />
 			<arg value="${uploads.dir}/Raptor_${version}_OS_X_Cocoa_x86_64.dmg" />
-		</exec>
-	</target>
-
-	<target name="osxCocoa32DMG" depends="init" description="Builds Raptor dmg for Cocoa32">
-		<delete dir="${install.dir}" />
-		<delete file="${uploads.dir}/Raptor_${version}_OS_X_Cocoa32.dmg" />
-
-		<property name="swtEnv" value="MacCocoa32" />
-
-		<antcall target="install" />
-
-		<mkdir dir="${install.dir}/Raptor.app" />
-		<copy todir="${install.dir}/Raptor.app">
-			<fileset dir="projectFiles/Raptor.app.cocoa32">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-
-		<move todir="${install.dir}/Raptor.app/Contents/MacOS">
-			<fileset dir="${install.dir}">
-				<include name="**/*" />
-				<exclude name="Raptor.app/" />
-			</fileset>
-		</move>
-
-		<chmod dir="${install.dir}/Raptor.app" perm="755" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/raptor" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Chrisdesign" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Eyes" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Fantasy" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Portable" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Spacial" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Wiki" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/sounds" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/square" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/defaultHomeDir" includes="**/*" perm="777" />
-
-		<exec executable="hdiutil">
-			<arg value="create" />
-			<arg value="-srcfolder" />
-			<arg value="${install.dir}/Raptor.app" />
-			<arg value="${uploads.dir}/Raptor_${version}_OS_X_Cocoa_32.dmg" />
-		</exec>
-
-		<exec executable="hdiutil">
-			<arg value="internet-enable" />
-			<arg value="-yes" />
-			<arg value="${uploads.dir}/Raptor_${version}_OS_X_Cocoa_32.dmg" />
 		</exec>
 	</target>
 

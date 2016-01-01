@@ -1,7 +1,7 @@
 /**
  * New BSD License
  * http://www.opensource.org/licenses/bsd-license.php
- * Copyright 2009-2011 RaptorProject (http://code.google.com/p/raptor-chess-interface/)
+ * Copyright 2009-2016 RaptorProject (https://github.com/Raptor-Fics-Interface/Raptor)
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -170,27 +170,10 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 	protected List<Action> onlyEnabledOnConnectActions = new ArrayList<Action>(
 			20);
 
-	/**
-	 * Raptor allows connecting to fics twice with different profiles. Override
-	 * short name and change it to fics2 so users can distinguish the two.
-	 * 
-	 * This is also used to handle partnerships in simul bug.
-	 * 
-	 * If this is fics 1 it will contain the fics2 connector. If this is fics2
-	 * it will be null.
-	 */
-	protected FicsConnector fics2 = null;
-
 	protected Object extendedCensorSync = new Object();
 	protected static final String EXTENDED_CENSOR_FILE_NAME = Raptor.USER_RAPTOR_HOME_PATH
 			+ "/fics/extendedCensor.txt";
 
-	/**
-	 * This is used by the fics2 connector. You need a reference back to fics1
-	 * to handle simul bug partnerships. If this is fics2 it will contain the
-	 * fics1 connector, otherwise its null.
-	 */
-	protected FicsConnector fics1 = null;
 	protected GameBotService gameBotService = new GameBotService(this);
 	protected GameBotParser gameBotParser = new GameBotParser(this);
 	protected String partnerOnConnect;
@@ -203,18 +186,12 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 	public FicsConnector(IcsConnectorContext context) {
 		super(context);
 		context.getParser().setConnector(this);
-		initFics2();
 		createMenuActions();
 
 	}
 
 	protected String getInitialTimesealString() {
-		return "TIMESTAMP|iv|OpenSeal|";
-		// if (getPreferences().getBoolean(FICS_TIMESEAL_IS_TIMESEAL_2)) {
-		// return "TIMESEAL2|OpenSeal|OpenSeal|";
-		// } else {
-		// return "TIMESTAMP|iv|OpenSeal|";
-		// }
+		return "TIMESEAL2|OpenSeal|OpenSeal|";
 	}
 
 	public GameBotService getGameBotService() {
@@ -252,12 +229,6 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (fics2 != null) {
-			fics2.dispose();
-			fics2 = null;
-		}
-		// stop circular refs for easier gc.
-		fics1 = null;
 	}
 
 	/**
@@ -310,15 +281,6 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 				}
 			}
 		}
-		// Check the fics2 connection.
-		if (!result && fics2 != null && fics2.isConnected()) {
-			for (Game game : getGameService().getAllActiveGames()) {
-				if (game.isInState(Game.PLAYING_STATE)) {
-					result = true;
-					break;
-				}
-			}
-		}
 		return result;
 	}
 
@@ -346,43 +308,9 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 			}
 
 			if (event.getType() == ChatType.PARTNERSHIP_CREATED) {
-				if (fics2 != null
-						&& isConnected()
-						&& fics2.isConnected()
-						&& StringUtils.equalsIgnoreCase(
-								IcsUtils.stripTitles(event.getSource()).trim(),
-								fics2.getUserName())) {
-					// here we are in fics1 where a partnership was created.
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("Created simul bughouse partnership with "
-								+ fics2.getUserName());
-					}
-					isSimulBugConnector = true;
-					simulBugPartnerName = event.getSource();
-					fics2.isSimulBugConnector = true;
-					fics2.simulBugPartnerName = getUserName();
-				} else if (fics2 == null
-						&& fics1 != null
-						&& fics1.isConnected()
-						&& isConnected()
-						&& StringUtils.equalsIgnoreCase(
-								IcsUtils.stripTitles(event.getSource()).trim(),
-								fics1.getUserName())) {
-					// here we are in fics2 when a partnership was created.
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("Created simul bughouse partnership with "
-								+ fics1.getUserName());
-					}
-					isSimulBugConnector = true;
-					simulBugPartnerName = event.getSource();
-					fics1.isSimulBugConnector = true;
-					fics1.simulBugPartnerName = getUserName();
-				}
 
-				if (!isSimulBugConnector
-						&& getPreferences()
-								.getBoolean(
-										PreferenceKeys.FICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP)) {
+				if (getPreferences().getBoolean(
+						PreferenceKeys.FICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP)) {
 					SWTUtils.openBugButtonsWindowItem(this);
 				}
 				if (getPreferences().getBoolean(
@@ -396,16 +324,6 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Partnership destroyed. Resetting partnership information.");
-				}
-
-				// clear out the fics2 or fics1 depending on what this is.
-				if (fics2 != null) {
-					fics2.isSimulBugConnector = false;
-					fics2.simulBugPartnerName = null;
-				}
-				if (fics1 != null) {
-					fics1.isSimulBugConnector = false;
-					fics1.simulBugPartnerName = null;
 				}
 
 				// Remove bug buttons if up displayed you have no partner.
@@ -475,19 +393,19 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 			}
 		}
 	}
-	
+
 	/**
-	 * Creates menu with fics server actions all of which can be invoked
-	 * only after connecting to the server
+	 * Creates menu with fics server actions all of which can be invoked only
+	 * after connecting to the server
 	 */
-	private void createFicsMenuActions() {		
+	private void createFicsMenuActions() {
 		// create fics actions menu
 		RaptorAction[] scripts = ActionScriptService.getInstance().getActions(
 				Category.IcsCommands);
 		for (final RaptorAction raptorAction : scripts) {
 			Action action = new Action(raptorAction.getName()) {
 				public void run() {
-					raptorAction.setConnectorSource(FicsConnector.this);					
+					raptorAction.setConnectorSource(FicsConnector.this);
 					raptorAction.run();
 				}
 			};
@@ -516,28 +434,30 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 			}
 		}
 	}
-	
+
 	public void showLoginDialog() {
-		Raptor.getInstance().getWindow().getShell().getDisplay().syncExec(
-				new RaptorRunnable() {
+		Raptor.getInstance().getWindow().getShell().getDisplay()
+				.syncExec(new RaptorRunnable() {
 					@Override
 					public void execute() {
-						IcsLoginDialog dialog = new IcsLoginDialog(
-								context.getPreferencePrefix(),
-								local.getString("ficsConn7"));
+						IcsLoginDialog dialog = new IcsLoginDialog(context
+								.getPreferencePrefix(), local
+								.getString("ficsConn7"));
 						dialog.open();
 						getPreferences().setValue(
 								context.getPreferencePrefix() + "profile",
 								dialog.getSelectedProfile());
-						autoConnectAction.setChecked(getPreferences().getBoolean(
-								context.getPreferencePrefix() + "auto-connect"));
+						autoConnectAction.setChecked(getPreferences()
+								.getBoolean(
+										context.getPreferencePrefix()
+												+ "auto-connect"));
 						getPreferences().save();
 						if (dialog.wasLoginPressed()) {
 							connect();
 						}
 					}
-				});			
-		
+				});
+
 	}
 
 	/**
@@ -548,7 +468,7 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 		connectAction = new Action(local.getString("ficsConn6")) {
 			@Override
 			public void run() {
-				showLoginDialog();				
+				showLoginDialog();
 			}
 		};
 
@@ -633,110 +553,6 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 			}
 		};
 
-		fics2.connectAction = new Action(local.getString("ficsConn18")) {
-			@Override
-			public void run() {
-				IcsLoginDialog dialog = new IcsLoginDialog(
-						context.getPreferencePrefix(),
-						local.getString("ficsConn19"));
-				if (isConnected()) {
-					dialog.setShowingSimulBug(true);
-				}
-				dialog.setShowingAutoLogin(false);
-				dialog.open();
-				if (autoConnectAction != null) {
-					autoConnectAction.setChecked(getPreferences().getBoolean(
-							context.getPreferencePrefix() + "auto-connect"));
-				}
-				if (dialog.wasLoginPressed()) {
-					fics2.connect(dialog.getSelectedProfile());
-
-					if (dialog.isSimulBugLogin()) {
-						// This is used to automatically send the partner
-						// message after login.
-						// When the partnership is received a
-						// PARTNERSHIP_CREATED message
-						// is fired and the names of the bug partners are set in
-						// that see the overridden publishEvent for how that
-						// works.
-						fics2.partnerOnConnect = userName;
-						// Force bug-open to get the partnership message.
-						sendMessage("set bugopen on");
-					}
-				}
-			}
-		};
-
-		Action fics2DisconnectAction = new Action(local.getString("ficsConn8")) {
-			@Override
-			public void run() {
-				fics2.disconnect();
-			}
-		};
-
-		Action fics2ReconnectAction = new Action(local.getString("ficsConn9")) {
-			@Override
-			public void run() {
-				fics2.disconnect();
-				// Sleep half a second for everything to adjust.
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException ie) {
-				}
-				fics2.connect(fics2.currentProfileName);
-			}
-		};
-
-		Action fics2SeekTableAction = new Action(local.getString("ficsConn10")) {
-			@Override
-			public void run() {
-				SWTUtils.openSeekTableWindowItem(fics2);
-			}
-		};
-
-		Action fics2GamesAction = new Action(local.getString("ficsConn13")) {
-			@Override
-			public void run() {
-				SWTUtils.openGamesWindowItem(fics2);
-			}
-		};
-
-		Action fics2bugwhoAction = new Action(local.getString("ficsConn11")) {
-			@Override
-			public void run() {
-				SWTUtils.openBugWhoWindowItem(fics2);
-			}
-		};
-
-		Action fics2RegexTabAction = new Action(local.getString("ficsConn14")) {
-			@Override
-			public void run() {
-				RegularExpressionEditorDialog regExDialog = new RegularExpressionEditorDialog(
-						Raptor.getInstance().getWindow().getShell(),
-						getShortName() + local.getString("ficsConn15"),
-						local.getString("ficsConn16"));
-				String regEx = regExDialog.open();
-				if (StringUtils.isNotBlank(regEx)) {
-					final RegExController controller = new RegExController(
-							fics2, regEx);
-					ChatConsoleWindowItem chatConsoleWindowItem = new ChatConsoleWindowItem(
-							controller);
-					Raptor.getInstance().getWindow()
-							.addRaptorWindowItem(chatConsoleWindowItem, false);
-					ChatUtils
-							.appendPreviousChatsToController((ChatConsole) chatConsoleWindowItem
-									.getControl());
-				}
-			}
-		};
-
-		Action fics2BugbuttonsAction = new Action(local.getString("ficsConn20")) {
-			@Override
-			public void run() {
-				SWTUtils.openBugButtonsWindowItem(fics2);
-			}
-		};
-
 		Action showSeekDialogAction = new Action(local.getString("ficsConn21")) {
 			public void run() {
 				FicsSeekDialog dialog = new FicsSeekDialog(Raptor.getInstance()
@@ -748,7 +564,7 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 			}
 		};
 
-		actions = new MenuManager(local.getString("ficsConn22"));		
+		actions = new MenuManager(local.getString("ficsConn22"));
 
 		connectAction.setEnabled(true);
 		disconnectAction.setEnabled(false);
@@ -770,23 +586,6 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 		onlyEnabledOnConnectActions.add(showSeekDialogAction);
 		onlyEnabledOnConnectActions.add(gamesAction);
 
-		fics2.connectAction.setEnabled(true);
-		fics2DisconnectAction.setEnabled(false);
-		fics2ReconnectAction.setEnabled(false);
-		fics2SeekTableAction.setEnabled(false);
-		fics2bugwhoAction.setEnabled(false);
-		fics2RegexTabAction.setEnabled(false);
-		fics2BugbuttonsAction.setEnabled(false);
-		fics2GamesAction.setEnabled(false);
-
-		fics2.onlyEnabledOnConnectActions.add(fics2bugwhoAction);
-		fics2.onlyEnabledOnConnectActions.add(fics2DisconnectAction);
-		fics2.onlyEnabledOnConnectActions.add(fics2ReconnectAction);
-		fics2.onlyEnabledOnConnectActions.add(fics2RegexTabAction);
-		fics2.onlyEnabledOnConnectActions.add(fics2SeekTableAction);
-		fics2.onlyEnabledOnConnectActions.add(fics2BugbuttonsAction);
-		fics2.onlyEnabledOnConnectActions.add(fics2GamesAction);
-
 		autoConnectAction.setChecked(getPreferences().getBoolean(
 				context.getPreferencePrefix() + "auto-connect"));
 
@@ -794,24 +593,6 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 		ficsMenu.add(disconnectAction);
 		ficsMenu.add(reconnectAction);
 		ficsMenu.add(autoConnectAction);
-
-		MenuManager fics2Menu = new MenuManager(
-				local.getString("bicsConnector16"));
-		MenuManager fics2TabsMenu = new MenuManager(
-				local.getString("ficsConn23"));
-		fics2Menu.add(fics2.connectAction);
-		fics2Menu.add(fics2DisconnectAction);
-		fics2Menu.add(fics2ReconnectAction);
-		fics2Menu.add(new Separator());
-		fics2TabsMenu.add(fics2GamesAction);
-		fics2TabsMenu.add(fics2SeekTableAction);
-		fics2TabsMenu.add(new Separator());
-		fics2TabsMenu.add(fics2BugbuttonsAction);
-		fics2TabsMenu.add(fics2bugwhoAction);
-		fics2TabsMenu.add(new Separator());
-		fics2TabsMenu.add(fics2RegexTabAction);
-		fics2Menu.add(fics2TabsMenu);
-		ficsMenu.add(fics2Menu);
 
 		ficsMenu.add(new Separator());
 		ficsMenu.add(actions);
@@ -824,62 +605,12 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 		tabsMenu.add(new Separator());
 		tabsMenu.add(regexTabAction);
 		ficsMenu.add(tabsMenu);
-		linksMenu = new MenuManager(local.getString("ficsConn24"));		
+		linksMenu = new MenuManager(local.getString("ficsConn24"));
 		ficsMenu.add(linksMenu);
 		MenuManager problems = new MenuManager(local.getString("ficsConn25"));
 		addProblemActions(problems);
 		ficsMenu.add(problems);
 		ficsMenu.add(showSeekDialogAction);
-	}
-
-	protected void initFics2() {
-		fics2 = new FicsConnector(
-				new IcsConnectorContext(new IcsParser(false)) {
-					@Override
-					public String getDescription() {
-						return local.getString("ficsConn26");
-					}
-
-					@Override
-					public String getShortName() {
-						return "fics2";
-					}
-				}) {
-
-			/**
-			 * Override not needed.
-			 */
-			@Override
-			public PreferencePage getRootPreferencePage() {
-				return null;
-			}
-
-			/**
-			 * Override not needed.
-			 */
-			@Override
-			public PreferenceNode[] getSecondaryPreferenceNodes() {
-				return null;
-			}
-
-			/**
-			 * Override not needed.
-			 */
-			@Override
-			protected void createMenuActions() {
-			}
-
-			/**
-			 * Override the initFics2 method to do nothing to avoid the
-			 * recursion.
-			 */
-			@Override
-			protected void initFics2() {
-
-			}
-
-		};
-		fics2.fics1 = this;
 	}
 
 	protected boolean isSmartMoveEnabled() {
@@ -911,7 +642,8 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 								.toString())
 						|| option.equals(PlayingMouseAction.RandomMove
 								.toString()) || option
-						.equals(PlayingMouseAction.RandomRecapture.toString()));
+							.equals(PlayingMouseAction.RandomRecapture
+									.toString()));
 	}
 
 	protected void loadExtendedCensorList() {

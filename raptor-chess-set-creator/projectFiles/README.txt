@@ -1,5 +1,5 @@
                          Raptor Set Creator README 
-                 (c) 2009-2011 Raptor Project (All rights reserved).
+                 (c) 2009-2016 Raptor Project (All rights reserved).
  
 About
 -----

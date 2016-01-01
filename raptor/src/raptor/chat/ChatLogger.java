@@ -1,7 +1,7 @@
 /**
  * New BSD License
  * http://www.opensource.org/licenses/bsd-license.php
- * Copyright 2009-2011 RaptorProject (http://code.google.com/p/raptor-chess-interface/)
+ * Copyright 2009-2016 RaptorProject (https://github.com/Raptor-Fics-Interface/Raptor)
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -23,7 +23,6 @@ import java.util.Date;
 
 import raptor.Raptor;
 import raptor.connector.Connector;
-import raptor.connector.bics.BicsConnector;
 import raptor.connector.fics.FicsConnector;
 import raptor.pref.PreferenceKeys;
 import raptor.service.ThreadService;
@@ -52,7 +51,8 @@ public class ChatLogger {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm");
 
-	private static final RaptorLogger LOG = RaptorLogger.getLog(ChatLogger.class);
+	private static final RaptorLogger LOG = RaptorLogger
+			.getLog(ChatLogger.class);
 
 	protected String pathToFile;
 	protected Connector connector;
@@ -201,8 +201,6 @@ public class ChatLogger {
 		}
 		if (connector instanceof FicsConnector) {
 			return "fics";
-		} else if (connector instanceof BicsConnector) {
-			return "bics";
 		} else {
 			throw new IllegalStateException("Unknown Connector type: "
 					+ connector);
@@ -219,30 +217,32 @@ public class ChatLogger {
 		ThreadService.getInstance().run(new RaptorRunnable() {
 			@Override
 			public void execute() {
-				if (Raptor.getInstance().getPreferences().getBoolean(
-						PreferenceKeys.APP_IS_LOGGING_CONSOLE)
+				if (Raptor.getInstance().getPreferences()
+						.getBoolean(PreferenceKeys.APP_IS_LOGGING_CONSOLE)
 						&& !vetoLogging(event.getSource())) {
 					appendToFile(Raptor.USER_RAPTOR_HOME_PATH
 							+ "/logs/console/" + getConnectorType()
 							+ "-console.txt", event);
 				}
-				if (Raptor.getInstance().getPreferences().getBoolean(
-						PreferenceKeys.APP_IS_LOGGING_CHANNEL_TELLS)
+				if (Raptor
+						.getInstance()
+						.getPreferences()
+						.getBoolean(PreferenceKeys.APP_IS_LOGGING_CHANNEL_TELLS)
 						&& event.getType() == ChatType.CHANNEL_TELL) {
 					appendToFile(Raptor.USER_RAPTOR_HOME_PATH
 							+ "/logs/console/" + getConnectorType() + "-"
 							+ event.getChannel() + ".txt", event);
 				}
-				if (Raptor.getInstance().getPreferences().getBoolean(
-						PreferenceKeys.APP_IS_LOGGING_PERSON_TELLS)
+				if (Raptor.getInstance().getPreferences()
+						.getBoolean(PreferenceKeys.APP_IS_LOGGING_PERSON_TELLS)
 						&& event.getType() == ChatType.TELL
 						&& !vetoLogging(event.getSource())) {
 					appendToFile(Raptor.USER_RAPTOR_HOME_PATH
 							+ "/logs/console/" + getConnectorType() + "-"
 							+ event.getSource().toLowerCase() + ".txt", event);
 				}
-				if (Raptor.getInstance().getPreferences().getBoolean(
-						PreferenceKeys.APP_IS_LOGGING_PERSON_TELLS)
+				if (Raptor.getInstance().getPreferences()
+						.getBoolean(PreferenceKeys.APP_IS_LOGGING_PERSON_TELLS)
 						&& event.getType() == ChatType.OUTBOUND) {
 
 					RaptorStringTokenizer tok = new RaptorStringTokenizer(event
@@ -281,7 +281,7 @@ public class ChatLogger {
 				&& (userName.equalsIgnoreCase("gamebot")
 						|| userName.equalsIgnoreCase("notesbot")
 						|| userName.equalsIgnoreCase("problembot") || userName
-						.equalsIgnoreCase("endgamebot"));
+							.equalsIgnoreCase("endgamebot"));
 	}
 
 	/**
@@ -296,7 +296,9 @@ public class ChatLogger {
 		FileWriter fileWriter = null;
 		try {
 			fileWriter = new FileWriter(fileName, true);
-            fileWriter.append("[").append(DATE_FORMAT.format(new Date(event.time))).append("] ").append(event.getMessage()).append("\n");
+			fileWriter.append("[")
+					.append(DATE_FORMAT.format(new Date(event.time)))
+					.append("] ").append(event.getMessage()).append("\n");
 			fileWriter.flush();
 		} catch (IOException ioe) {
 			Raptor.getInstance().onError(

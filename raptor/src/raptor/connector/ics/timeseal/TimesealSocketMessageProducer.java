@@ -169,19 +169,14 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 	 * @throws IOException
 	 */
 	protected String handleTimeseal(String text) throws IOException {
-		//text.replace("[G]\0", "") TIMESEAL 2.
+		String result = text;
 		
-		//Send an ack for each \n\r[G]\n\r received.
-		String beforeReplace = text;
-		String afterReplace  = StringUtils.replaceOnce(beforeReplace,"\n\r[G]\n\r", "");
-		
-		while (!StringUtils.equals(beforeReplace,afterReplace)) {
+		if (text.contains("[G]\0")) {
 			sendAck();
-			beforeReplace = afterReplace;
-			afterReplace  = StringUtils.replaceOnce(beforeReplace,"\n\r[G]\n\r", "");
+			result = text.replaceAll("\\[G\\]\0", "");
 		}
 
-		return afterReplace;
+		return result;
 	}
 
 	/**
@@ -257,12 +252,6 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 	}
 
 	private void writeInitialTimesealString() throws IOException {
-
-		// BICS can't handle speedy connections so this slows it down a bit.
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException ie) {
-		}
 
 		if (isTimesealOn) {
 			OutputStream outputstream = getOutputStream();

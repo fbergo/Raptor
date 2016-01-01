@@ -1,4 +1,4 @@
-Raptor site: http://code.google.com/p/raptor-chess-interface/
+Raptor site: https://github.com/Raptor-Fics-Interface/Raptor
 	There are several developer wikis in this site. Also check out the FAQ for developer issues.
 	 
 Third Party Source Files:

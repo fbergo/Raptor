@@ -1,7 +1,7 @@
 /**
  * New BSD License
  * http://www.opensource.org/licenses/bsd-license.php
- * Copyright 2009-2011 RaptorProject (http://code.google.com/p/raptor-chess-interface/)
+ * Copyright 2009-2016 RaptorProject (https://github.com/Raptor-Fics-Interface/Raptor)
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import raptor.connector.Connector;
-import raptor.connector.bics.BicsConnector;
 import raptor.connector.fics.FicsConnector;
 
 /**
@@ -34,9 +33,7 @@ public class ConnectorService {
 
 	private ConnectorService() {
 		FicsConnector ficsConnector = new FicsConnector();
-		BicsConnector bicsConnector = new BicsConnector();
 		shortNameToConnector.put(ficsConnector.getShortName(), ficsConnector);
-		shortNameToConnector.put(bicsConnector.getShortName(), bicsConnector);
 	}
 
 	/**
@@ -63,8 +60,7 @@ public class ConnectorService {
 	 * Returns an array of all connectors.
 	 */
 	public Connector[] getConnectors() {
-		return new Connector[] { shortNameToConnector.get("fics"),
-				shortNameToConnector.get("bics") };
+		return new Connector[] { shortNameToConnector.get("fics") };
 
 	}
 }

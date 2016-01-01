@@ -1,7 +1,7 @@
 /**
  * New BSD License
  * http://www.opensource.org/licenses/bsd-license.php
- * Copyright 2009-2011 RaptorProject (http://code.google.com/p/raptor-chess-interface/)
+ * Copyright 2009-2016 RaptorProject (https://github.com/Raptor-Fics-Interface/Raptor)
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -1561,7 +1561,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/AdditionalChessSets");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/AdditionalChessSets");
 			}
 		});
 		fileMenu.add(new Action(local.getString("rapWinL10")) {
@@ -1835,7 +1835,7 @@ public class RaptorWindow extends ApplicationWindow {
 				@Override
 				public void run() {
 					BrowserUtils
-							.openUrl("http://code.google.com/p/raptor-chess-interface/");
+							.openUrl("https://github.com/Raptor-Fics-Interface/Raptor");
 				}
 			});
 		}
@@ -1852,14 +1852,14 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/Thanks");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/Thanks");
 			}
 		});
 		helpMenu.add(new Action(local.getString("rapWinL33")) {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/ThirdPartyContent");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/ThirdPartyContent");
 
 			}
 		});
@@ -1870,7 +1870,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/NewToRaptor");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/NewToRaptor");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL36")) {
@@ -1884,7 +1884,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/FAQ");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/FAQ");
 
 			}
 		});
@@ -1892,7 +1892,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/LinuxSoundIssues");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/LinuxSoundIssues");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL39")) {
@@ -1905,14 +1905,14 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/Scripting");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/Scripting");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL41")) {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/UsefulTips");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/UsefulTips");
 
 			}
 		});
@@ -1923,7 +1923,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/wiki/NewToFics");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/NewToFics");
 			}
 		});
 		ficsHelp.add(new Action(local.getString("rapWinL44")) {
@@ -1964,7 +1964,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("http://code.google.com/p/raptor-chess-interface/issues/entry");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorissues/entry");
 			}
 		});
 	}
@@ -2009,7 +2009,7 @@ public class RaptorWindow extends ApplicationWindow {
 							@Override
 							public void run() {
 								BrowserUtils
-										.openUrl("http://code.google.com/p/raptor-chess-interface/");
+										.openUrl("https://github.com/Raptor-Fics-Interface/Raptor");
 							}
 						}, new org.eclipse.jface.action.Action() {
 							@Override
