@@ -56,9 +56,6 @@ import raptor.util.RaptorLogger;
 
 /**
  * A window item that displays a list of games from a PGN file.
- * 
- * @author mindspan
- * 
  */
 public class PgnParseResultsWindowItem implements RaptorWindowItem {
 	private static final RaptorLogger LOG = RaptorLogger

@@ -73,7 +73,6 @@ import raptor.chess.util.GameUtils;
 import raptor.pref.PreferenceKeys;
 import raptor.service.ActionScriptService;
 import raptor.service.UCIEngineService;
-import raptor.service.XboardEngineService;
 import raptor.swt.chess.controller.BughouseSuggestController;
 import raptor.swt.chess.controller.ExamineController;
 import raptor.swt.chess.controller.InactiveController;
@@ -204,9 +203,11 @@ public class ChessBoardUtils implements BoardConstants {
 	}
 
 	/**
-	 * Returns a list sorted ascending, containing integers representing 
-	 * all of the piece sizes the set supports.
-	 * @param setName The name of the set.
+	 * Returns a list sorted ascending, containing integers representing all of
+	 * the piece sizes the set supports.
+	 * 
+	 * @param setName
+	 *            The name of the set.
 	 * @return A list of sizes supported in ascending order.
 	 */
 	public static List<Integer> getSetPieceSizes(String setName) {
@@ -230,8 +231,9 @@ public class ChessBoardUtils implements BoardConstants {
 		}
 		return sizes;
 	}
-	
-	public static List<Integer> getSquareBackgroundSizes(String squareBackgroundName) {
+
+	public static List<Integer> getSquareBackgroundSizes(
+			String squareBackgroundName) {
 		List<Integer> sizes = squareBackgroundSizes.get(squareBackgroundName);
 		if (sizes == null) {
 			sizes = new ArrayList<Integer>(100);
@@ -270,14 +272,14 @@ public class ChessBoardUtils implements BoardConstants {
 			Image image = Raptor.getInstance().getImageRegistry().get(key);
 
 			if (image == null) {
-				//This list is sorted ascending.
+				// This list is sorted ascending.
 				List<Integer> supportedSizes = getSetPieceSizes(name);
-				
+
 				if (!supportedSizes.contains(size)) {
-					//TO DO: make this more of a binary search for speed.
+					// TO DO: make this more of a binary search for speed.
 					int lastSize = supportedSizes.get(0);
 					boolean foundMatch = false;
-					
+
 					for (int currentSize : supportedSizes) {
 						if (currentSize > size) {
 							size = lastSize;
@@ -286,9 +288,9 @@ public class ChessBoardUtils implements BoardConstants {
 						}
 						lastSize = currentSize;
 					}
-					
+
 					if (!foundMatch) {
-						//This will be the largest size found.
+						// This will be the largest size found.
 						size = lastSize;
 					}
 				}
@@ -302,7 +304,7 @@ public class ChessBoardUtils implements BoardConstants {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the Image for users current background name
 	 */
@@ -313,20 +315,25 @@ public class ChessBoardUtils implements BoardConstants {
 			width = 10;
 			height = 10;
 		}
-		
-		//There are two types of square backgrounds supported.
-		//Type 1 (Classic):
-		//    Consists of two images a light image and a dark image.
-		//    Has an effect, Crop, Random Crop, or Scale.
-		//    Crop crops out only what is needed form the image based on width and height.
-		//    Random crop crops out random areas of the image, even rotating it 180 degrees.
-		//    Scale scales the image to size.
-		//    Works great for wood grain and marble.
-		//Type 2 (Images for every size):
-		//    Type 2 consists of a light image and a dark image for each possible square size 10-200+
-		//    It is great for square backgrounds with decorations like borders and diagonal lines.
-		//    No scaling or cropping is involved, and using the chess set creator you can create all
-		//     of the sizes from svg.
+
+		// There are two types of square backgrounds supported.
+		// Type 1 (Classic):
+		// Consists of two images a light image and a dark image.
+		// Has an effect, Crop, Random Crop, or Scale.
+		// Crop crops out only what is needed form the image based on width and
+		// height.
+		// Random crop crops out random areas of the image, even rotating it 180
+		// degrees.
+		// Scale scales the image to size.
+		// Works great for wood grain and marble.
+		// Type 2 (Images for every size):
+		// Type 2 consists of a light image and a dark image for each possible
+		// square size 10-200+
+		// It is great for square backgrounds with decorations like borders and
+		// diagonal lines.
+		// No scaling or cropping is involved, and using the chess set creator
+		// you can create all
+		// of the sizes from svg.
 
 		String key = name + "_" + effect + "_" + isLight + "_" + squareId + "_"
 				+ width + "x" + height;
@@ -334,51 +341,54 @@ public class ChessBoardUtils implements BoardConstants {
 		Image result = Raptor.getInstance().getImageRegistry().get(key);
 
 		if (result == null) {
-			//This list is sorted ascending.
+			// This list is sorted ascending.
 			List<Integer> supportedSizes = getSquareBackgroundSizes(name);
-			
-			if (supportedSizes.isEmpty()) { //Type 1
+
+			if (supportedSizes.isEmpty()) { // Type 1
 				Image moldImage = getSquareBackgroundMold(name, isLight);
-	
-				// If the image is smaller than the width/height needed then just
+
+				// If the image is smaller than the width/height needed then
+				// just
 				// scale it and ignore the effect.
 				if (moldImage.getImageData().width < width
 						|| moldImage.getImageData().height < height) {
 					effect = SquareBackgroundImageEffect.Scale;
 				}
-	
+
 				switch (effect) {
 				case Scale:
 					result = new Image(Display.getCurrent(),
-							getSquareBackgroundMold(name, isLight).getImageData()
-									.scaledTo(width, height));
+							getSquareBackgroundMold(name, isLight)
+									.getImageData().scaledTo(width, height));
 					break;
 				case Crop:
-					result = ImageUtil.cropImage(moldImage, 0, 0, width, height);
+					result = ImageUtil
+							.cropImage(moldImage, 0, 0, width, height);
 					break;
 				case RandomCrop:
-					int x = RANDOM.nextInt(moldImage.getImageData().width - width);
-					int y = RANDOM
-							.nextInt(moldImage.getImageData().height - height);
-	
-					// Add some more randomness by flipping the image 180 degrees.
+					int x = RANDOM.nextInt(moldImage.getImageData().width
+							- width);
+					int y = RANDOM.nextInt(moldImage.getImageData().height
+							- height);
+
+					// Add some more randomness by flipping the image 180
+					// degrees.
 					// This is safe for most images, including wood grain.
 					if (RANDOM.nextBoolean()) {
-						result = ImageUtil
-								.cropImage(moldImage, x, y, width, height);
+						result = ImageUtil.cropImage(moldImage, x, y, width,
+								height);
 					} else {
 						result = ImageUtil.flipAndCrop(moldImage, x, y, width,
 								height);
 					}
 					break;
 				}
-			}
-			else { //Type 2
+			} else { // Type 2
 				if (!supportedSizes.contains(width)) {
-					//TO DO: make this more of a binary search for speed.
+					// TO DO: make this more of a binary search for speed.
 					int lastSize = supportedSizes.get(0);
 					boolean foundMatch = false;
-					
+
 					for (int currentSize : supportedSizes) {
 						if (currentSize > width) {
 							width = lastSize;
@@ -387,20 +397,21 @@ public class ChessBoardUtils implements BoardConstants {
 						}
 						lastSize = currentSize;
 					}
-					
+
 					if (!foundMatch) {
-						//This will be the largest size found.
+						// This will be the largest size found.
 						width = lastSize;
 					}
 				}
 				result = new Image(Display.getCurrent(), SQUARE_BACKGROUND_DIR
-						+ name + "/" + width + "/" + (isLight ? "light.png" : "dark.png"));
-				
+						+ name + "/" + width + "/"
+						+ (isLight ? "light.png" : "dark.png"));
+
 			}
 			Raptor.getInstance().getImageRegistry().put(key, result);
 			return result;
 		} else {
-			//The image is already cached so just return it.
+			// The image is already cached so just return it.
 			return result;
 		}
 	}
@@ -470,7 +481,7 @@ public class ChessBoardUtils implements BoardConstants {
 
 		String key = getChessSetName() + "_" + type + "_" + size + "x" + size;
 
-		Cursor result = Raptor.getInstance().getCursorRegistry().get(key);		
+		Cursor result = Raptor.getInstance().getCursorRegistry().get(key);
 
 		if (result == null) {
 			ImageData pieceImageData = getChessPieceImage(type, size)
@@ -575,8 +586,6 @@ public class ChessBoardUtils implements BoardConstants {
 				isLight, squareId, width, height);
 	}
 
-
-
 	/**
 	 * Returns the path to the backgrund image name.
 	 */
@@ -594,7 +603,6 @@ public class ChessBoardUtils implements BoardConstants {
 		return Raptor.getInstance().getImage(
 				getSquareBackgroundImageName(name, isLight));
 	}
-
 
 	/**
 	 * Returns the users current square background name.
@@ -857,12 +865,7 @@ public class ChessBoardUtils implements BoardConstants {
 					|| controller instanceof ObserveController) {
 
 				if ((Variant.isClassic(controller.getGame().getVariant()) && UCIEngineService
-						.getInstance().getDefaultEngine() != null)
-						|| XboardEngineService.getInstance()
-								.hasEnginesSupportingVariant(
-										controller.getGame().getVariant())
-						|| UCIEngineService.getInstance()
-								.containsFischerRandomEngines()) {
+						.getInstance().getEngine() != null)) {
 					result = new ToolItem(toolbar, SWT.CHECK);
 					controller.addToolItem(
 							ToolBarItemKey.TOGGLE_ANALYSIS_ENGINE, result);
@@ -910,7 +913,7 @@ public class ChessBoardUtils implements BoardConstants {
 		} else if (action instanceof TryVariation) {
 			result = new ToolItem(toolbar, SWT.CHECK);
 			controller.addToolItem(ToolBarItemKey.TRY_VARIATION, result);
-		}else if (action instanceof AutoQueenAction) {
+		} else if (action instanceof AutoQueenAction) {
 			result = new ToolItem(toolbar, SWT.RADIO);
 			controller.addToolItem(ToolBarItemKey.AUTO_QUEEN, result);
 			int pieceSize = Raptor.getInstance().getPreferences()

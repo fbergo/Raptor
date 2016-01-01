@@ -12,7 +12,7 @@
 	  -->
 	<property name="swtEnv" value="MacCocoa64" />
 
-	<property name="version" value="v99" />
+	<property name="version" value="v1.0" />
 	<property name="dist.dir" value="install" />
 	<property name="src.dir" value="src" />
 	<property name="build.dir" value="target" />
@@ -48,7 +48,7 @@
 	</target>
 
 	<target name="compile" depends="init" description="Compile the Java source code">
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" target="1.5" classpathref="class.path" debug="false" deprecation="true" optimize="true">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" target="1.7" classpathref="class.path" debug="true" deprecation="true" optimize="true">
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
 	</target>
@@ -105,10 +105,10 @@
 		</copy>
 
 		<jar jarfile="${install.dir}/Raptor.jar" manifest="${projectFiles.dir}/Manifest.txt" basedir="${classes.dir}">
-			<exclude name="raptor/updater/*" />			
+			<exclude name="raptor/updater/*" />
 			<include name="**/*" />
 		</jar>
-		<jar jarfile="${install.dir}/updater.jar" manifest="${projectFiles.dir}/Upd-manifest.txt" basedir="${classes.dir}">			
+		<jar jarfile="${install.dir}/updater.jar" manifest="${projectFiles.dir}/Upd-manifest.txt" basedir="${classes.dir}">
 			<include name="raptor/updater/*" />
 		</jar>
 	</target>
@@ -122,17 +122,10 @@
 		<copy todir="${install.dir}">
 			<fileset dir="projectFiles/Windows">
 				<include name="**/*" />
-				<exclude name="**/*32.exe" />
-				<exclude name="**/*64.exe" />
 			</fileset>
 		</copy>
 
-		<copy todir="${install.dir}">
-			<fileset dir="projectFiles/Windows">
-				<include name="**/*" />
-			</fileset>
-			<globmapper from="*64.exe" to="*.exe" />
-		</copy>
+		<chmod dir="${install.dir}/*" perm="755" />
 
 		<zip destfile="${uploads.dir}/Raptor_${version}_Windows64.zip">
 			<zipfileset dir="${install.dir}" prefix="Raptor_${version}" dirmode="777" filemode="755">
@@ -150,6 +143,14 @@
 
 		<antcall target="install" />
 		<copy file="${projectFiles.dir}/raptor" toDir="${install.dir}" />
+
+		<copy todir="${install.dir}">
+			<fileset dir="projectFiles/linux">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<chmod dir="${install.dir}/*" perm="755" />
 
 		<zip destfile="${uploads.dir}/Raptor_${version}_Linux_x86_64_GTK2.zip">
 			<zipfileset dir="${install.dir}" prefix="Raptor_${version}" dirmode="777" filemode="755">
@@ -175,7 +176,7 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-
+		
 		<move todir="${install.dir}/Raptor.app/Contents/MacOS">
 			<fileset dir="${install.dir}">
 				<include name="**/*" />

@@ -50,7 +50,6 @@ import raptor.service.ThemeService;
 import raptor.service.ThreadService;
 import raptor.service.UCIEngineService;
 import raptor.service.UserTagService;
-import raptor.service.XboardEngineService;
 import raptor.swt.ErrorDialog;
 import raptor.swt.InputDialog;
 import raptor.swt.RaptorCursorRegistry;
@@ -69,41 +68,40 @@ import raptor.util.RaptorRunnable;
  */
 public class Raptor implements PreferenceKeys {
 
-    private final static String MINIMUM_JAVA_VERSION = "1.6";
+	private final static String MINIMUM_JAVA_VERSION = "1.6";
 	public static final File DEFAULT_HOME_DIR = new File("defaultHomeDir/");
 	public static final String APP_HOME_DIR = ".raptor/";
-	public static final File USER_RAPTOR_DIR = new File(System
-			.getProperty("user.home")
-			+ "/" + APP_HOME_DIR);
+	public static final File USER_RAPTOR_DIR = new File(
+			System.getProperty("user.home") + "/" + APP_HOME_DIR);
 	public static final String USER_RAPTOR_HOME_PATH = USER_RAPTOR_DIR
 			.getAbsolutePath();
 	public static final String ICONS_DIR = "resources/icons/";
 	public static final String IMAGES_DIR = "resources/images/";
 	public static final String RESOURCES_SCRIPTS = "resources/scripts";
 	public static final String RESOURCES_DIR = "resources/";
-	public static final String ENGINES_DIR = USER_RAPTOR_HOME_PATH + "/engines";
 	private static Raptor instance;
 	private static Display display;
 	protected static L10n local;
-	
+
 	static {
 		RaptorLogger.initializeLogger();
 	}
 
 	public static void createInstance() {
 		instance = new Raptor();
-		instance.init();		
+		instance.init();
 	}
-    /**
-     * Print message and stop application: cannot rely on standard
-     * logging and error processing code because the Java version is
-     * too old so those facilities themselves might be using features that are
-     * not supported by the Java version that was detected.
-     */
-    private static void croak(String s) {
-	System.err.println(s);
-	System.exit(1);
-    }
+
+	/**
+	 * Print message and stop application: cannot rely on standard logging and
+	 * error processing code because the Java version is too old so those
+	 * facilities themselves might be using features that are not supported by
+	 * the Java version that was detected.
+	 */
+	private static void croak(String s) {
+		System.err.println(s);
+		System.exit(1);
+	}
 
 	/**
 	 * Returns the singleton raptor instance.
@@ -117,22 +115,24 @@ public class Raptor implements PreferenceKeys {
 	/**
 	 * The applications main method. Takes no arguments.
 	 */
-	public static void main(String args[]) {		
-	    //
-	    // Reality check: we really need at least version MINIMUM_JAVA_VERSION
-	    //
-	    if(System.getProperty("java.version").compareTo(MINIMUM_JAVA_VERSION) < 0) {
-		croak("Sorry, you are using Java version " + System.getProperty("java.version") +
-		      " but Raptor needs version " + MINIMUM_JAVA_VERSION + " or later.");
-	    }
+	public static void main(String args[]) {
+		//
+		// Reality check: we really need at least version MINIMUM_JAVA_VERSION
+		//
+		if (System.getProperty("java.version").compareTo(MINIMUM_JAVA_VERSION) < 0) {
+			croak("Sorry, you are using Java version "
+					+ System.getProperty("java.version")
+					+ " but Raptor needs version " + MINIMUM_JAVA_VERSION
+					+ " or later.");
+		}
 		local = L10n.getInstance();
 		Locale.setDefault(L10n.currentLocale);
 		try {
 			Display.setAppName("Raptor");
 			display = new Display();
-			
+
 			createInstance();
-                        
+
 			if (L10n.noSavedLocaleFile)
 				L10n.updateLanguage(true);
 			// Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -141,7 +141,7 @@ public class Raptor implements PreferenceKeys {
 			// getInstance().shutdown();
 			// }
 			// });
-			
+
 			display.addListener(SWT.Close, new Listener() {
 				public void handleEvent(Event event) {
 					getInstance().shutdown();
@@ -160,33 +160,41 @@ public class Raptor implements PreferenceKeys {
 				ThreadService.getInstance().scheduleOneShot(750,
 						new Runnable() {
 							public void run() {
-								// See if we need to launch the login dialog		
-										boolean connected = connector.onAutoConnect();
-										if (!connected && connector instanceof FicsConnector
-												&& Raptor.getInstance().getPreferences()
-												.getBoolean(APP_IS_LAUNCHING_LOGIN_DIALOG)) {
-											((FicsConnector)connector).showLoginDialog();										
-										}
-											
+								// See if we need to launch the login dialog
+								boolean connected = connector.onAutoConnect();
+								if (!connected
+										&& connector instanceof FicsConnector
+										&& Raptor
+												.getInstance()
+												.getPreferences()
+												.getBoolean(
+														APP_IS_LAUNCHING_LOGIN_DIALOG)) {
+									((FicsConnector) connector)
+											.showLoginDialog();
+								}
+
 							}
 						});
 			}
-			
-//			ThreadService.getInstance().run(new Runnable() {
-//
-//				@Override
-//				public void run() {
-//					if (!OSUtils.isLikelyOSX() && !getInstance().getPreferences().getBoolean("ready-to-update")
-//							&& getInstance().getPreferences().getBoolean("app-update"))
-//						CheckUpdates.checkUpdates();
-//					else if (getInstance().getPreferences().getBoolean("ready-to-update"))
-//						getInstance().getPreferences().setValue("ready-to-update", "false");
-//				}
-//				
-//			});
+
+			// ThreadService.getInstance().run(new Runnable() {
+			//
+			// @Override
+			// public void run() {
+			// if (!OSUtils.isLikelyOSX() &&
+			// !getInstance().getPreferences().getBoolean("ready-to-update")
+			// && getInstance().getPreferences().getBoolean("app-update"))
+			// CheckUpdates.checkUpdates();
+			// else if
+			// (getInstance().getPreferences().getBoolean("ready-to-update"))
+			// getInstance().getPreferences().setValue("ready-to-update",
+			// "false");
+			// }
+			//
+			// });
 
 			display.timerExec(500, new Runnable() {
-				public void run() {	
+				public void run() {
 					try {
 						// Launch the home page after a half second it requires
 						// a
@@ -206,19 +214,17 @@ public class Raptor implements PreferenceKeys {
 
 						// Initialize this after a half second. It requires a
 						// RaptorWindow.
-						//ChessBoardCacheService.getInstance();
+						// ChessBoardCacheService.getInstance();
 
 						// Initialize the UCIEngineService after a half second.
 						// Requires a raptor window in case there is an error.
-						//UCIEngineService.getInstance();
-						
-						//Remove the old imageCache user directory if its there. (version .98)
-						FileUtils.deleteDir(new File(USER_RAPTOR_HOME_PATH + "/imagecache"));
-						
-						
-						
-						
-					  
+						// UCIEngineService.getInstance();
+
+						// Remove the old imageCache user directory if its
+						// there. (version .98)
+						FileUtils.deleteDir(new File(USER_RAPTOR_HOME_PATH
+								+ "/imagecache"));
+
 					} catch (Throwable t) {
 						Raptor.getInstance().onError(
 								"Error initializing Raptor", t);
@@ -231,14 +237,12 @@ public class Raptor implements PreferenceKeys {
 		} catch (Throwable t) {
 			if (t instanceof SWTException) {
 				instance.LOG
-						.info(
-								"SWTException: (If this is a widget is disposed error just ignore it its nothing)",
+						.info("SWTException: (If this is a widget is disposed error just ignore it its nothing)",
 								t);
 
 			} else {
 				instance.LOG
-						.error(
-								"Error occured in main: (If this is a widget is disposed error just ignore it its nothing)",
+						.error("Error occured in main: (If this is a widget is disposed error just ignore it its nothing)",
 								t);
 			}
 		} finally {
@@ -258,8 +262,8 @@ public class Raptor implements PreferenceKeys {
 
 	protected FontRegistry fontRegistry = new FontRegistry(Display.getCurrent());
 
-	protected ColorRegistry colorRegistry = new ColorRegistry(Display
-			.getCurrent());
+	protected ColorRegistry colorRegistry = new ColorRegistry(
+			Display.getCurrent());
 
 	protected RaptorCursorRegistry cursorRegistry = new RaptorCursorRegistry(
 			Display.getCurrent());
@@ -271,10 +275,10 @@ public class Raptor implements PreferenceKeys {
 	protected Clipboard clipboard;
 
 	protected boolean isShutdown = false;
-	
+
 	/**
-	 * The list contains hash codes of already displayed to user 
-	 * errors to avoid duplication and be less annoying.
+	 * The list contains hash codes of already displayed to user errors to avoid
+	 * duplication and be less annoying.
 	 */
 	private List<Integer> errorsDisplayed = new ArrayList<Integer>();
 
@@ -287,12 +291,13 @@ public class Raptor implements PreferenceKeys {
 	 */
 	public void alert(final String message) {
 		if (!isDisposed()) {
-            instance.raptorWindow.getShell().getDisplay().asyncExec(
-					new RaptorRunnable() {
+			instance.raptorWindow.getShell().getDisplay()
+					.asyncExec(new RaptorRunnable() {
 						@Override
 						public void execute() {
 							MessageDialog.openInformation(Raptor.getInstance()
-									.getWindow().getShell(), local.getString("alert"), message);
+									.getWindow().getShell(),
+									local.getString("alert"), message);
 						}
 					});
 		}
@@ -304,8 +309,9 @@ public class Raptor implements PreferenceKeys {
 	 */
 	public boolean confirm(final String question) {
 		if (!isDisposed()) {
-			return MessageDialog.openConfirm(Raptor.getInstance().raptorWindow
-					.getShell(), local.getString("confirm"), question);
+			return MessageDialog.openConfirm(
+					Raptor.getInstance().raptorWindow.getShell(),
+					local.getString("confirm"), question);
 		}
 		return false;
 	}
@@ -348,8 +354,7 @@ public class Raptor implements PreferenceKeys {
 	 * method handles that for you.
 	 */
 	public Image getIcon(String nameOfFileInIconsWithoutPng) {
-		String iconSize = preferences.getString(
-                PreferenceKeys.APP_ICON_SIZE);
+		String iconSize = preferences.getString(PreferenceKeys.APP_ICON_SIZE);
 		String fileName = ICONS_DIR + "/" + iconSize + "/"
 				+ nameOfFileInIconsWithoutPng + ".png";
 		return getImage(fileName);
@@ -363,8 +368,8 @@ public class Raptor implements PreferenceKeys {
 		if (result == null) {
 			try {
 				ImageData data = new ImageData(fileName);
-				imageRegistry.put(fileName, result = new Image(Display
-						.getCurrent(), data));
+				imageRegistry.put(fileName,
+						result = new Image(Display.getCurrent(), data));
 			} catch (RuntimeException e) {
 				LOG.error("Error loading image " + fileName, e);
 				throw e;
@@ -399,8 +404,7 @@ public class Raptor implements PreferenceKeys {
 	}
 
 	public boolean isDisposed() {
-		return isShutdown || instance == null
-				|| instance.raptorWindow == null
+		return isShutdown || instance == null || instance.raptorWindow == null
 				|| instance.raptorWindow.getShell() != null
 				&& instance.raptorWindow.getShell().isDisposed();
 	}
@@ -429,11 +433,11 @@ public class Raptor implements PreferenceKeys {
 		if (!isDisposed()) {
 			if (errorsDisplayed.contains(error.hashCode()))
 				return;
-			
+
 			errorsDisplayed.add(error.hashCode());
 
-            instance.raptorWindow.getShell().getDisplay().asyncExec(
-					new Runnable() {
+			instance.raptorWindow.getShell().getDisplay()
+					.asyncExec(new Runnable() {
 						public void run() {
 							ErrorDialog dialog = new ErrorDialog(
 									Raptor.getInstance().getWindow().getShell(),
@@ -459,7 +463,9 @@ public class Raptor implements PreferenceKeys {
 	 */
 	public String promptForText(final String question) {
 		if (!isDisposed()) {
-			InputDialog dialog = new InputDialog(Raptor.getInstance().raptorWindow.getShell(), local.getString("entText"), question);
+			InputDialog dialog = new InputDialog(
+					Raptor.getInstance().raptorWindow.getShell(),
+					local.getString("entText"), question);
 			return dialog.open();
 		} else {
 			return null;
@@ -474,7 +480,9 @@ public class Raptor implements PreferenceKeys {
 	 */
 	public String promptForText(final String question, String answer) {
 		if (!isDisposed()) {
-			InputDialog dialog = new InputDialog(Raptor.getInstance().raptorWindow.getShell(), local.getString("entText"), question);
+			InputDialog dialog = new InputDialog(
+					Raptor.getInstance().raptorWindow.getShell(),
+					local.getString("entText"), question);
 			if (answer != null) {
 				dialog.setInput(answer);
 			}
@@ -504,7 +512,7 @@ public class Raptor implements PreferenceKeys {
 		try {
 			if (instance.raptorWindow != null
 					&& !instance.raptorWindow.getShell().isDisposed()) {
-                instance.raptorWindow.storeWindowPreferences();
+				instance.raptorWindow.storeWindowPreferences();
 			}
 		} catch (Throwable t) {
 			LOG.warn("Error in storeWindowPreferences", t);
@@ -517,7 +525,7 @@ public class Raptor implements PreferenceKeys {
 		}
 
 		if (!isIgnoringPreferenceSaves) {
-            preferences.save();
+			preferences.save();
 		}
 
 		// Dont try catch around this block. Let eclipse bomb out on it.
@@ -530,7 +538,7 @@ public class Raptor implements PreferenceKeys {
 				LOG.warn("Error shutting down EcoService", t);
 			}
 		}
-		
+
 		if (SoundService.serviceCreated) {
 			try {
 				SoundService.getInstance().dispose();
@@ -558,14 +566,6 @@ public class Raptor implements PreferenceKeys {
 		if (UCIEngineService.serviceCreated) {
 			try {
 				UCIEngineService.getInstance().dispose();
-			} catch (Throwable t) {
-				LOG.warn("Error shutting UCIEngineService", t);
-			}
-		}
-		
-		if (XboardEngineService.serviceCreated) {
-			try {
-				XboardEngineService.getInstance().dispose();
 			} catch (Throwable t) {
 				LOG.warn("Error shutting UCIEngineService", t);
 			}
@@ -643,7 +643,7 @@ public class Raptor implements PreferenceKeys {
 		}
 
 		if (!isIgnoringPreferenceSaves) {
-            preferences.save();
+			preferences.save();
 		}
 
 		LOG.info("Shutdown Raptor");
@@ -656,28 +656,28 @@ public class Raptor implements PreferenceKeys {
 	public void shutdown(boolean isIgnoringPreferenceSaves) {
 		shutdownWithoutExit(isIgnoringPreferenceSaves);
 		System.exit(0);
-	}	
+	}
 
 	/**
 	 * Initializes raptor.
 	 */
 	private void init() {
-		preferences = new RaptorPreferenceStore();			
-		install();	
-		
+		preferences = new RaptorPreferenceStore();
+		install();
+
 		// Make sure all of the Singleton services get loaded.
 		ThreadService.getInstance();
-		//DictionaryService.getInstance();
-		//MemoService.getInstance();
-		//ThemeService.getInstance();
-		//UserTagService.getInstance();
-		//EcoService.getInstance();
+		// DictionaryService.getInstance();
+		// MemoService.getInstance();
+		// ThemeService.getInstance();
+		// UserTagService.getInstance();
+		// EcoService.getInstance();
 		ConnectorService.getInstance();
-		//SoundService.getInstance();
-		//ScriptService.getInstance();
-		//ActionScriptService.getInstance();
-		//UCIEngineService.getInstance();
-		//AliasService.getInstance();			
+		// SoundService.getInstance();
+		// ScriptService.getInstance();
+		// ActionScriptService.getInstance();
+		// UCIEngineService.getInstance();
+		// AliasService.getInstance();
 	}
 
 	/**
@@ -688,7 +688,7 @@ public class Raptor implements PreferenceKeys {
 	private void install() {
 		try {
 			FileUtils.copyFiles(DEFAULT_HOME_DIR, USER_RAPTOR_DIR);
-			
+
 			if (!new File(preferences.getString(APP_PGN_FILE)).exists()) {
 				new File(preferences.getString(APP_PGN_FILE)).createNewFile();
 			}

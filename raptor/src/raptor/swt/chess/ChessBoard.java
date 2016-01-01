@@ -14,8 +14,6 @@
 package raptor.swt.chess;
 
 import org.apache.commons.lang.StringUtils;
-import raptor.util.RaptorLogger;
-
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
@@ -41,7 +39,7 @@ import raptor.swt.SWTUtils;
 import raptor.swt.chat.ChatUtils;
 import raptor.swt.chess.ChessBoardLayout.Field;
 import raptor.swt.chess.analysis.UciAnalysisWidget;
-import raptor.swt.chess.analysis.XboardAnalysisWidget;
+import raptor.util.RaptorLogger;
 
 /**
  * A GUI representation of a chess board, and all controls associated with it
@@ -425,7 +423,10 @@ public class ChessBoard implements BoardConstants {
 
 	/**
 	 * Forces redraws on all of the squares and all of the pieceJailSquares.
-	 * @param forceRedraw True if every square should be redrawn. False if only dirty squares should be redrawn.
+	 * 
+	 * @param forceRedraw
+	 *            True if every square should be redrawn. False if only dirty
+	 *            squares should be redrawn.
 	 */
 	public void redrawPiecesAndArtifacts(boolean forceRedraw) {
 		if (!forceRedraw) {
@@ -707,14 +708,8 @@ public class ChessBoard implements BoardConstants {
 	}
 
 	protected void createEngineAnalysisWidget() {
-		if (!Variant.isClassic(controller.getGame().getVariant())
-				&& controller.getGame().getVariant() != Variant.fischerRandom) {
-			engineAnalysisWidget = new XboardAnalysisWidget();
-			engineAnalysisWidget.setController(controller);
-		} else {
-			engineAnalysisWidget = new UciAnalysisWidget();
-			engineAnalysisWidget.setController(controller);
-		}
+		engineAnalysisWidget = new UciAnalysisWidget();
+		engineAnalysisWidget.setController(controller);
 	}
 
 	protected void createPieceJailControls() {
