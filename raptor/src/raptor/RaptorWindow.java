@@ -1557,30 +1557,30 @@ public class RaptorWindow extends ApplicationWindow {
 		});
 
 		fileMenu.add(new Separator());
-		fileMenu.add(new Action(local.getString("rapWinL9")) {
-			@Override
-			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/AdditionalChessSets");
-			}
-		});
-		fileMenu.add(new Action(local.getString("rapWinL10")) {
-			@Override
-			public void run() {
-				FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
-				fd.setFilterPath("");
-
-				fd.setText(local.getString("rapWinL11"));
-				String[] filterExt = { "*.zip" };
-				fd.setFilterExtensions(filterExt);
-				final String selected = fd.open();
-				if (!StringUtils.isBlank(selected)) {
-					ChessSetInstallDialog dialog = new ChessSetInstallDialog(
-							getShell(), selected);
-					dialog.open();
-				}
-			}
-		});
+//		fileMenu.add(new Action(local.getString("rapWinL9")) {
+//			@Override
+//			public void run() {
+//				BrowserUtils
+//						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/AdditionalChessSets");
+//			}
+//		});
+//		fileMenu.add(new Action(local.getString("rapWinL10")) {
+//			@Override
+//			public void run() {
+//				FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
+//				fd.setFilterPath("");
+//
+//				fd.setText(local.getString("rapWinL11"));
+//				String[] filterExt = { "*.zip" };
+//				fd.setFilterExtensions(filterExt);
+//				final String selected = fd.open();
+//				if (!StringUtils.isBlank(selected)) {
+//					ChessSetInstallDialog dialog = new ChessSetInstallDialog(
+//							getShell(), selected);
+//					dialog.open();
+//				}
+//			}
+//		});
 
 		if (!OSUtils.isLikelyOSXCocoa()) {
 			fileMenu.add(new Separator());
