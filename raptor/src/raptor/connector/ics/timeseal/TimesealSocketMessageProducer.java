@@ -39,12 +39,10 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 				}
 			} else {
 				byteArrayOutputStream.write(i);
-				//System.err.print(i);
 			}
 		}
 
 		private int crypt(byte stringToWriteBytes[], long timestamp) {
-			//System.err.println("Writing " + stringToWriteBytes);
 			int bytesInLength = stringToWriteBytes.length;
 			System.arraycopy(stringToWriteBytes, 0, buffer, 0,
 					stringToWriteBytes.length);
@@ -170,12 +168,21 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 	 */
 	protected String handleTimeseal(String text) throws IOException {
 		String result = text;
-		
-		if (text.contains("[G]\0")) {
+		if (LOG.isDebugEnabled())
+			LOG.debug("Entering handleTimeseal " + result);
+		while (result.contains("[G]\0")) {
+			/**
+			 * You have to ack each [G]\0! This was the major timeseal bug. Not all were acked!
+			 */
 			sendAck();
-			result = text.replaceAll("\\[G\\]\0", "");
+			result = result.replaceFirst("\\[G\\]\0", "");
+			
+			if (LOG.isDebugEnabled())
+				LOG.debug("Handled ack new result " + result);
 		}
 
+		if (LOG.isDebugEnabled())
+			LOG.debug("Leaving handleTimeseal " + result);
 		return result;
 	}
 
