@@ -1,0 +1,59 @@
+=Feature List=
+
+==Operating Systems==
+  *  Mac OS X: 10.4+
+  *  Windows: XP+
+  *  Linux: x86,x86_64, 
+
+==Unique Features==
+  *  Customizable Themes and Layouts)
+  *  `GameBot` history tab
+  *  An internal web browser.
+  *  Simul bughouse support for both fics and bics.
+  *  Unicode support using html characters. Modeled after maciejg's finger notes.
+  *  Scripting support
+  *  Spell check.
+
+==Chess==
+  *  Games tab with a settings and table view. 
+  *  Seek Tab with a settings, table, and graph view. 
+  *  Bugwho tab with adjustable settings for partners,teams, and games.
+  *  Speech support for moves and tells.
+  *  UCI/winboard chess engine support. 
+  *  Game statistics that show up after you finish a game. 
+  *  Mouse wheel over a chess board to go forward/backward moves.
+  *  Opening/ECO code is displayed as you play/observe a game.
+  *  A PGN viewer that supports all variants on fics and bics.
+  *  Client side legal move validation for all variants on fics and bics, 
+  *  King auto promote button on toolbar for suicide. You can also see captured kings in the piece jail.
+  *  PGN export in the ficsgames.com format. 
+  *  Navigation arrows to go back to previous moves.
+  *  Fade away arrows and higlights.
+  *  Traversable move list.
+  *  Configurable mouse button actions i.e.  smartmove, random move, random capture, random recapture.
+  *  Premove, Queued Premove, and SmartMove.
+  *  Crosshairs cursor mode.
+  *  Winners toolbar button to automatically match the winner of a game.
+  *  Jin chess set support.
+
+==Chat==
+  *  Logging
+  *  Regular expression message blocking 
+  *  Control/Alt/Command+Space auto complete on user names/common commands.
+  *  Player tagging.
+  *  Memo support, to save tells.
+  *  Links for urls, history, journal, etc.
+  *  Alias support. Clear lists, toggle sound on and off, etc.
+  *  Speak tells in a tab by pressing the musical notes
+  *  Channel, person, game, regular expression tabs.
+  *  Scripting using Bean Shell.
+  *  Over 200 keyboard bindable actions. You can also create your own Action Scripts. 
+  *  If you have the memory for it, the consoles can buffer up to 20 million characters.
+  *  Extended censor.
+
+==General==
+  *  Highly customizable 
+  *  Multi-core friendly
+
+*Raptor .95 screen shot Mac OS X Carbon*
+http://raptor-chess-interface.googlecode.com/files/raptorv95ScreenShot1.jpg

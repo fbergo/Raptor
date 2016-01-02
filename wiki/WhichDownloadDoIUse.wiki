@@ -1,0 +1,60 @@
+=Install Guide=
+
+<wiki:toc max_depth="3"/>
+
+==Requirements==
+  *  All version require a java 5 (1.5) JRE (Java Runtime Environment) or better.
+  *  Memory usage varies but Raptor will probably use between 20-40 megs of memory.
+  *  I started developing Raptor on an old Mac dual 1ghz with 1 gig of ram. It runs quite well on it so anything made this century will probably work well.
+
+   After installation, launch Raptor and then click the Fics menu and then Connect.
+  
+==Release Types==
+There are two types of releases: "Stable" and "Latest".
+
+The "Stable" release will be the last release which contained few bugs and issues; however, it does not contain the latest features. 
+
+The "Latest" release is the latest release. It is typically fairly stable but might contain some defects. It also has all the latest features. Beta testers are encouraged to always upgrade to the "Latest" release and report Issues as they encounter them in the [http://code.google.com/p/raptor-chess-interface/issues/list Issues] tab.
+
+==Mac OS X==
+  *  10.4/ OS X Carbon
+  *  10.5+ 32 bit
+  *  10.5+ 64bit
+
+  ===Mac OS X Tips===
+  *  The download is a dmg file. It should automatically open. To install Raptor just drag Raptor.app into applications, and then double click it.
+  *  Speech comes pre configured for Mac OS X. You can change the speech settings in System Preferences.
+
+==Windows==
+Raptor runs best in Windows Vista and Windows 7. You probably want to install "Windows 32". However, if you are positive you have a 64 bit JRE (Java Runtime Environment) try the "Windows 64" version. If you try "Windows 64" and it doesnt work please just try "Windows 32". Many users ask questions about this and that is the easiest solution.
+
+  *  Windows 7 Window32/Windows64
+  *  Windows Vista Window32/Windows64
+  *  *Raptor will run in Windows XP but it is not officially supported. There are some issues related to dragging and dropping.*
+
+  ===Windows Tips===
+  *  The download is an exe installer. Double click on it after downloading.
+  *   If you do use the 64 bit version for windows make sure you have a 64 bit JRE. If you do not you can download one from http://java.com. A common mistake is downloading Windows 64 when you have a 32 bit jre installed. If raptor is not launching and you have unzipped it correctly just try the Windows 32 bit version.
+  *  Speech comes pre-configured for Windows. You can change the speech settings in control panel Speech.
+
+==Linux==
+  *  Linux PPC If you have a PPC processor
+  *  Linux x86 If you have a x86 32 bit processor.
+  *  Linux x86_64 If you have a x86 64 bit processor.
+
+  ===Linux Tips===
+  *  The download is a zip file. Double click on it, extract Raptor_VERSION where ver you desire, and then double click on Raptor inside of the extracted directory.
+  *  You will need at least java 5(1.5) To run raptor. Do a java -version to find out what you have. If you are looking for instructions on how to install java check this out: http://openjdk.java.net/install/ 
+  *  *You will need to have firefox installed to enable the internal web browser.*
+  *  *There are issues with sound in linux.* Raptor uses [http://www.alsa-project.org/main/index.php/Main_Page ALSA] and it has many issues in java applications. See [http://code.google.com/p/raptor-chess-interface/wiki/LinuxSoundIssues LinuxSoundIssues] for help if you have problems mixing sounds with other applications or you just don't hear sound at all.
+  *  You will have to configure speech manually in the linux version. Check out the say package for more information.
+
+==Solaris==
+  *  x86 processor use Solaris x86
+  *  SPARC processor use Solaris SPARC.
+
+  ===Solaris Tips===
+  *  *You will need to have firefox installed to enable the internal web browser.*
+  *  You will need at least java 5(1.5) To run raptor. Do a java -version to find out what you have. If you are looking for instructions on how to install java check this out: http://openjdk.java.net/install/ 
+  *  The download is a zip file. Double click on it, extract Raptor_VERSION where ver you desire, and then double click on Raptor inside of the extracted directory.
+  *  You will have to configure speech manually in the Solaris versions. Check out the unix say program for more information.

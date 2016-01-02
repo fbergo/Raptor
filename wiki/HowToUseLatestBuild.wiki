@@ -1,0 +1,6 @@
+Latest builds are uploaded after each important commit (as long as they are not very often at least). It works for all systems. You can always reach a latest build using the link http://raptor-chess-interface.googlecode.com/files/Raptor.jar
+
+== Usage ==
+In order to use the build you have to download the latest unstable release package, if you haven't done it yet. In the root of Raptor directory find the file Raptor.jar and replace it with downloaded file. In case of Linux packages you should similarly locate Raptor.jar and replace it.
+
+I hope this would compensate the long period between releases and help everyone to access latest bug fixes and added features more easily.

@@ -1,0 +1,347 @@
+=FICS New User's Guide=
+
+<wiki:toc max_depth="3"/>
+
+==Registering an Account==
+The first step towards using FICS is to register a FICS account. You can start your registration by reading [http://www.freechess.org/Register/index.html this] page and then clicking on Registration Form. 
+
+*It should be noted that you need to carefully select your handle. You can't change it once you have picked it.* 
+
+Also, duplicate accounts are highly frowned upon and viewed as server abuse. Accounts are closely monitored and chances are you will get caught if you create more than one. It is really not worth it. If caught, you risk having your accounts banned from FICS and having to sort out the mess with the FICS abuse committee which can and often does take months. After you have registered and activated your account, you will have a permanent user name and password that you can use to log in with. Most interfaces have an intuitive way to enter this information, and makes connecting to FICS easy.
+
+After you have registered an account, you can start Raptor. Raptor will appear with the Google project page showing up in the internal browser. Click the Fics menu on the top left and select Connect. You will see the following screen:
+
+http://raptor-chess-interface.googlecode.com/files/raptorFicsLogin.jpg
+
+Type in your user name and password from your registration and click the login button to connect to FICS.
+
+
+
+==FICS in a nutshell==
+The Free Internet Chess Server, or [http://www.freechess.org FICS], is a chess server that uses telnet. Raptor is a client used to connect to FICS. A client enhances the telnet experience, by providing a GUI board to play and observe games, consoles to make chatting and sending messages easier, and many other features. 
+
+FICS is driven by sending text messages to the server and viewing output sent from the server. To interact with FICS, you send commands on the command line and it sends back results responding to your requests.
+
+The command line in raptor is the line after the fics% at the bottom of the screen. To type a command, you type in a message in the input box and hit the enter key. Or you can press the left arrow at the end of the command line.
+http://raptor-chess-interface.googlecode.com/files/raptorShowingCommandLine.jpg
+
+Some important things to note about FICS:
+  *  It is a 'G' rated environment. Swearing and harassing are not tolerated. You risk having your account temporarily booted from the server, as well as being banned (for multiple offenses) if you don't follow this rule.
+  *  Using computer assistance or cheating of any kind is not tolerated. Computer abuse is closely monitored and, if caught, you risk being banned from FICS.
+
+==Communicating with other FICS users==
+There are several ways to talk to other people on FICS. Popular choices include channels, shouts, and direct tells. You can also kibitz to all people in a particular chess game, or whisper.
+
+===Channel tells (tell ### command)===
+A channel on FICS is a group of people interested in a particular topic. There are also specific channels designated for help, interface issues, and discussions about FICS. Some examples of channel tells:
+{{{
+MyBirds(1): [Jin Applet 02.12.2006] How do you do personal tells ???ANYONE 
+\   ????
+LightKnight(TM)(1): "tell <player> <message>"
+LightKnight(TM)(1): in console, not in the channel window.
+LightKnight(TM)(1): console=command line.
+whiteguardian(1): lol
+LightKnight(TM)(1): ? :)
+MyBirds(1): [Jin Applet 02.12.2006] Some one send me a private tell ,,and ill 
+\   try too send one back,,,Sorry everyone ,,im very New...usally play on Pogo
+\   .com
+MyBirds(1): [Jin Applet 02.12.2006] asking questions,,to show to all in 
+\   Genaral  (tells)???
+MyBirds(1): [Jin Applet 02.12.2006] Do i tpe my Handle to private chat.(have 
+\   to find out about ..Main Console and the Ask a Question box
+}}}
+The number in parenthesis denotes the channel number. The name to the left is the person sending the tell to the channel. To send a tell to a channel you use the syntax 'tell channelNumber message', e.g. ("tell 50 Hello") will send the message "Hello" to everyone in channel 50.
+
+As you begin learning how to use FICS, you will obviously have questions. To ask a FICS server related question, use channel 1. To ask an interface related question, use channel 6.
+
+To list all of the channels by topic on FICS, type 'help channel_list'. Popular channels include: channel 1, the help channel; channel 6, the interface help channel; and channel 50, the chat channel. 
+
+To add a channel you can type '+channel channelNumber'. To remove a channel you can type '-channel channelNumber'.  
+
+You can get a list of all the users in a channel by typing 'in channelNumber'.
+
+Examples: 
+{{{
+tell 1 How do I play a game?
+help channel_list
++channel 1
+-channel 50
+in 88
+}}}
+
+===Shouts (shout and it commands)===
+Shouts are basically a large channel most people listen to. Some examples of shouts:
+{{{
+CDay shouts: Why do I waste all of my time writing chess interfaces?
+--> whiteguardian blik is off to the moon 
+blik(C) shouts: Come to think of it, there are already a million monkeys on a million typewriters, and Usenet is nothing like Shakespeare.
+}}}
+To send a shout of the form "userName shouts:", use the command "shout message". To send the message "CDay shouts: Why do I waste all of my time writing chess interfaces?" above you type "shout Why do I waste all of my time writing chess interfaces?". To send a message of the form "--> whiteguardian blik is off to the moon" shown above use "it blik is off to the moon". 
+
+You can turn shouts on by sending the command "set shout on" and you can also turn them off by sending the command "set shout off".
+
+Examples:
+{{{
+shout Only TheRaven can divide by 0.
+it waves to fics
+set shout on
+set shout off
+}}}
+
+===Direct user tells (tell userName command)==
+You can send a tell directly to a user and nobody else on fics. Examples of direct tell:
+{{{
+Ludens tells you: you suck
+}}}
+To send the message "you suck" to CDay you can issue the command, "tell cday you suck".
+
+Examples:
+{{{
+tell cday you suck
+}}}
+
+===Game Related Tells (kibitz,whisper,say commands)==
+There are several commands you can use that are game related to send tells. To send a tell to your current or last opponent you can use the say command. For example "say good game" will send the message "good game" to your current (if you're playing a game) or last opponent (if you're not playing a game).
+
+If you are observing or playing a game you can send a message to all people playing or observing the game. This is called a kibitz. "kibitz Can I play the winner?" will send the message "Can I play the winner?" to all of the players playing the game and everyone who is observing the game as well. This can be disruptive to people playing a game and sometimes you just want to send a message to everyone observing. To do this you use the whipser command. "whisper Qxh7 is mate in 3" will send the message "Qxh7 is mate in 3" only to the people observing the game. It will not be sent to those playing the game.
+
+Examples:
+{{{
+say well played
+kibitz Winners please?
+whisper e5 looks like a strong move.
+}}}
+
+
+===Adding a User as a Friend. (notify command)===
+As you use FICS you will likely make friends with many people. FICS has a mechanism to add a friend. To add someone as a friend use "+notify userName". To remove someone as a friend use "-notify userName". After adding people to your friends list, you will receive messages when they log in and out of fics. The following is an example of a message you will see after you have added people and they have added you when you log in:
+{{{
+Present company on your notify list:
+   gwarp Musot(idle:12m) TheRaven(idle:20m) TheTactician
+The following players have you on their notify list:
+   bugbot(idle:2m) Cahta gwarp Musot(idle:12m) outAtime TheRaven(idle:20m) TheTactician
+}}}
+
+As your friends log in and out you will see messages like this:
+{{{
+Notification: gwarp has departed.
+Notification: Ludens has arrived.
+}}}
+
+You can list all of your friends currently online by typing "znotify" (See the example above).
+
+Examples:
+{{{
++notify sparkysdrone
+-notify sparkysdrone
+znotify
+}}}
+
+===How to avoid seeing tells from a particular user. (censor and set tell 0 commands)===
+FICS is generally a nice place; however, there are times when you will encounter abusive people. To avoid receiving messages from a particular user you use the censor list. "+censor userName" will add a user to your censor list, and you will no longer see any forms of communication from this user. You can also remove a user from the censor list with the command "-censor userName".
+
+At times you might also be harassed by guests. To avoid a user harassing you as different guests you can type "set tell 0". After sending this you will no longer see tells from guests. If at a later time you want to see tells from guests again, you can type "set tell 1".
+
+Examples:
+{{{
++censor reducto
+-censor reducto
+set tell 0
+set tell 1
+}}}
+
+===Sending a message to a user who is offline. (message command)===
+There are times when you want to send a message to a user offline. FICS uses 'messages' to accomplish this. To send a message to an offline user use 'message userName This is a message you can read when you come back online.'. To view your messages you can just type 'messages'. To save server space, FICS limits you to a maximum of 40 messages. Once this has been reached you will need to clear messages to receive new ones. There are several ways to clear messages. 
+  *  'clearmessages 8' will remove your message number 8. 
+   * 'clearmessages 8-10' will remove your messages 8-10.
+  *  'clearmessages *' will remove all of your messages.
+
+Another nice feature FICS offers is to email you messages. To activate this feature type 'set mailmess 1'. To deactivate it type 'set mailmess 0'.
+
+Examples:
+{{{
+message CDay Hello this is a test message.
+clearmessages 8
+clearmessages 8-10
+clearmessages *
+set mailmess 1
+set mailmess 0
+}}}
+
+==Useful Commands==
+Before we get into how to play a game, there are some other commands you should be familar with. 
+
+===Viewing a Users Profile (finger command)===
+You can view the ratings and statistics of a player by typing 'finger playerName'. Example: "finger cday". To view yourself just type in "finger".
+{{{
+Finger of CDay:
+
+On for: 32 mins   Idle: 0 secs
+
+          rating     RD      win    loss    draw   total   best
+Blitz      1636     29.9    4766    3208     325    8299   1970 (09-Nov-1996)
+Standard   1925     75.4     166      76      20     262   2000 (21-Aug-1996)
+Lightning  1649     48.2    5534    4493     369   10396   2137 (20-Sep-1998)
+Wild       1645    239.7     242     247      16     505   2042 (14-Dec-1996)
+Bughouse   1723     74.3   14434   13796      85   28315   2091 (11-Nov-2000)
+Crazyhouse 1909    121.8    3822    3040      10    6872   2228 (01-Jul-2001)
+Suicide    1133    281.2       3      25       0      28
+Atomic     1392    222.2      10      29       0      39
+
+Email      : carsonday@gmail.com
+
+Total time online: XXXXX
+% of life online:  XX.X (since Mon Feb 12, 18:50 EST 1996)
+
+Timeseal 1 : On
+
+ 1: Main developer for Raptor, a cross platform chess interface, for fics and 
+\   bics.
+ 2: http://code.google.com/p/raptor-chess-interface/
+ 3: Latest Stable Version: Beta1e
+ 4: Latest In Progress Version: Beta2m2
+ 5: Searching for a developer to take over bughouse issues and defects for 
+\   Raptor.
+}}}
+  *  The words on the far left are the rating categories. Blitz,Standard, and lightning are classical chess broken into categories based on time control. This will be explained later on.
+  *  Rating is your ELO or chess rating in the category. 
+
+
+You are allowed 10 notes to write comments for other people to see. You can set these notes by typing "set 1 This is my message line 1.","set 2 This is my message line 2",..."set 10 This is my message line 10.". You can unset a line by typing "set 1"
+
+Examples: 
+{{{
+finger cday
+finger
+set 1 "This is my note 1"
+set 1
+}}}
+
+===Viewing a Users Recent Game History (history command)===
+To view the last 10 games someone played you can type "history playerName". You can also type "history" to see your last 10 games.
+{{{
+History for CDay:
+                  Opponent      Type         ECO End Date
+58: + 1635 B    0 raptorTest    [ bu  5   0] B01 Res Fri Dec  4, 08:29 EST 2009
+59: + 1635 W    0 raptorTest    [ bu  5   0] B01 Res Fri Dec  4, 08:34 EST 2009
+60: + 1635 B    0 raptorTest    [ bu  5   0] B13 Res Fri Dec  4, 08:50 EST 2009
+61: + 1635 W    0 raptorTest    [ bu  5   0] B21 Res Fri Dec  4, 08:53 EST 2009
+62: + 1925 B    0 raptorTest    [ su 45   0] C00 Res Fri Dec  4, 08:57 EST 2009
+63: - 1635 W    0 raptorTest    [ bu  5   0] B01 Res Fri Dec  4, 08:58 EST 2009
+64: + 1635 B    0 raptorTest    [ bu  5   0] B01 Res Fri Dec  4, 09:00 EST 2009
+65: + 1649 W    0 raptorTest    [ lu  1   0] B01 Res Fri Dec  4, 09:01 EST 2009
+66: + 1635 B    0 raptorTest    [ bu  3   0] B01 Dis Fri Dec  4, 18:10 EST 2009
+67: = 1636 W 1674 JozeG         [ br  5   0] C00 Rep Sat Dec  5, 05:22 EST 2009
+}}}
+
+The list is pretty self explanatory. One thing to note is the number on the far left. That is an index describing the game. To look at the game you can type "examine playerName index". For example examine cday 67 would bring up my game 67 in the above list against JozeG.
+
+Examples:
+{{{
+history CDay
+history
+}}}
+
+===The Help Command===
+Fics has numerous help files describing how to use all of the features on the server. To view a help file just type "help helpFileName". The following are good tutorials to start out with, and help further explain the commands available:
+  * "help intro_welcome"
+  * "help intro_playing"
+  * "help intro_talking"
+
+Also you can type help commandName for a help file on a command if you would like more information. "help commands" lists all of the available commands.
+
+Examples:
+{{{
+help
+help commands
+help tell
+help kibitz
+help intro_welcome
+help intro_playing
+help intro_talking
+}}}
+
+
+==Playing and Observing Chess Games==
+
+===Game Challenge===
+FICS offers a wide variety of chess variants and time controls. For this tutorial I am just going to cover regular chess. Regular chess is broken up into 3 categories: lightning,blitz, and standard. FICS also supports Fischer Delay time controls otherwise known as increment. This is a number of seconds that are added to your clock after you make a move. FICS also support 0 second increment. Lets look at an example of a match request sent to me by mastertan and I will break down what all of this means.
+{{{
+Challenge: mastertan (1601) CDay (1636) rated blitz 5 0.
+Your blitz rating will change:  Win: +7,  Draw: -1,  Loss: -9
+Your new RD will be 29.8
+You can "accept" or "decline", or propose different parameters.
+}}}
+  *  The numbers in parenthis are mastertan and my ratings for blitz. Type "help rating" for more information.
+  *  The 5 0 indicates the clocks start at 5 minutes for each side and there is a 0 second increment. Also this game is a blitz game.  
+  *  The win,loss,draw numbers are the number of rating points you get for a win and the number you gain/lose for a loss or draw. 
+  *  RD stands for Ratings Deviation. It is part of a special rating system FICS uses called GLICKO. Basically as you play more your RD decreases. The lower your RD the more accurate your rating is supposed to be. You also gain/lose fewer points per game the lower your RD gets. Type "help glicko" or "help rd" for more information.
+
+To accept the match type "accept". To decline the match type "decline".
+
+To send a match for 5 0 to mastertan use:
+{{{
+match mastertan 5 0
+}}}
+
+Examples:
+{{{
+help rd
+help glicko
+help ratings
+match mastertan 5 0
+}}}
+
+===Advertising you want to play a game to many people (seek and sought commands)===
+FICS has a useful way to advertise that you are looking for a game. It is commonly referred to as a seek. To see all of the games available type the command "sought". You will get a listing like this:
+
+{{{
+ 10 2350  Knightsmasher(C)    1   0 rated   lightning              0-9999 
+ 19 2310  Knightsmasher(C)    3   0 rated   blitz                  0-9999 
+ 37 1924  CatNail(C)          3   0 rated   suicide                0-9999 mf
+ 58 2027  Sillycon(C)         5   0 rated   blitz                  0-9999 f
+ 76 1965  Snelheid(C)         3   0 rated   suicide                0-9999 
+ 81 1924  CatNail(C)          3   0 unrated suicide                0-9999 m
+ 93 2145  blik(C)             5   0 rated   blitz                  0-9999 mf
+105 1633P Medievil            3   0 rated   crazyhouse             0-9999 
+106 1818  thevines            3   0 rated   blitz               1600-9999 f
+110 2033E mella               0   1 unrated crazyhouse             0-4000 
+126 1598  nikros              3   0 rated   blitz               1650-9999 f
+127 2223  Sillycon(C)        15   0 rated   standard               0-9999 f
+143 1643  kurushi(C)          3   0 rated   wild/2                 0-9999 f
+145 2311  Knightsmasher(C)   15   0 rated   standard               0-9999 
+146 1643  kurushi(C)          3   0 rated   wild/3                 0-9999 f
+147 1643  kurushi(C)          3   0 rated   wild/4                 0-9999 f
+151 1939  GriffyJr(C)         5   0 rated   blitz                  0-9999 mf
+17 ads displayed.
+}}}
+
+The number on the far left is the ad id. To accept someones seek type "play adId".
+In the above list if I wanted to accept thevines 3 0 blitz ad I would type:
+{{{
+play 106
+}}}
+
+Most interfaces provide some sort of a gui screen to manage the sought list. In Raptor you can bring up this screen by selecting the menu
+{{{
+ Fics -> Tabs -> Seek Table
+}}}
+
+You can also issue seeks. To issue a seek for a 5 0 rated game use:
+{{{
+seek 5 0 r
+}}}
+
+For further information see the help files "help seek" and "help sought".
+
+Examples:
+{{{
+sought
+soughtall
+play 106
+help seek
+help sought
+}}}
+
+
+==More to come...==

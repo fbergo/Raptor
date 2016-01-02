@@ -1,0 +1,47 @@
+#labels Featured
+Raptor does not implement the babas !BCS->(SOUND) chess sounds and never will. However, rookcheck wanted to set it up and we wrote a script to do it. Here are the directions:
+
+  # Copy over all of the babas chess sounds into the Raptor/resources/sounds/bughouse directory.
+  # Now you need to add a regular expression script. Open up File->Preferences
+  # Click on Regular Expression Scripts on the left.
+  # Type in "babasSounds" for the script name.
+  # Type in "Plays !BCS->(sound) babas chess sounds." for the description.
+  # Click edit to the right of regular expression.
+  # Enter
+{{{
+.*\!BCS\-\>\(.*
+}}}
+    and click OK.
+  # Next click edit on the right of Script.
+  # Enter
+{{{
+String message = context.getChatEvent().getMessage();
+int bcsIndex = message.indexOf("!BCS->(");
+if (bcsIndex != -1) {
+   int closingParen = message.indexOf(")",bcsIndex);
+   if (closingParen != -1) {
+      String soundName = message.substring(bcsIndex + 7,closingParen);
+
+      File file = null;
+      new File("resources/sounds/bughouse/").listFiles(new FileFilter() {
+				public boolean accept(File pathName) {
+                    if (pathName.getName().equalsIgnoreCase(soundName + ".wav")) {
+					    file = pathName;
+                    }
+                    return false;
+				}
+			});
+
+      if (file != null) {
+          String fileName = file.getName();
+          int dotIndex = fileName.indexOf(".");
+          context.playBughouseSound(fileName.substring(0,dotIndex));
+      }
+   }
+}
+}}}
+     and click ok.
+  #  Enter save at the bottom.
+  #  Now click the left arrow to activate the script.
+  #  Now restart raptor. It has to reload all of the bughouse sounds.
+  #  When someone sends you a !BCS->(SOUND) now it should play it. e.g. !BCS->(applause)

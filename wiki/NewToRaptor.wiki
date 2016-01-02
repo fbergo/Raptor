@@ -1,0 +1,175 @@
+=Raptor New User's Guide=
+
+This user's guide will walk you through the features in Raptor from a new user's perspective. It is not intended to be a complete user's guide. It assumes the following:
+   *  You have raptor installed correctly. [WhichDownloadDoIUse Install Guide]
+   *  You have basic knowlege of FICS. [NewToFics FICS New User's Guide]
+
+<wiki:toc max_depth="3"/>
+
+==Launching Raptor For the First Time==
+When you launch raptor for the first time you will see the raptor-chess-interface project page. This will fill up the entire application. You will also see this page when you start raptor in the future. It is a good starting point because it allows you to see Raptor news, and take notice when a new version is released. 
+
+A question many people seem to have is how do you connect to FICS after launching it? If you look in the top left there is a FICS menu. Select FICS and then Connect and you will be presented with the login dialog:
+
+http://raptor-chess-interface.googlecode.com/files/raptorFicsLogin.jpg
+
+  *  After you type in your login name and password one time, Raptor will remember it and you will not have to type it in again.
+  *  You have three profiles to log in with. You can select another profile besides primary and fill that out if you wish. I have another one set up as raptorTest that I use to test raptor issues.
+  *  If you want to login as a guest check the "Login as guest" checkbox. If you want to login as an unnamed guest just remove your name and it will be the equivalent of logging in through telnet and pressing g.
+  *  You can choose to play with or without timeseal by checking the timeseal checkbox.
+  *  You can automatically log into fics with raptor by checking the "Automatically log me in next time'. This will log you into fics with these settings next time you launch Raptor.
+
+
+==Raptor Windowing==
+
+http://raptor-chess-interface.googlecode.com/files/RaptorAlphaSceenShot1.jpeg
+
+
+Raptor uses a fairly unique way of doing windowing and [http://en.wikipedia.org/wiki/Multiple_document_interface MDI]. It is very much like that of a modern [http://en.wikipedia.org/wiki/Integrated_development_environment IDE]. The Raptor window is broken up into 8 sub areas called quadrants. Each quadrant can contain one or more tabs. The quadrants are adjustable. Drag the dividers around until you have the windows sized like you want them. You can also drag and drop window items between quadrants by dragging the tab headers. In my opinion,  this is much better approach than the MDI windowing systems used in Baba's Chess, Thief, and Jin because you just have to re-size one quadrant and everything adjusts. However, it does take a little getting use to.
+
+Here are some useful windowing tips:
+  *  Right click on a tab header for a list of options.
+  *  You can drag a tab, by its tab header and drop it into another quadrant.
+  *  You can reorder tabs within a quadrant by dragging and dropping the tab header onto the tab header of the tab you want to swap it with.
+
+The quadrant numbering system will take some getting use to. Here is an image showing all of the quadrants. Raptor would only look like this if there were an item in each quadrant. If a quadrant does not contain any items it vanishes, and the other quadrants take up the extra space.
+
+http://raptor-chess-interface.googlecode.com/files/quadrants.jpg
+
+
+===Configuring Quadrants===
+After you get the hang of the quadrant system you might want to change the default location where raptor window items pop-up. This is all configurable. Click on File -> Prefences. On the left expand out the RaptorWindow tree. Click on Quadrants. Here you can customize which quadrants the Internal Web Browser uses and which ones are used for viewing PGN game lists and games.
+
+Next, expand out the Fics branch. Notice how it has both a fics and fics2 Quadrants section. You can connect to fics twice while running Raptor. Using these preference pages you can control the default locations of the specified items.
+
+If you use Bics, it has the same preference pages if you drill down into the Bics menu.
+
+==Interacting with the Raptor Consoles==
+
+===Right Click Popups===
+The key to using many raptor console features is to right click on users names and channel tells. Consider the following console output:
+
+{{{
+AmbiDexter(24): opps
+endgamebot(TD) c-shouts: I am lost. "tell endgamebot help"
+rajashekar(1): date
+juliusde(24): ops
+SantoshFromIndia(1): [Jin Applet 02.12.2006] How to msg on main console
+philk(SR)(TM)(1): e.g. type "tell philk Hello" to say hello to me . type "say 
+\   good game" to say good game to your opp, type "tell 1 text" to speak to 
+\   channel 1, .... type "help intro_talking" in the console for infos. If  a 
+\   player is offline and you want to send him a message type "message 
+\   playername ...", see also "help message"
+Notification: ilknight has arrived.
+TScheduleBot(TD) c-shouts: Chesslecture.com Prize Tournament scheduled 
+\   tournament. See 'finger TScheduleBot' for more information about this and 
+\   other scheduled events on FICS.
+lyquidMouse(1): [Jin 2.14.1] u
+mella(24): partner
+}}}
+
+Right clicking on `AmbiDexter(24)` will bring up all kinds of quick commands.
+
+http://raptor-chess-interface.googlecode.com/files/consolePopUp.jpg
+
+You can add a person tell tab for `AmbiDexter`, add a tab for channel 24, and many other features.
+
+Raptor also has some built in 'Right Click Parameter Scripts'. Translate to english, google, and define are all scripts. You can right click on a word or select text in the console then right click to use these options. You can add your own right click scripts in:
+{{{
+Preferences -> Chat Consoles -> Right Click Scripts
+}}}
+
+Raptor also has built in ficsgames.com and watchbot support. If you right click on a persons names you will have options to look them up on these sites automatically.
+
+You can also configure the "match" command list that shows up.
+{{{
+Preferences -> Fics (Right Click Person Match Commands)
+}}}
+
+If you right click on a word Raptor will try to figure out what the word is (e.g. a persons name, a channel, or a gameId). If it is a likely persons name it will show you commands for the person. If it is a likely channel number it will show you commands to interact with the channel. If it is a game id it will show you game commands.
+
+Another feature is you can select text in the console and then right click. This is useful for translating text into another language, or googling something longer than 1 word. 
+
+===Console Toolbar===
+Raptor has quite a few features in the console toolbar. If you hover over an icon you will see a description of what it does. 
+
+http://raptor-chess-interface.googlecode.com/files/raptorConsole.jpg
+
+The image above is me logged in with a main console tab and channel tabs for channels 37, 88, and 36.
+
+The 15minute, 5minute, 3minute, 1minute buttons are speed buttons for issuing seeks for classical chess by default. However you can configure these and add you own speed buttons in:
+{{{
+Preferences -> Chat Consoles -> Toolbars -> Main
+}}}
+
+You can sort by the All Actions Category from the pereference screen to find some useful pre-built actions. You can also create your own actions in:
+{{{
+Preferences -> Action Scripts
+}}}
+save them, and then add them to the toolbar mentioned above.
+
+===Console Scrolling and Scroll Lock===
+Raptor uses 'Smart Scroll' to handle scroll lock issues. If the thumb of the vertical scroll bar is on the bottom, scroll lock is automatically enabled. If the thumb of the vertical scroll bar is not at the bottom scroll lock will be turned off. This is useful if you have to scroll up to read a tell and have scroll lock turned on. You don't have to fight scroll lock this way. However, one thing to remember is to scroll back to the bottom when you want to turn scroll lock back on. The lock icon on the toolbar is closed when scroll lock is enabled, and is open when it is disabled.
+
+You can also disable 'Smart Scroll' and click on the lock to toggle scroll lock by unchecking the "Smart Scroll" in:
+{{{
+Preferences -> Chat Consoles -> Behavior
+}}}
+
+===Console Tab Filtering===
+By default, if you have a channel,person,regex,or game chat tab open in addition to a main tab, Raptor will filter messages sent to the tabs from the main tab. This is useful because it allows you to unclutter your Main console tab.
+
+You can disable this setting and stop the filtering by unchecking "Filter messages handled by other tabs from the main console" in:
+{{{
+Preferences -> Chat Consoles -> Behavior
+}}}
+ 
+
+===Typing in Raptor Commands (Raptor aliases)===
+Aliases are useful commands you can type into a console and execute functionality in Raptor. Some examples include "clear censor" which removes all of the names in your FICS censor list, "#message" which is similar to . but tells the last person who told you a message the specified message, and "set sound [on|off]" which toggles raptor sound.
+
+You can get a complete list of aliases by typing in "aliashelp" or by selecting:
+{{{
+Help->Raptor Help->Aliases
+}}}
+
+Aliases are frequently added with new releases, so you might want to check the [ChangeLog change log] or do an "aliashelp" to see if anything new was added when you install a new release.
+
+===Auto Complete===
+Raptor supports auto complete on the command line. You can auto complete user names who have sent shouts,channel tells,tells, kibitz, whisper, and says. You can also auto complete common commands. This is useful to auto complete names that are long or hard to remember like 'Mytzlplyk'. 
+
+Example of auto complete on the word messages:
+  #  Remove all text in the command line.
+  #  Type 'mes'
+  #  Type one of the following combinations: (control+space,alt+space,command+space)
+  #  'mes' will autocomplete into 'messages'
+
+If more than one match for an auto complete is found, all possiblities will be displayed in the console. You can then type 1 or more characters to make your auto complete word unique and then do it again.
+
+
+===Customizing the Chat Console Toolbars===
+You can customize the icons that appear in the different chat console toolbars. There are many preconfigured actions you can use, and you can also create your own. The following is a screenshot from preferences:
+http://raptor-chess-interface.googlecode.com/files/MainConsoleToolbarPrefs.jpg
+
+  *  Use the left and right arrows to add or remove an item.
+  *  Use the up and down arrows to order the items.
+  *  You can also add a separator with the add separator button.
+  *  You can sort the left side by category. This is useful if you just want to look at a particular category.
+
+*Your change won't take effect immediately. You need to close the console and reopen it for the changes to take effect.*
+
+===Creating an action script to add to a toolbar===
+The following example will cover creating an action script to shout "World Hello" to fics. Here is a screen shot of the ActionScript Preference Page with the fields populated for the script.
+
+http://raptor-chess-interface.googlecode.com/files/ActionScriptPreferences.jpg
+
+To edit the script you can click the edit button on the right side.
+
+http://raptor-chess-interface.googlecode.com/files/ActionScriptEditor.jpg
+
+Action scripts typically just send messages to the server using the context.send(msg) and context.sendHidden(msg) methods. However, you can actually do quite a lot more with scripting in Raptor. See the [http://code.google.com/p/raptor-chess-interface/wiki/Scripting scripting wiki] for more details.
+
+Now that you have added the script you can add it to a chat toolbar as an action. This is covered in the section "Customizing the Chat Console Toolbars".
+
+
+==...More to come==

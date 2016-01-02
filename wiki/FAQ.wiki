@@ -1,0 +1,146 @@
+=Frequently Asked Questions=
+==User Questions==
+  #  Linux sound issues [FAQ#1]
+  #  Which version to download? [FAQ#2]
+  #  Queued Premove [FAQ#3]
+  #  Slow drag and drop or board redrawing [FAQ#4]
+  #  Toolbar on bottom of page. [FAQ#5]
+  #  How co contribute? [FAQ#6]
+  #  Strange characters when I send unicode [FAQ#7]
+  #  Tabs closing for no reason [FAQ#8]
+  #  What are these roman numerals III,IV,V,etc? [FAQ#9]
+  #  All I see is a browser when launching Raptor [FAQ#10]
+  #  How do I add channel and person tabs? [FAQ#11]
+  #  How can I pop open a tab whenever someone tells me something like Babas does? [FAQ#12]
+  #  How does scripting work? [FAQ#13]
+  #  Why does scroll lock seem to have a mind of its own? [FAQ#14]
+  #  Why do observed games disapear when I play a game? [FAQ#15]
+  #  How do I get the LCD clocks I see in the screenshots? [FAQ#16]
+  #  My toolbar lost icons when I upgraded to a new version. [FAQ#17]
+  #  Is it possible to restore Raptor to all of its default settings? [FAQ#18]
+  #  Unkown Mozilla path (MOZILLA_FIVE_HOME) Error [FAQ#19]
+  #  How do I customize sounds? [FAQ#20]
+  #  I cant get TogaII or Fruit to work. They just dont do anything [FAQ#21]
+  #  Hiarchs will not analize. It doesnt do anything [FAQ#22]
+
+==Developer Questions==
+  #  Invalid file names when updating from subversion. [FAQ#Developer_1]
+  #  How do I build Raptor? [FAQ#Developer_2]
+  #  Are there any development guidelines? [FAQ#Developer_3]
+
+
+===1=== 
+*I don't hear any sound in Linux, or I just hear sound sometimes. Do you not support sound in Linux?*
+   This is the most common frequently asked question. For some reason sound support in linux is awful. It is quite bad on Ubuntu. To fix this you can setup process sound. See [http://code.google.com/p/raptor-chess-interface/wiki/LinuxSoundIssues Sound Issues in Linux].
+
+
+===2=== 
+*Which version do I download there are so many?*
+   Raptor uses SWT which is a native api that has a different implementation for each operation system and processor. You can check out this Wiki to find out which one works best for you: http://code.google.com/p/raptor-chess-interface/wiki/WhichDownloadDoIUse.
+
+
+===3===
+*Queued premove doesnt work. Why is that?*
+   It works its just probably not designed as you would expect. Queued premove currently allows you to make many moves. When it is your turn to move the list is processed by the oldest moves first. If a move is found that is legal it is the move made and the others are preserved. If a move is illegal it is removed. If no moves are found the entire queue is cleared. There is currently a discussion in the GoogleGroups about how to change it. If you have suggestions you can post them there. http://groups.google.com/group/raptor-chess-interface/browse_thread/thread/46fdefa4f3241820
+
+===4===
+*Chess piece images seem to be loading slow for me. Why is that?*
+   Raptor uses svg graphics for chess piece images. As different sizes are needed png files are created per size needed and stored in your $USER_DIR/.raptor/imagecache folder. You can convert all pngs at once for a chess set by selecting it in Preferences->ChessBoard and clicking on the optimize button at the top. This will get rid of the delay.
+
+===5===
+*I tried to move the toolbar to the bottom of the chess boards and it didn't work. WTF?*
+   Toolbar adjustments are one of the preferences that cant be done easily without a restart of raptor. Click the checkboxes the way you like them in Preferences ->ChessBoard->Toolbars then restart Raptor and your changes will take effect.
+
+===6===
+*I like Raptor and want to help out. What can I do?*
+   Raptor is an open source open community project. You are free to make comments on any of the wikis or fill out Issues in the Issues tab at the top to report defects or offer suggestions for new ideas. Raptor is always looking for developers to help implement and fix issues. If you want to help in this area talk to someone on the team. Also if you are interested in working on new sounds or new chess sets we are always looking for help in those areas. Just ask someone on the team.
+
+===7===
+*Others can't see the unicode character I send them. Why is that?*
+   Raptor uses the 'maciejg fics unicode standard', finger him for more details. This is really just the html unicode syntax with the x after &#. Ask the person who couldn't see the unicode to suggest unicode support to the person who authored his interface. To a user who does'nt have unicode supported they will see stuff like this:
+{{{
+&#x17c;&#xf3;&#x142;&#x107;&#x119;&#x15b;&#x105;&#x17a;&#x144;
+}}}
+ 
+===8===
+*I left and came back and all my tabs were closed. Is there a gremlin in Raptor that closing all my tabs?*
+   No gremlin, Raptor closes all tabs when a connector disconnects. This is so you don't have to manually close them all yourself. If you have a bunch of tabs open this can be quite cumbersome. However, if you really want to manually close them all just uncheck "Close all fics tabs on disconnect" in Preferences->Fics and uncheck "Close all bics tabs on disconnect" in Preferences->Bics. You can also check the keep alive options in the above mentioned preferences to avoid idle log outs.
+   
+===9===
+*What is all this Move to III,IV,V crap?*
+   Raptor uses a quadrant system to layout content. You can see an image of how the quadrants are aid out by right clicking on a tab header or by looking at the Preferences->Fics->Fics Quadrants page. Usually I,II, and VIII are only used for bughouse buttons and possible some new windows in the future. III and IV are typically used for chess boards. V,VI,and VII are generally used for console tabs and bugwho/seek tabs. The quadrant system does take a bit of getting use to, but after reading this I am sure it will be easy to use. It was implemented this way to handle tabbed content. You can also adjust the size of the quadrants by moving around the borders between them. It may not seem like it, but in my opinion this is a much better way to handle MDI types of applications than using individual windows in a box (Thief and Babas style). 
+
+From the Preferences->Fics->Fics Quadrants page ...
+  "If a quadrant contains no items, the quadrant disappears and the remaining quadrants consume the space. You may drag and drop items between quadrants by dragging the tab and dropping anywhere in another quadrant. Double click on a tab to maximize a quadrant, and double click again to restore it. Right clicking on a tab brings up a list of options as well."
+
+===10===
+*I just see a browser what is going on here?*
+   The browser you see is actually raptor with the project home page loaded. Look at the menus and you will see Fics/Bics options. Click connect from one of those menus to connect to the server.
+
+===11===
+*How do I add a channel tab or a person tab?*
+   Right click on the "JKiller(24):" part of a channel tell to add a channel tab. You can also just right click on the number. To add a person tab right click on the persons name. There are also regular expression tabs available from the Fics/Bics menus if you want to do that.
+
+===12===
+*How can I pop open a tab whenever someone tells me something?*
+   Most people find this annoying so it is not on by default. To activate it Preferences->Message Event Scripts select openPersonTab. Check the Active checkbox and then click Save.
+
+===13===
+*How does scripting work?*
+   Scripting uses the popular java scripting language Bean Shell that has been around for quite some time. See the Wiki on scripting for more information: http://code.google.com/p/raptor-chess-interface/wiki/Scripting.
+
+===14===
+*Why does my auto scroll keep turning off*
+   Raptor has smart scroll on by default. What this means is if the scrolling thumb on the right side is not at the bottom auto scrolling is turned off. If it is on the bottom again it is turned back on. This is so you don't have to fight auto scroll if you scroll up to look at something as new messages arrive. You can turn smart scroll off by unchecking smart scroll in Preferences -> Chat Consoles.  
+
+===15===
+*When I am observing a relay game then I play a game my relay game goes away why is that?*
+   As long as the game is currently in progress and not inactive, Raptor won't do this. However there is a fics variable on by default that does called unobserve. To stop this type 'set unobserve 0'.
+
+===16===
+*How do I configure the LCD clocks I see in the screen shots?*
+   Instructions are in this Wiki: [HowToSetupLCDFont]
+
+===17===
+*My toolbar lost icons when I upgraded to a new version. How do I fix that?*
+   If you do not have any custom action scripts you have written, and don't mind reverting to the default toolbar settings you can do this:
+     #  Open up terminal or a command prompt.
+     #  Determine the raptor home directory. If you open up Preferences->Raptor the first line displays it.
+     #  Type cd raptorHomeDir. (the directory mentioned above).
+     #  Type cd actions.
+     #  Type rm `*`.properties.
+     #  Restart Raptor.
+     #  You should now have all of the default toolbar icons and actions.
+
+
+===18===
+*Is it possible to restore raptor to its default settings?*
+   Yes but you will lose all cached images, saves scripts, preferences, and saved chess games. To do it go to Preferences -> Raptor and click the "Reset Raptor To Defaults" button on the bottom.
+
+===19===
+*Unkown Mozilla path (MOZILLA_FIVE_HOME)*
+    This error occurs in some linux versions and solaris. To fix it install firefox. That should clear up the issue and you will then have a working internal browser. Alternatively you can configure the external browser in Preferences->Raptor.
+
+===20===
+*How do I replace sounds?*
+    All sounds are clearly labeled in the resources/sounds folder. Just overwrite the file with whatever wav sound you like.
+
+===21===
+*I can't get TogaII or Fruit to work. They don't do anything.*
+   If you are using a version before 94b this was a bug. Upgrade to fix it.
+
+===22===
+*Hiarcs will not analize. It just sits there and won't do anything.*
+  Click on settings. At the top remove infinite form the go command. Click save. It should start analizing.
+
+===Developer 1===
+*When I try to do an update in subversion I get all of these strange errors saying I can't download the files because of the file names. Why is that?*
+   We work hard to make sure this does not happen. Chances are the problem has been fixed and you are way out of date. Try doing a replace on the entire project instead of just an update. If the problem still occurs then someone broke it with a commit and you can fill out an issue in the issues tab and it will be quickly resolved.
+
+===Developer 2===
+*How do I build it?*
+   http://code.google.com/p/raptor-chess-interface/wiki/HowToBuild
+
+===Developer 3===
+*Are there any development rules or guidelines?*
+   http://code.google.com/p/raptor-chess-interface/wiki/DevelopmentGuidelines

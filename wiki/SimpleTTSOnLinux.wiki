@@ -1,0 +1,35 @@
+#labels Featured
+= Simple Text-to-Speech on Linux =
+You can easily have Text-to-Speech functionality in Raptor on GNU/Linux. This can be achieved by using free software solutions, such as described here Festival. Of course this will not provide you the voice naturality as in proprietary products, but could be quite decent during chatting on FICS. Currently Raptor has a limited support of TTS, but I'll try to add some more in the future. All examples are for Fedora, but most will also apply to other distributions. 
+
+== Installing Festival ==
+=== Fedora ===
+First you need to install Festival along with available Festvox voices, which is free TTS system. 
+{{{
+yum install festival festvox-awb-arctic-hts
+}}}
+festvox-awb-arctic-hts is an example, there are about seven Festvox voice packages in Fedora repository. Run "yum search festvox" to list it all.
+=== Ubuntu ===
+In Ubuntu anything is much the same, except voice packages have different names.
+{{{
+sudo apt-get install festival festvox-kallpc16k
+}}}
+festvox-kallpc16k is an example again. Type "festvox" in Synaptic Package Manager for a list of voice packages.
+
+== Configuring Festival == 
+Now you can test Festival by typing "festival" in the console. You will be presented by its built-in Scheme interpreter. 
+{{{ 
+(SayText "Festival Speech Synthesis System by University of Edinburgh") ;; this will pronounce the text
+(voice.list) ;; to list all voices available
+(voice_nitech_us_rms_arctic_hts) ;; this will choose the voice named "nitech_us_rms_arctic_hts", very handy for trying voices 
+}}}
+After you choose the voice that suits you best, you need to fixate changes in Festival configuration file. To do this run "*sudo gedit /usr/share/festival/festival.scm*" for Ubuntu, or "*su -c 'gedit /usr/share/festival/lib/festival.scm'*" for Fedora. On the top of the file add the line "(set! voice_default 'voice_voicename)", where "voicename" is voice name as displayed by (voice.list) command, for example "(set! voice_default 'voice_nitech_us_bdl_arctic_hts)". Save the changes.
+
+== Applying it to Raptor ==
+In order to use Festival in Raptor you have to create a file named "festiv" with the following content:
+{{{
+#!/bin/sh
+echo $1 |festival --tts
+}}}
+
+Move the file into /usr/bin with "*sudo mv festiv /usr/bin*". Run Raptor, go to Preferences -> Speech. Type "festiv" in process name field. Now it is set, you may click on Test button to make sure everything works correctly.

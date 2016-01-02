@@ -1,0 +1,29 @@
+*Screen shot of the first chess board:*
+http://raptor-chess-interface.googlecode.com/files/raptorOld1.jpeg
+
+*Here it is after adding svg graphics and the first telnet console:*
+http://raptor-chess-interface.googlecode.com/files/raptorPreAlpha.jpg
+
+*This was after adding multiple connections within the same application:*
+http://raptor-chess-interface.googlecode.com/files/raptor.jpg
+
+*Here it is with the first browser window added:*
+http://raptor-chess-interface.googlecode.com/files/ScreenShot3.jpg
+
+*Here is a windows screen shot showing a bug john found with the clocks not showing:*
+http://raptor-chess-interface.googlecode.com/files/RaptorBug01.jpg
+
+*Another one of john's windows screen shot showing the circular to move indicator, this was later removed:*
+http://raptor-chess-interface.googlecode.com/files/raptor%20screenshot%2092509.jpg
+
+*Oh no ... a bug with quadrants in windows:*
+http://raptor-chess-interface.googlecode.com/files/raptor%20screenshot%2093009.jpg
+
+*Another funny bug with results showing for white and black at the same time in windows:*
+http://raptor-chess-interface.googlecode.com/files/RaptorBug02.jpg
+
+*Another john screen shot showing coordinate issues:*
+http://raptor-chess-interface.googlecode.com/files/RaptorBug03.jpg
+
+*Starting to get closer to the alpha look and feel:*
+http://raptor-chess-interface.googlecode.com/files/raptorAlpha.1.jpg

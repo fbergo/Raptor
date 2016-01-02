@@ -1,0 +1,19 @@
+#labels Featured
+To build:
+  *  Download and install eclipse. http://download.eclipse.org
+  *  After you have installed eclipse setup a new workspace.
+  *  Now you will need to download the SWT that matches your environment. Currently raptor is using Stable Build: 3.6.1 final.  Towards the bottom You will see a section called SWT Binary and Source. Pick the environment that matches your system and download it. http://archive.eclipse.org/eclipse/downloads/drops/R-3.6.1-201009090800/
+  *  Now you need to import the downloaded file as a project in eclipse. See http://www.eclipse.org/swt/eclipse.php for a detailed description on how to do that.
+  *  You now should have a project called org.eclipse.swt in your workspace. If you do not go back to the above url and try again.
+  *  The next step is to setup subversion in eclipse.
+  *  Directions on how to install can be found here: http://subclipse.tigris.org/servlets/ProjectProcess;jsessionid=94D9F9E05F79A8E0A376719C7755C3A1?pageID=p4wYuA
+  *  Now we need to setup subversion. Open up the Svn Repositories perspective.
+  *  Select new repository.
+  *  For URL use:
+    *  (committers) https://raptor-chess-interface.googlecode.com/svn/trunk/ 
+    *  (others) http://raptor-chess-interface.googlecode.com/svn/trunk/ 
+    *  If you are a committer you will need to enter in your google login name and go to the source tab in this project. If you are logged in you will have a link to get your password. Use that as your password.
+    *  Expand out the new repository.
+    *  Right click on raptor and then checkout. Use raptor as the project name.
+  *  Now when you switch back into the java perspective you should have no errors.
+  *  To run raptor: expand out src/raptor. Right click on Raptor.java and select run as java application.

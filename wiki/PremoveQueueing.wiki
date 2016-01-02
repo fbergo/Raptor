@@ -1,0 +1,19 @@
+=Premove Queueing=
+
+This page is a description of how premove queueing works in Raptor. It is probably not what you expect, as it is not conditional premove.
+
+First you have to enable it. In Preferences -> ChessBoard -> Behavior check both premove enabled and queued premove enabled.
+
+How it works:
+As you premove, each move is added to the queue. You can see the queue under the Premoves label while you are playing.
+
+After your opponent moves the following pseudo code executes:
+
+For each move in queue
+   *  Delete move from queue.
+   *  If move is legal, make move and remove from queue. Break out of the loop.
+   *  If move is illegal, remove move from queue.
+
+If you click the red X under the premoves label, the entire queue is emptied.
+
+If i remember correctly, JohnTheGreat and I came up with this concept back when I was first writing raptor.

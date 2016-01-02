@@ -1,0 +1,42 @@
+#labels Featured
+*The Golden Rule*
+  *  Nobody gets paid to do any work on Raptor we do it because we enjoy it. 
+  *  Try to respect others on the project. Some developers are new and might have noob questions but don't be a jerk or condescending to them. This behavior is not tolerated and you will quickly find yourself kicked off the team if you continually do this.
+  *  If you have questions at least do an internet search or check around before asking. Questions are fine but something you could easily look up is better handled by looking it up instead of asking someone a bunch of annoying questions.
+
+Typical standards for java coding: http://java.sun.com/docs/codeconv/ 
+
+We use the default eclipse formatting for code, and I do a clean-up with formatting, sorting (ignoring constants, enums, and variables,) , and optimize imports before each check in. Just be sure to *not* sort by constants, enums, or variables. It will break a bunch of code and has happened before. If you don't do a cleanup before checking in you might find your file was formatted or changed when someone else performed a clean up. 
+
+Try to avoid over complex if statements. I am guilty of this at times but try and write a method that reduces the complexity of them. I have found that the cleanup at times will try and optimize by removing what it thinks are unnecessary ()s and in the process remove ones that are essential. So if you have long ifs with lots of () look into writing a method to do some of the work. It also makes the code more readable.
+
+Try to write self documenting code that is easy to maintain. If you do this its readable and you don't even need to javadoc it.
+
+Raptor must be written to support java 5 (1.5). Don't use 1.6 features. The plan is to eventually use 1.6 but it will probably be in 6 months to a year. The main problem is Mac OS X. 1.6 is not supported in OSX 10.4.
+
+When you check in the fix for an issue use the comment: Fixed Issue ###. This will automatically add the revision to the issue, and it will also add a link to the issue in the revision. It is much easier to manage issues this way. Its not required for every issue, but if you do fix something please try to add an Issue for it.
+
+You are free to add yourself as an author of a file even though I don't like doing this. It just becomes a headache when a bunch of people have changed a file to see a bunch of names next to it. People can see that you made the changes by looking at the subversion history. However if you must include your name you are free to do it. You can also include your email address if you like or a url. However, don't (c) it. The (c) is held by the RaptorProject for all contributions.
+
+Add the following to all java files at the top before the package declaration:
+{{{
+/**
+ * New BSD License
+ * http://www.opensource.org/licenses/bsd-license.php
+ * Copyright (c) 2009,2010 RaptorProject (http://code.google.com/p/raptor-chess-interface/)
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+ * Neither the name of the RaptorProject nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+}}}
+
+Some good links:
+  *  SWT FAQ (http://www.eclipse.org/swt/faq.php
+  *  SWT Widgets http://www.eclipse.org/swt/widgets/
+  *  SWT Examples http://www.eclipse.org/swt/examples.php
+  *  1.5 JDK javadoc http://java.sun.com/j2se/1.5.0/docs/api/

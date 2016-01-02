@@ -1,0 +1,29 @@
+*Video created by Gorgonian. Shows many different Raptor chess sets and boards:*
+<wiki:video url="http://www.youtube.com/watch?v=we8rQ_mygh0"/>
+
+*Raptor .98u2 Xubuntu 10.04 (STC Championship)*
+http://raptor-chess-interface.googlecode.com/files/USCF-Metal_Example.png
+
+*Raptor .95 Mac OS X Carbon (Analysis)*
+http://raptor-chess-interface.googlecode.com/files/raptorv95ScreenShot1.jpg
+
+*Raptor .95 Mac OS X Carbon (Bughouse)*
+http://raptor-chess-interface.googlecode.com/files/raptorv95BugScreenShot.jpg
+
+*Raptor .95 Mac OS X Carbon (Bughouse 2)*
+http://raptor-chess-interface.googlecode.com/files/raptorv95BugScreenShot2.jpg
+
+*Alpha Release Screen Shot 2 Mac OS X Carbon*
+http://raptor-chess-interface.googlecode.com/files/RaptorAlphaScreenShot2.jpeg
+
+*Alpha Release Screen Shot 4 Windows*
+http://raptor-chess-interface.googlecode.com/files/raptor02.jpg
+
+*Alpha Release Screen Shot 5 Windows*
+http://raptor-chess-interface.googlecode.com/files/raptor01.jpg
+
+*Alpha Release Screen Shot 6 Mac OS X Carbon*
+http://raptor-chess-interface.googlecode.com/files/RaptorAlphaScreenShot3.jpeg
+
+*Alpha Release Screen Shot 7 Mac OS X Carbon*
+http://raptor-chess-interface.googlecode.com/files/RaptorAlphaScreenshot4.jpeg

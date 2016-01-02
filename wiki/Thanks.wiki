@@ -1,0 +1,28 @@
+#labels Featured
+==Thanks to the following people for suggestions and ideas that have made Raptor what it is today!==
+
+  *  *All of the members on the Raptor team*: For help testing and offering great ideas and suggestions. 
+
+  *  *johnthegreat*: He is a team member, but really helped with the pre Alpha versions by offering suggestions, testing, and doing a bit of development. Lately he has fixed some windows only issues.
+
+  *  *Ludens*: For finding some good defects that needed to be fixed before Alpha was released. He also seems to find many Windows only issues which is great. Often windows isn't tested as thoroughly as linux and Mac OS X. Ludens has also written many useful bots Raptor interacts with on fics (puzzlebot,endgamebot,notesBot). He also maintains http://ficsgames.com which Raptor interacts with.
+
+  *  *mastertan*: For providing good input on bugs, and usability enhancements. He has been an excellent tester. Without his bug reports Raptor would not be nearly as stable as it is today!
+
+  *  *Aramen*: For finding good defects, and making great suggestions. Some of aramens suggestions that have been implemented: Mouse wheel support on chess boards and UCI protocol for chess engines.
+
+  *  *StrategyMaster*: For fixing some sound issues related to mixing sounds in linux. He discovered some mono sounds were causing linux issues with mixing sounds. Without his help I dont think I would have been able to fix this issue.
+
+  *  *linusman*: For helping me make the UCI engine piece solid. He has pointed out quite a few things that were broken and probably would not have been fixed without his help tracing them down.
+
+  *  *AndreD*: For discussions on Thanx features and suggestions, many of which have been implemented. Some of his suggestions include: End game statistics, Memos, underlining mail and gnotify, player tags, and custom mouse actions. He also suggested the concept of aliases.
+
+ *  *Gorgonian*: For contributing many awesome chess sets.
+
+ *  *rookcheck*: For several suggestions on chess piece/background images. He has also offered good suggestions around usability.
+
+ *  *thetactician*: For many chat related suggestions. The away button was his idea. Many of his decaf suggestions wound up in Raptor as well.
+
+ *  *seberg*: For adding some features to gamebot to allow the gamebot tab. This is a great feature and allows you to use UCI analysis while looking through your old fics games.
+
+ *  *HALgooo*: For translating Raptor's interface into Italian in a very timely fashion. 

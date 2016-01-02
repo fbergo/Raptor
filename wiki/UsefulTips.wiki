@@ -1,0 +1,18 @@
+==Previous Useful Tips==
+  #  File -> Open PGN file will open a pgn file containing all of the variants [http://ficsgames.com ficsgames.com] supports.
+  #  "clear censor" will clear all of the handles in your fics censor list.
+  #  "fen" will dump FENs for all the open chess boards.
+  #  "cls" will clear a chat console.
+  #  You can add UCI chess engines for analysis on the Preferences -> Chess Engines page.
+  #  Right clicking on an observed board brings up a tab for game related tells (kibitzes/whispers)
+  #  ESC clears the command line and clears all premoves.
+  #  Control+space,ALT+space,Command+space can be used to autocomplete a command or user name.
+  #  Left clicking on an observed board makes it the primary board for kibitzes/whispers.
+  #  You can clear a list by typing clear listName. Useful for clearing censor,noplay,gnotify,notify lists.
+  #  F9 will populate the text to send field with "tell " + the last person who sent you a tell.
+  #  File Menu -> View My Saved Games, to view your played games.
+  #  Right click on peoples names for a list of options. This works on chess boards, in consoles, and in the seek/bugwho tabs. 
+  #  You can also right click on the CDay(24): portion of channel tells in consoles for channel related options. 
+  #  You can select text in a console then right click for a list of other options like translation,google,define, etc.
+  #  You can move tabs around by dragging the tab header and dropping it in another window.
+  #  Right clicking on tab headers gives you a menu of options.

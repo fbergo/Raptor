@@ -1,0 +1,593 @@
+===Additional Raptor Chess Sets (.98RC6+) ===
+
+As of .98RC6 Raptor supports Jin chess sets as well.
+
+To install a chess set download it, then in Raptor click File->Install chess set.
+
+==All sets: [http://raptor-chess-interface.googlecode.com/files/ChessSet_AllSets.zip ChessSet_AllSets.zip]==
+
+==Akiross: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Akiross.zip ChessSet_Akiross.zip]==
+
+Author: Unknown
+
+License: ?
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Akiross/bk.png
+
+==Freak: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Freak.zip ChessSet_Freak.zip]==
+
+Author: Maurizio Monge <maurizio.monge@gmail.com>
+
+License: [http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/sets/Freak/license.txt GPLv2]
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Freak/bk.png
+
+==Glass: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Glass.zip ChessSet_Glass.zip]==
+
+Author: poohblah13 <?>
+
+License: ?
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Glass/bk.png
+
+==Igor: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Igor.zip ChessSet_Igor.zip]==
+
+Author: poohblah13 <?>
+
+License: ?
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Igor/bk.png
+
+==JinAlpha: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinAlpha.zip ChessSet_JinAlpha.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinAlpha/bk.png
+
+==JinAlpha: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinBerlin.zip ChessSet_JinBerlin.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinBerlin/bk.png
+
+==JinAlpha: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinCondal.zip ChessSet_JinCondal.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinCondal/bk.png
+
+==JinHarlequin: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinHarlequin.zip ChessSet_JinHarlequin.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinHarlequin/bk.png
+
+==JinKingdom: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinKingdom.zip ChessSet_JinKingdom.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinKingdom/bk.png
+
+==JinLeipzig: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinLeipzig.zip ChessSet_JinLeipzig.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLeipzig/bk.png
+
+==JinLine: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinLine.zip ChessSet_JinLine.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLine/bk.png
+
+==JinLucena: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinLucena.zip ChessSet_JinLucena.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinLucena/bk.png
+
+==JinMagnetic: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinMagnetic.zip ChessSet_JinMagnetic.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMagnetic/bk.png
+
+==JinMark: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinMark.zip ChessSet_JinMark.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMark/bk.png
+
+==JinMarroquin: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinMarroquin.zip ChessSet_JinMarroquin.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMarroquin/bk.png
+
+==JinMaya: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinMaya.zip ChessSet_JinMaya.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMaya/bk.png
+
+==JinMedieval: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinMedieval.zip ChessSet_JinMedieval.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMedieval/bk.png
+
+==JinMerida: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinMerida.zip ChessSet_JinMerida.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMerida/bk.png
+
+==JinMotif: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinMotif.zip ChessSet_JinMotif.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinMotif/bk.png
+
+==JinSmart: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinSmart.zip ChessSet_JinSmart.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinSmart/bk.png
+
+==JinUsual: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinUsual.zip ChessSet_JinUsual.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUsual/bk.png
+
+==JinUtrecht: [http://raptor-chess-interface.googlecode.com/files/ChessSet_JinUtrecht.zip ChessSet_JinUtrecht.zip]==
+
+Author: Jin Chess Set
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/JinUtrecht/bk.png
+
+
+==Maju: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Maju.zip ChessSet_Maju.zip]==
+
+Author: Maurizio Monge <maurizio.monge@gmail.com>
+
+License: [http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/sets/Maju/license.txt GPLv2]
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Maju/bk.png
+
+==Odisea: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Odisea.zip ChessSet_Odisea.zip]==
+
+Author: Frederico A. P. Brandt <fredericobrandt@gmail.com>
+
+License: [http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/sets/Odisea/license.txt GPLv2]
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Odisea/bk.png
+
+==Portable Gray: [http://raptor-chess-interface.googlecode.com/files/ChessSet_PortableGray.zip ChessSet_PortableGray.zip]==
+
+Author: Unknown
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/PortableGray/bk.png
+
+==Simple: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Simple.zip ChessSet_Simple.zip]==
+
+Author: poohblah13 <?>
+
+License: ?
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Simple/bk.png
+
+==Skulls: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Skulls.zip ChessSet_Skulls.zip]==
+
+Author: Maurizio Monge <maurizio.monge@gmail.com>
+
+License: [http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/sets/Skulls/license.txt GPLv2]
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Skulls/bk.png
+
+==Tribal: [http://raptor-chess-interface.googlecode.com/files/ChessSet_Tribal.zip ChessSet_Tribal.zip]==
+
+Author:  poohblah13 <?>
+
+License: ?
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/Tribal/bk.png
+
+
+
+==WikiGray: [http://raptor-chess-interface.googlecode.com/files/ChessSet_WikiGray.zip ChessSet_WikiGray.zip]==
+
+Author: Unkown
+
+License: GNU
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/wp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/wn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/wb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/wr.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/wq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/wk.png
+
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/bp.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/bn.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/bb.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/br.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/bq.png
+http://raptor-chess-interface.googlecode.com/svn/trunk/raptor-set-expansion-packs/preview/WikiGray/bk.png
+
+
+Feel free to post comments on the sets below.

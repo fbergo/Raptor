@@ -1,0 +1,24 @@
+#labels Featured
+List of open source software and content used in raptor:
+  *  SWT http://www.eclipse.org/swt/widgets/ An awesome cross platform gui widget toolkit created by IBM for the eclipse project. Raptor also uses the JFace api that lays ontop of SWT.
+  *  svgsalamander https://svgsalamander.dev.java.net/ A great compact api for processing svg files.
+  *  Aha-Soft http://www.small-icons.com/stock-icons/16x16-free-toolbar-icons.htm Raptor uses the 12x12,16x16,20x20, and 24x24 icon sets.
+  *  Wiki chess set: http://commons.wikimedia.org/wiki/Category:BSD_images
+  *  Scripting provided by the bean shell project: http://www.beanshell.org/intro.html
+  *  Maurizio Monge <maurizio.monge@gmail.com> http://linuz.sns.it/~monge/wiki/index.php/Chess_pieces Created the fantastic svg chess sets: Eyes, Fantasy, Maju, Freak, Skulls, and Spacial. Raptor uses modified versions of these chess sets.
+  *  Decaf: http://code.google.com/p/decaf-chess-interface/ Raptor is a rewrite of the Decaf project. So quite a lot of concepts and code come from this project.
+  *  JIN Chess Interface (timeseal code) http://www.jinchess.com/ The code that handles timeseal was based on code from jin.
+  *  Various Jakarta commons apis: http://jakarta.apache.org/ 
+  *  Log4j and commons logging are used for logging: http://logging.apache.org/log4j/
+  *  JUnit is used for the unit testing framework: http://www.junit.org/
+  *  Inkscape: http://www.inkscape.org/ An outstanding free svg editor. 
+  *  The bughouse sounds and some other sounds were taken from Thief: http://www.thief-interface.com/
+  *  Various small pieces of code were taken from examples on the web. The authors names are still in the code where they are used. A couple of useful examples include:
+    *  Dem Pilafian Bare Bones Browser Launch (Still works and was written in 2005!) raptor.util.LaunchBrowser
+    *  yin_zhiguo yin_zhiguo@hotmail.com Progress Bar Dialog A simple and easy to use progress bar dialog. raptor.swt.ProgressBarDialog
+  *  The fics 'lasker' version eco999.idx and long999.idx files. These files are under GNU Version 2 license. They are being used for opening description and ECO code. (Used prior to .92)
+  *  The scid project for a very nice eco file containing eco code, opening name, and fen: http://scid.sourceforge.net/
+  *  The Odisea chess set by Frederico A. P. Brandt <fredericobrandt@gmail.com>. GNU/GPL license.
+  *  Using `SayStatic.exe` for windows a utility program that invokes the windows speech api. Downloaded from:  http://krolik.net/post/Say-exe-a-simple-command-line-text-to-speech-program-for-Windows.aspx
+  *  The unpacked-words dictionary file from: ftp://nic.funet.fi/pub/unix/security/dictionaries/DEC-collection/
+  *  Raptor chess creator uses batik to convert svg files into pngs: http://xmlgraphics.apache.org/batik/

@@ -1,0 +1,20 @@
+#labels Featured
+=Linux Sound Issues=
+[http://www.alsa-project.org/main/index.php/Main_Page ALSA] is always problematic in Linux. In java it is even worse. If you are having issues with mixing sounds across other applications, or not hearing sounds, I would suggest trying Process Sound. You can also try Pulse Audio but people have reported issues using it with other applications at the same time.
+
+==Process Sound==
+You can abandon java sound all together and set up process sound. The following instructions set up the 'play' process using sox (OSS instead of ALSA).
+
+First you will need to install the sox package. To do this in ubuntu open up a terminal and issue the command:
+{{{
+sudo apt-get install sox
+}}}
+
+The next step is to setup process sound in Raptor.
+
+Click on the file menu. Click on Preferences. And click on the Sound item on the left.Type in the process name 'play' (don't use 's) then click on the Apply button on the button right. Click the test button. If you heard the win.wav play then you now have sound working. Be sure to click ok at the end to save the change for future logins.
+
+==Pulse Audio==
+If you are having issues mixing sounds with ALSA pulse audio might be a good option. I have installed it in Ubuntu and it works well if you setup process sound with 'aplay', installed by default in Ubuntu. The following Wiki site has details on how to install it.
+
+https://wiki.ubuntu.com/PulseAudio

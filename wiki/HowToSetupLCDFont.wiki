@@ -1,0 +1,15 @@
+#labels Featured
+I was playing around with fonts and found some neat ones here is an example:
+http://raptor-chess-interface.googlecode.com/files/LCDFont.jpg
+
+
+First find a LCD Font you like from: http://www.dailyfreefonts.com
+The one in the above image is called Atomic Clock Radio. You can get it here: http://www.dailyfreefonts.com/fonts/charmap/2869-Atomic-Clock-Radio.html
+
+To set it up on OS X just download the file (for osx), and unzip it. Place the ttf file in your user/library/Fonts directory. 
+
+Next go into File/Properties in Raptor and select Chess Board/Clock Preferences. Click on clock font and select Atomic Clock Radio. Click apply and ok on the dialog and you are done. 
+
+One thing to beware of. Raptor needs a monospaced font for Clocks, otherwise the clock will look strange when it blinks in HH:SS mode.
+
+Feel free to post comments on other fonts you enjoy here.

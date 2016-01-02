@@ -1,0 +1,272 @@
+v.98u1 28/06/2011
+  *  Added language choosing dialog during the first startup.
+  *  Closing the application window now doesn't cause all services to reload. This allows instant Raptor window closing.
+  *  Greatly improved startup time.
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.98%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Better linux defaults for process sound.
+  *  Kibittz/Whisper events no longer show ratings in event source.
+  *  Games tab now filters on examined games correctly. 
+  *  Examine mode now highlights/arrows the last move made.
+  *  Games tab refreshes once a minute. Click the label to force an immediate refresh.
+  *  Reorganized the right click menu into sub-menus.
+  *  Pgn games are now appended to files.
+  *  Chess sets now are png based. For more information: see HowToCreateChessSets.
+  *  You can now pick which file to save pgn games to in Preferences -> General.
+  *  Page up/Page down/Home/End now work on the server output console.
+  *  Command line now retains focus if maximized or restored.
+  *  Upgraded to swt 3.6.1 final.
+  *  Fixed reconnect not enabling/disabling menu items correctly.
+  *  Fixed a small bug where "--> CDay<-- blah" shouts were leaking through extended censor.
+  *  Fixed bug where last seek was not showing up in the seek graph/table. (israelchauca ) 
+  *  Fixed some bugs in the seek tab. (israelchauca)
+  *  Fixed some linux bugs dealing with tables (bvk256)
+  *  Added gamebot tab. Right click gamebot history on a players name to activate it.
+  *  Added a zoom percentage for fonts in the bottom right corner.
+  *  Added console/player/channel message logging. Configurable in Preferences -> General.
+  *  Added spell check of the command line. 
+  *  Added a new text move list.  (bvk256)
+  *  Added themes (color preferences). You can access them from the Window -> Themes menu.
+  *  Added layouts (quadrant preferences). You can access them from the Window -> Layouts menu.
+  *  Added solid square background colors in the  Preferences -> Chess Board page.
+  *  Added an effect to square background images in the Preferences -> Chess Board page.
+  *  Added a seeks preference page. Preferences -> Seeks.
+  *  Added a non-ambiguous smart move.
+  *  Fixed atomic bug, now the opponent king can be dropped while you're in check
+  *  Added full player info dialog
+  *  Now it is possible to have Text-to-Speech in game consoles (applies to whispers and kibs)
+  *  Added wild 0 support (other wild variations should work as well)
+  *  New scripting mechanism
+  *  Bug Who enhancements: cleaned up UI, added a match: hi v hi, hi v low, both to the teams tab.
+  *  OS X Cocoa now binds the Raptor menu items correctly.
+  *  Added support for Jin chess sets You can install one directly. or from the AdditionalChessSets page.
+  *  Fixed bug where pasted text was chopped at first line break.
+  *  Fixed message breaking bug. If you are sending a message text can be 800, if you are sending a tell text can be 400. If its over its broken up appropriately.
+  *  Rewrote timeseal to be faster.
+  *  New notification sounds created by StrategyMaster.
+  *  Piece and Square drawing optimizations.
+  *  Added Thief, Jin, Babas, and new Raptor themes created by StrategyMaster.
+  *  Added Import/Export to themes and layouts.
+  *  Added bughouse premove drop from ghosted piece jail pieces.
+  *  Added Alpha,USCF,Smart,Motif,Fritz,Usual,CCube,Cases and many more default sets.Changed Wiki and Portable to sets to have dark black pieces. (Created by Gorgonian)
+  *  Premove drops now stick until you make a move. They are not cleared when your opponent moves.
+  *  Sending a message now turns autoscrolling back on  (Fudpucker).
+  *  Added a square background creator from svg files. See HowToCreateChessSets for more details.
+
+v.97a 01/04/2010
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.97%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Fixed variables right click menu item typo.
+  *  Fixed windows toolbars, they now handle text correctly and are packed.
+  *  Fixed Pref ->General -> Restore To Defaults in Windows.
+  *  Fixed the quadrants image on tab header right clicks in Windows and Linux.
+  *  Fixed apple key q, windows alt f4 issues. The application now shuts down cleanly.
+  *  Fixed Cocoa64 issues, added it back.
+  *  Added a preference to suppress the links for history,journal,who, etc.
+  *  Changed windows default fixed-width font to Lucida Console.
+  *  Mouse wheel over an observed or inactive chess board in Windows now goes backwards and forwards in the move list.
+  *  Fixed an issue with the ###message channel alias. It now adds a space if the tell is more than one word long.
+  *  Speech is automatically configured for windows. You can change the settings int he Speech Control panel.
+  *  Increased the default font sizes for small displays.
+  *  Milow is now the preferred default fixed-width font in OS X if it is available.
+  *  Added a right click delete and a save to the pgn table widget.
+  *  You can now simulate a right click with control/command/alt click.
+  *  Open pgn now remembers the last file you opened.
+  *  Added a windows installer.
+  *  Added a right oriented fixed layout for chessboards that does not dynamically adjust the font sizes.
+  *  New notification sounds by StrategyMaster
+
+v.96a 12/30/2009
+  *  If you sent an empty line, a NullPointerException would get logged.
+  *  Right clicking wasn't working on languages other than English. The menu items to translate were not appearing in the popup.
+
+v.96 12/30/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.96%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  `BugWho`,Games,Seeks now sort by rating descending.
+  *  Added memos. Right click a message to make it a memo. Type File->Show Memos to view memos. Type "clear memos" to remove all memos.
+  *  Added player tags. Right click on a players name to add a tag. Tags show up in tells,challenges,and shouts next to the user's name like Fics titles. Aliases =tags,`clear tags [tag]` can be used to manage tags. The Chat Consoles -> Tags preference page can be used to add,remove,edit tag names.
+  *  Added notification message color and sounds. You can configure if its played in chat consoles -> behavior and change the message colors in chat consoles -> message colors.  If you add a user to your extended censor list this message will be repressed.
+  *  Added regex based message blocking. You can configure this in the preferences -> Fics -> Message Blocks. It is intended to suppress some of the superfluous messages Fics sends.
+  *  Added custom colors for history, bugwho, and games.
+  *  Removed the strange characters you see after typing in user-name and password.
+  *  Since raptor is now more stable, set debug to false and optimize to true while compiling releases.
+  *  Links for history,bugwho,games,gnotify and journal are now the color of the message.
+  *  Added a preference not to underline quoted text.
+  *  ###Message is now an alias to tell channel ###. For instance, "37who am I?" will expand into "tell 37 who am i?".
+
+v.95 12/28/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.95%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Fixed another UCI engine bug that was not setting properties correctly.
+  *  gnotify events are now links
+  *  Fixed aliashelp it was'nt working.
+  *  kozyr Added a seek graph to compliment the seek table.
+  *  bugwho tabs are now contained in one window.
+  *  Fixed being able to edit/add right click menu items in the Fics preferences page.
+  *  Added a games tab which shows all games being played. Contains filter options similar to the seek tab.
+
+
+v.94c 12/27/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.94c%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Fixed a UCI engine bug that was not setting properties correctly.
+  *  Added auto unexamine when issuing a seek,match,getgame, or play.
+  *  Added a preference to block observed games when you are playing. Configurable in Preferences -> Chess Board -> Behavior. The default is off.
+
+v.94b 12/27/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.94b%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Fixed some UCI bugs. If you are using hiarchs you will need to click the settings button and remove the infinite in the go command and save to have it start analizing.
+  *  Fixed the pending offers widget, the lightbulb on the main console tab. It now shows: draws,partnership requests,aborts,matches,takebacks, and adjourns.
+  *  Added a partnership offered sound.
+
+v.94a 12/26/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.94a%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  History links were not showing up for games with an id < 10.
+  *  Using nav arrows when playing a game had some serious issues that have been fixed.
+
+v.94 12/26/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.94%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Fixed annoying bug where scroll lock didnt always scroll to the end.
+  *  History,journal,games,bugwho,news items now contain links that can be clicked on.
+  *  Added `ChatTypes` for finger,history,journal,games,and bugwho. These can be useful in scripts.
+  *  Fixed some annoyances in `RightOrientedLayout`. There is now a fixed size the header and footer labels can grow to. Also the header labels will always be the same size as the footer labels.
+  *  Right click on people's names now works in who and bugwho even if they are `1234.#FicsWhoFormattingSucks` types of names.
+  *  A few usability preference page changes.
+  *  Added a performance alias that dumps your performance ratings.
+  *  Added the ability to speak moves as they are made and results as games finish. Configurable in Preferences -> Chess Board -> Behavior.
+  *  Fixed a bug in the Chess Engines page where you could'nt add an engine in Linux because of the `*.*` filter.
+  *  Added a light bulb on the main console. When lit it means you have one or more challanges issued or you offered to you. When you click on it it gives you a popup menu to accept/withdraw the challenge. This is useful when there are multiple offers outstanding and clicking on accept or decline is ambiguous.
+  *  The openboard alias can now take a FEN. The FEN can also be incomplete, only the position is required.
+  *  Added a fen alias the shows the FENs of all the boards open.
+  *  Removed Mac OS X Cocoa64. To many people were having strange problems with it. When a new SWT is released that fixes these problems I will add it back.
+
+v.93 12/24/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.93%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Converted over to SCID eco/opening name file. This is even better than the FICS lasker versions.
+  *  Fixed Losers bug, you could not move when you were in check.
+  *  No longer announce checks in suicide.
+  *  Issue a quit to UCIEngines before disconnecting the process. Also added in code to invoke quit whenever a UCIEngine object is finalized.
+  *  Right click person,channel,game properties are now configurable in the Fics/Bics preference pages.
+  *  Added a preference for the busy command sent in the Fics/Bics preference pages.
+  *  Fixed the `ScriptDialog` being too tall or wide if the script was tall or wide.
+  *  Top/Bottom oriented layout now works in Windows and Linux.
+
+v.92 12/20/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.92%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Added extended censor. You can use the aliases +extcensor name, -extcensor name, =extcensor. Or use the right click drop down on a persons name.
+  *  Added win/loss/draw percentages to the pgn file screen.
+  *  Fixed click click move premoves where you capture your own piece.
+  *  Fixed the annoying not focusing window bug when double clicking on links and sometimes when showing a game.
+  *  Changed over to prepending games to your stored games pgn file instead of appending them.
+  *  Fixed many preference page bugs dealing with scripting.
+  *  Added an actions submenu to the Fics menu.
+  *  Fixed the `ChatType == TOLD` messages. These were not being parsed correctly.
+  *  Redid quadrants, you can now add bug buttons between the boards if you want. You can also move any window to any quadrant.
+  *  Added a north/south oriented layout for chess board controls.
+  *  No longer store E,P,+++,or---- in `WhiteElo`,`BlackElo` pgn headers.
+  *  Removed fics wrapping. (Preferences -> Fics uncheck remove server linewrapping to turn it back on and reconnect).
+  *  Fixed scroll lock problem where it was not scrolling to the end if a line wraps.
+  *  Fixed the extra space on the left of the window in windows.
+
+
+v.91 12/14/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone=Release.91%20status=Fixed&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary Defects/Enhancement]
+  *  Added a seek dialog.
+  *  Added the seek dialog and an unseek to the main console toolbar.
+  *  Fixed the opening name bug, the wrong opening names were being shown.
+  *  johnthegreat fixed the Vista key forwarding issue. Keystrokes are now forwarded and none are lost if you type fast.
+  *  Both games are flipped if the game is bughouse and you flip a board.
+  *  Channel tabs are sorted before they are restored. Also when restored they don't gain focus any longer.
+  *  Sound clips are no longer cached. Added a play to the context for scripting that takes a fully qualified file name. It can play most formats it doesn't have to be .wav.
+  *  The it shouts now use the shout color.
+  *  Fixed the move numbering bug.
+  *  Countdown sounds now work like thief.
+
+v.90 12/09/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta2m4&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancement]
+  *  Added auto-complete support. Use alt-space,command-space,control-space to auto complete. Works on common commands and user names in channel tells,direct tells,shouts,kibitzes, and whispers you have seen.
+  *  Added aliases =tells,+tab,=regex,cls
+  *  Change defaults: Piece Jail is not shown by default, Close tabs on disconnect is not enabled by default, show milliseconds is now never by default.
+  *  Fixed the missing keystrokes bug in Windows.
+  *  Scripting fixes: messages no longer contain fics%, and they are also trimmed. The messageSource has also been fixed in many ChatEvents. This was broken previously.
+  *  Added Fredricko's new chess set, Odisea.
+  *  Windows toolbars no longer contain the extra spacing.
+  *  Fixed many preference page bugs.
+  *  Changed scripting a bit, right click parameter scripts now contain a "chatEvent" for the message right clicked on. getParameter, getValue, and storeValue() now use Objects instead of Strings.
+  *  ESC now clears the command line.
+
+v.Beta2 Milestone 3 12/05/2007
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta2m3&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancement]
+  *  Fixed Opening name/eco. It was broken in milestone 2.
+  *  Fixed Chess engine analysis. It was broken in milestone 2.
+  *  Fixed Linux auto promote pieces, they were not showing up in milestone 2
+  *  You can now drag and drop tabs within the same tab folder to reorder them.
+  *  Added a game chat tab for kibs and whispers. By default you can bring this up by right clicking on the Observe board. It also now appears in the right click drop down in consoles.
+  *  Wrote a new Linux sound player. This should fix quite a few sound issues.
+
+v.Beta2 Milestone 2 12/04/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta2m2&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancement]
+  *  Mouse wheel support on chess boards. Moves forward/back moves.
+  *  Added configurable mouse button actions when playing,observing, and when inactive.
+  *  Added Random Move, Random Recapture, Random Capture, to the list of configurable mouse button actions while playing.
+  *  Added message filter from main console if it the message was handled in another tab. (See Preferences->Chat Consoles->Behavior to deactivate this feature).
+  *  Added game end statistics when playing. Performance rating, series information, avg mvoe time, # premoves.
+  *  Fixed Aliases, they were not working in Mac OS X.
+
+v.Beta2 Milestone 1 12/02/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta2m1&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancements]
+  *  UCI Chess Engine support for analysis.
+  *  Added aliases (Help Menu->Raptor->Raptor Aliases) for a list. They include useful things like timed commands, clearing notify,gnotify,censor,noplay lists, clearing finger notes/vars, turning on/off sound, etc.
+  *  Default fonts sizes change depending on monitor size.
+  *  Toolbar icons that change size depending on monitor size.
+  *  Auto promote pieces are now larger.
+  *  Fixed the piece jail count bug when promotes occurred.
+  *  Clicking on the premoves label clears all premoves.
+  *  Revamped scripting. There are now regular expression scripts. Added aliases +script name,-script name,listscript name,=scripts.
+  *  You can set announce checks for giving/receiving checks in Preferences ->Chess Board->Behavior.
+  
+
+v.Beta1e 11/18/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta1e&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancements]
+  *  Performance enhancements for tab items in the Raptor Window.
+  *  Upgrade to SWT 3.6M3. So far it seems like a smooth upgrade, no issues yet. I have also noticed some performance increases.
+  *  Sounds for challenge,abort request, and draw request.
+  *  Added direct speech support, there are no longer speech scripts. You can speak person tells and channel tells from tabs now. Bughouse partner tell speech can be configured from the Preferences->Bughouse tab.
+
+v.Beta1d 11/14/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta1d&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancements]
+  *  Added match winners.
+  *  Fixed an annoying bug where it brought up an error message saying channel was invalid when you clicked ok in preferences.
+  *  Fixed some other issues listed above.
+
+
+v.Beta1c 11/13/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta1c&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancements]
+  *  Fixed a few things that needed to be fixed but were not serious.
+  *  Redid all of the tables. The BugWho and SeekTable tabs should work better now. Added right click and double click support to them. Also they don't scroll up every time they are refreshed and they grow and shrink depending on the window size.
+
+v.Beta1b 11/10/2009
+  * [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=milestone%3Dbeta1b&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancements]
+  * Emergency fix for some Beta1a issues. Bug suggest making moves on the board was broken, There was an issue with Linux JRE 6, and restoring tab content was broken.
+
+v.Beta1a 11/10/2009
+  * [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=beta1a&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancements]
+  * Emergency fix for some issues in Beta1 listed above. Thanks to mastertan for finding and doing a good job at describing the issues in movies.
+
+v.Beta1 11/9/2009
+  * [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=Milestone%3DBeta1&sort=priority&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles Defects/Enhancements]
+  * Countless critical errors and issues were fixed as detailed in the above link.
+  * Poohblahs new chess sets (Glass,Simple.Tribal,ChrisDesgin, and Igor).
+  * Support for Fischer Random, Fischer Random Bughouse, Fischer Random Crazyhouse
+  * Move Lists in examine mode.
+  * Tons of examine mode fixes for different variants.
+  * Saving channel tabs/regex tabs between logins.
+  * Smart quadrant selection when viewing more than one game at a time.
+  * The toolbar is now on the top left of the Chess Board by default. There are options now to move it to the bottom or put it back on the top right of the tab folder where it was in Alpha.
+  * Convenient castling buttons for wild/fr on the toolbar. No longer will you have to type O-O or O-O-O.
+  * Support for the sposition command (Its amazing but people do actually use it!)
+  * Match commands added to right clicks on people's names, configurable in Bics/Fics preferences
+  * ficsgames.com support, watchbot support for name right clicks.
+  * Tabs are restored when you reconnect.
+  * Added some toolbar items since there is more space for them now (Draw,Adjourn,Observers,Rematch).
+  
+
+
+v.Alpha 10/30/2009
+  *  [http://code.google.com/p/raptor-chess-interface/issues/list?can=1&q=Milestone-Alpha%20status%3AFixed Defects/Enhancements]

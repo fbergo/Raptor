@@ -1,0 +1,556 @@
+#labels Featured
+Raptor uses a java scripting language called bean shell for scripting. http://www.beanshell.org/ .Bean shell is just java in scripting form. You do not have to declare a main or a main you just write a script as if you are inside of a method.
+
+There are three types of scripts in Raptor. The simplest is an action script. A script in response to some action. Examples are clicking on a bughouse button,clicking on a toolbar icon tied to an action script, and executing a keystroke bound to an action script.
+
+This help page assumes you have v.90 or better. 
+
+The context is key to scripting in Raptor. It contains methods you have access to. The following methods are available in every script. To invoke a method just use context.methodName(args):
+{{{
+	/**
+	 * Displays an alert message to the user.
+	 */
+	public void alert(String message);
+
+	/**
+	 * Appends the specified message to the specified file name.
+	 * 
+	 * @param fileName
+	 *            The path to the file.
+	 * @param message
+	 *            The message to append.
+	 */
+	public void appendToFile(String fileName, String message);
+
+	/**
+	 * Returns the current ping time in milliseconds.
+	 */
+	public long getPingMillis();
+
+	/**
+	 * Returns the current user you are following, if you are not following
+	 * anyone null is returned.
+	 */
+	public String getUserFollowing();
+
+	/**
+	 * Returns the number of seconds you have been idle, i.e. have not sent any
+	 * messages.
+	 */
+	public int getUserIdleSeconds();
+
+	/**
+	 * Returns the logged in user name.
+	 */
+	public String getUserName();
+
+	/**
+	 * Retrieves a stored value.
+	 * 
+	 * @param key
+	 *            The key to retrieve.
+	 * @return May return null if there is no value stored.
+	 */
+	public Object getValue(String key);
+
+	/**
+	 * Launches the process with the specified arguments. This can be used to
+	 * tie external scripts to Raptor.
+	 * 
+	 * @param commandAndArgs
+	 *            can be just a command name or you can pass in the command and
+	 *            multiple arguments i.e.
+	 *            launchProcess("say","this is the text to say").
+	 */
+	public void launchProcess(String... commandAndArgs);
+
+	/**
+	 * Opens a channel tab for the specified channel if one is not already
+	 * opened.
+	 */
+	public void openChannelTab(String channel);
+
+	/**
+	 * Opens a game chat tab for the specified game id.
+	 */
+	public void openGameChatTab(String gameId);
+
+	/**
+	 * Opens a partner, ptell tab, if one is not already opened.
+	 */
+	public void openPartnerTab();
+
+	/**
+	 * Opens a person tab if one is not already open for the specified person.
+	 */
+	public void openPersonTab(String person);
+
+	/**
+	 * Opens a regex tab if one is not already open.
+	 */
+	public void openRegularExpressionTab(String regularExpression);
+
+	/**
+	 * Opens the specified url.
+	 */
+	public void openUrl(String url);
+
+	/**
+	 * Plays the specified sound. Supports all formats.
+	 * @param pathToSound The fully qualified path to the sound.
+         * @since v.91
+	 */
+	public void play(String pathToSound);	
+
+
+	/**
+	 * Plays the specified bughouse sound.
+	 * 
+	 * @param soundName
+	 *            The name of the sound in the resources/sound/bughouse
+	 *            directory without the .wav. Spaces should be included if they
+	 *            are in the file name.
+	 */
+	public void playBughouseSound(String soundName);
+
+	/**
+	 * Plays the specified sound.
+	 * 
+	 * @param soundName
+	 *            The name of the sound in the resources/sound directory without
+	 *            the .wav.
+	 */
+	public void playSound(String soundName);
+
+	/**
+	 * Prompts the user for text with the specified message. The text the user
+	 * types in is returned.
+	 * 
+	 * @param message
+	 *            The message used to prompt the user.
+	 * @return
+	 */
+	public String prompt(String message);
+
+	/**
+	 * Registers a callback which will be invoked when the next message arrives
+	 * that matches the specified regular expression.
+	 * 
+	 * @param regularExpression
+	 *            The regular expression to match.
+	 * @param callback
+	 *            The callback which gets invoked. MessageCallback must
+	 *            implement the method
+	 * 
+	 *            <pre>
+	 * public void matchReceived(ChatEvent event);
+	 * </pre>
+	 */
+	public void registerMessageCallback(String regularExpression,
+			MessageCallback callback);
+
+	/**
+	 * Sends the specified message to the connector.
+	 * 
+	 * @param message
+	 *            The message to send.
+	 */
+	public void send(String message);
+
+	/**
+	 * Sends the specified message to the connector and hides the message from
+	 * the user.
+	 * 
+	 * @param message
+	 *            The message to send.
+	 */
+	public void sendHidden(String message);
+
+	/**
+	 * Displays a message to the user in the chat console. The message will not
+	 * be sent to the connector.
+	 * 
+	 * @param message
+	 *            The message to display to the user.
+	 */
+	public void sendToConsole(String message);
+
+	/**
+	 * Speaks the specified message. Requires that you have speech setup. OS X
+	 * users have speech enabled automatically; however, other users must
+	 * configure speech in the Speech preferences.
+	 */
+	public void speak(String message);
+
+	/**
+	 * Stores a value which can be obtained later in another script.
+	 * 
+	 * @param key
+	 *            The key of the value to store.
+	 * @param value
+	 *            The value to store.
+	 */
+	public Object storeValue(String key, String value);
+
+	/**
+	 * MIME encodes the passed in string.
+	 * 
+	 * @param stringToEncode
+	 *            The string to encode.
+	 * @return The encoded string.
+	 */
+	public String urlEncode(String stringToEncode);
+
+	/**
+	 * Writes the specified message to the specified file. The contents of the
+	 * file will be replaced with the specified message.
+	 * 
+	 * @param fileName
+	 *            The name of the file.
+	 * @param message
+	 *            The message.
+	 */
+	public void writeToFile(String fileName, String message);
+
+}}}
+
+Now lets look at some examples of action scripts. The 'I Suck' bughouse button is a good example of a simple action script. 
+{{{
+   context.send("ptell I SUCK");
+}}}
+Notice the use of the context to invoke the send method mentioned above. All this script does is send "ptell I SUCK" to the server.
+
+Lets have a look at another action script. This one is used as a main chat console button to follow the best lightning games.
+{{{
+   context.sendHidden("follow /l");
+}}}
+It looks quite similar. It sends the hidden text "follow /l" to the server. sendHidden, if you read above, does not display the sent message to the user.
+
+Most action scripts are just one lined scripts like these. They are the simplest of all the scripts. Now lets move onto something a bit more complex, parameter scripts.
+
+Parameter scripts also use the context above; however, they have some additional methods you have access to:
+{{{
+	/**
+	 * Returns the if the specified parameter name has a value.
+	 */
+	public boolean containsParameter(String parameterName);
+
+	/**
+	 * Returns the parameter value with the specified name.
+	 * 
+	 * @return The parameters.
+	 */
+	public Object getParameter(String parameterName);
+}}}
+As you can see they contain one or more parameters you can reference by name. The right click scripts you see when you select text in a console or right click on a word are partly driven off of right click scripts. Lets look at an example of the Translate to english script.
+{{{
+String parameter = " " + context.getParameter("selection");
+parameter = context.urlEncode(parameter);
+context.openUrl("http\://www.translate.google.com/?js\=y&prev\=_t&hl\=en&ie\=UTF-8&text\=" +
+                              parameter + "&sl\=auto&tl\=en\#submit");
+}}}
+This script is a bit more complicated. What it is doing is retrieving the parameter "selection" as shown above from the context. Next it urlEncodes the parameter. Finally, it opens the url by populating the queryy string with the text to translate.
+
+Even though it is not used parameter scripts also have the parameter `"chatEvent"`. This is the chat event being right clicked on. `ChatEvent` is described below.
+
+The most complex scripts are regular expression scripts. They work by matching messages sent from the server using a regular expression. When matched, the script is invoked with the message. The following method is available to regular expression scripts, in addition to the other methods belonging to all scripts.
+{{{
+	/**
+	 * Returns the ChatEvent this script pertains to.
+	 */
+	public ChatEvent getChatEvent();
+}}}
+
+A chat event is a just an object containing information about text the server is sending. You can obtain the message, the source or person sending the message, the channel, the game number, and the type. The following methods are available in `ChatEvent`:
+{{{
+	/**
+	 * If the chat event represents a channel tell this contains the channel
+	 * number. Otherwise it is null.
+	 */
+	public String getChannel() {
+		return channel;
+	}
+
+	/**
+	 * If the chat event represents a tell about a game, i.e.
+	 * kibitz,whisper,etc, this is the game id. Otherwise it is null.
+	 * 
+	 * @return
+	 */
+	public String getGameId() {
+		return gameId;
+	}
+
+	/**
+	 * Returns the entire server message.
+	 * 
+	 * @return Entire message involved in this ChatEvent.
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * This is the source of the ChatEvent. If it is a tell event, it is the
+	 * user sending the tell. If it is a channel tell event, it is the user
+	 * sending the tell to the channel. If its a shout or c-shout, its the
+	 * person shouting. If its a kibitz or whisper, its the person kibitzing or
+	 * whispering. If its a say, its the person sending the say.
+	 * 
+	 * @return The user name of the person involved in this ChatEvent.
+	 */
+	public String getSource() {
+		return source;
+	}
+
+	/**
+	 * The time in EPOC the chat event was created.
+	 * 
+	 * @return ChatEvent creation timestamp in EPOC millisconds.
+	 */
+	public long getTime() {
+		return time;
+	}
+
+	/**
+	 * @return The type of ChatEvent.
+	 * @see ChatTypes.
+	 */
+	public ChatType getType() {
+		return type;
+	}
+}}}
+There is another useful object available in `ChatEvent` the `ChatType`. By using this you can tell what type of event it is. Here is the definition of `ChatType`:
+{{{
+/**
+ * An enum that defines the different ChatTypes.
+ */
+public enum ChatType {
+	/**
+	 * Message sent when someone challenges you to a match.
+	 */
+	CHALLENGE,
+	/**
+	 * Channel tells. The source will be the person sending the tell. Will
+	 * always have a channel.
+	 */
+	CHANNEL_TELL,
+	/**
+	 * Global c-shouts. Will always have a source.
+	 */
+	CSHOUT,
+	/**
+	 * Message sent when you are following a persons games. Source will be the
+	 * person you are following.
+	 */
+	FOLLOWING,
+	/**
+	 * Used for messages sent from within Raptor. Error messages and
+	 * informational messages.
+	 */
+	INTERNAL,
+	/**
+	 * Kibitzes pertaining to a game. Will always have a game id set and a
+	 * source.
+	 */
+	KIBITZ,
+	/**
+	 * Used for a message containing a game moves list.
+	 */
+	MOVES,
+	/**
+	 * Message sent when you are no longer following a persons games.
+	 */
+	NOT_FOLLOWING,
+	/**
+	 * Used for messages sent to a connector.
+	 */
+	OUTBOUND,
+	/**
+	 * Tells from a bughouse partner. Source will be the partners name.
+	 */
+	PARTNER_TELL,
+	/**
+	 * Message pertaining to a bughouse partnership being created. Source will
+	 * be the name of the partner.
+	 */
+	PARTNERSHIP_CREATED,
+	/**
+	 * Message pertaining to a bughouse partnership being destroyed.
+	 */
+	PARTNERSHIP_DESTROYED,
+	/**
+	 * Global shouts. Will always have a source.
+	 */
+	SHOUT,
+	/**
+	 * Used for direct tells and say. Source will be the person sending the
+	 * tell.
+	 */
+	TELL,
+	/**
+	 * Used for the told message after a tell. Source will be the person told.
+	 */
+	TOLD,
+	/**
+	 * Used to identify types that don't match any of the others.
+	 */
+	UNKNOWN,
+	/**
+	 * Whispers pertaining to a game. Will always have a source and a game id.
+	 */
+	WHISPER,
+	/**
+	 * A message indicating this is a bugwho unpartnered buggers message.
+	 */
+	BUGWHO_UNPARTNERED_BUGGERS,
+	/**
+	 * A message indicating this is an available teams bugger message.
+	 */
+	BUGWHO_AVAILABLE_TEAMS,
+	/**
+	 * A message indicating this is a bughouse games message.
+	 */
+	BUGWHO_GAMES,
+	/**
+	 * A message indicating this is a message containing seeks.
+	 */
+	SEEKS,
+	/**
+	 * A message indicating an abort request.
+	 */
+	ABORT_REQUEST,
+	/**
+	 * A message indicating a draw offer.
+	 */
+	DRAW_REQUEST,
+	/**
+	 * Bots can send QTells. These are tells that start with the ':' character.
+	 * These messages never contain a source.
+	 */
+	QTELL,
+	/**
+	 * An internal message containing statistics after you finish playing a
+	 * game.
+	 */
+	PLAYING_STATISTICS,
+	/**
+	 * A message containing finger notes. Source contains the user whose finger
+	 * it is.(On fics this is the finger command).
+	 * 
+	 * @since .94
+	 */
+	FINGER,
+	/**
+	 * A message containing recent game history information. Source contains the
+	 * user whose history it is.(On fics this is the history command).
+	 * 
+	 * @since .94
+	 */
+	HISTORY,
+	/**
+	 * A message containing game jounal entries. Source contains the user whose
+	 * journal it is.(On fics this is the journal playerName command).
+	 * 
+	 * @since .94
+	 */
+	JOURNAL,
+	/**
+	 * A message containing games. (On fics this is from the games command).
+	 * 
+	 * @since .94
+	 */
+	GAMES,
+	/**
+	 * A message containing the full bugwho message. (On fics this is from the
+	 * bugwho command).
+	 * 
+	 * @since .94
+	 */
+	BUGWHO_ALL,
+	/**
+	 * Notification message, source is the user arriving.
+	 * 
+	 * @since .96
+	 */
+	NOTIFICATION_ARRIVAL,
+	/**
+	 * Notification message, source is the user departing.
+	 * 
+	 * @since .96
+	 */
+	NOTIFICATION_DEPARTURE
+}
+}}}
+
+Now lets look at an example of a fairly complex regular expression script. 
+
+http://raptor-chess-interface.googlecode.com/files/RegularExpressionScreenShot.jpg
+
+I would advise you to test your scripts carefully when trying to do things like this because it is a minefield and there are many ways to go wrong. Some things you need to carefully think about are endless looping tells and carefully guarding against `ChatEvents`. I created this script to tell 217 "RAPTOR ATTACK run for your lives!" whenever someone shouts or mentions Raptor in a channel. First I started with a regular expression that contains raptor. I could have been crafty and created a long one that basically did all of my `ChatEvent` checking for me but I wanted to illustrate using `ChatEvent` so I used 
+{{{
+   .*raptor.* 
+}}}
+. Next I needed a script. The following is what I came up with:
+{{{
+if ((context.getChatEvent().getType() == ChatType.CHANNEL_TELL && 
+    !context.getChatEvent().getChannel().equals("217")) || 
+    context.getChatEvent().getType() == ChatType.SHOUT) {
+    context.send("tell 217 RAPTOR ATTACK run for your lives!");
+}
+}}}
+Notice how this only sends the tell when the `ChatType` is a channel tell and its not channel 217. This is to prevent an endless loop i mentioned above where the script will execute again when it sees the channel 217 tell and again when it sees that tell forever. I also added in an or for the SHOUT `ChatType`.
+
+
+Here is the philosoraptor script i run sometimes. The regular expression is `.*raptor.*`:
+{{{
+import java.util.Random;
+
+if (context.getChatEvent().getType() == ChatType.SHOUT) {
+   String lastQuote = context.getValue("philosoraptorLastTell");
+   if (lastQuote == null || 
+       (System.currentTimeMillis() - Long.parseLong(lastQuote)) > 60000) {
+     	
+       String[] quotes = {"When I am, Death is not. When Death is, I am not. Then why fear what I cannot be?",
+                                   "Even if I choose not to decide. I still have made a choice.",
+                                   "All things are subject to interpretation ... whichever interpretation prevails at a give time is a function of power and not truth.",
+                                   "Why did the flinstones have christmas?",
+                                   "to /b/, or not to /b/ that is the question.",
+                                   "If I do nothing isn't but I go around seeking to be found.",
+                                   "Most people are afraid of death ... Yet the same people won't want to live forever.",
+                                   "We avoid risks in life ... so we can make it safely to death.",
+                                   "Why do they sterilize needles, used for lethal injections?",
+                                   "If actions are stronger than words, why is the pen mightier than the sword?",
+                                   "If you're not part of the solution ... you are the precipitate.",
+                                   "Why do they call it \"taking a dump\" when you're actually leaving one?",
+                                   "That which is hard to do is best done bitterly.",
+                                   "Is it a meme because you declare it or do you declare it because its a meme?",
+                                   "The next sentence is true. The previous sentence is false.",
+                                   "If police proportionally benefit directly from illegal activities ... How do we tell them apart from the \"criminals\"",
+                                   "Is being dead  the same as before you were alive?",
+                                    "Doesn't expecting the unexpected make the unexpected become the expected?",
+                                   "Is a key still a key if there is nothing to unlock?",
+                                   "If the univserse disappeared ... would the rules of chess still exist?",
+                                   "What if Pinocchio said ... \"My nose will not grow.\"",
+                                   "Even though I know nothing, I at least know that I know nothing. Thus meaning I actually DO know ONE thing. Which" + 
+                                   " means I am back to zero as the thing I thought I knew - is actually not true, causing me to know nothing at all",
+                                   "Practice makes perfect. But nobody is perfect ... Why practice?",
+                                   "Even a clock that does not work ... Is right twice a day",
+                                   "Do we see colours differently? is your red my green? is your blue my blue?",
+                                  "If I try to lose the game and succeed ... do I win the game?",
+                                  "Do i exist because there is porn of me? Or is it that because I exist, there is porn of me?",
+                                  "Is the cake ... a lie?",
+                                  "Are we human, or are we dancers?",
+                                  "A man with one watch knows what time it is. A man with two watches is never quite sure",
+                                  "Can one simply walk into Mordor?",
+                                  "Atoms and particles behave in probabilistic ways, but our mind is made of atoms and particles.... How can free will exist?",
+                                   };
+
+       String quote = quotes[new Random().nextInt(quotes.length)];
+       context.send("$$shout Philosoraptor ponders: " + quote);
+       context.storeValue("philosoraptorLastTell","" + System.currentTimeMillis());
+   }
+}
+}}}
+
+That wraps up scripting. If you have any comments or questions you can post them below. 
