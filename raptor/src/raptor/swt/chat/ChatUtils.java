@@ -193,7 +193,7 @@ public class ChatUtils {
 
 	public static String getUrl(String text) {
 		String strippedText = text == null ? "" : StringUtils.removeEnd(
-				StringUtils.replaceChars(text, "()'\"<>,", ""), ".");
+				StringUtils.replaceChars(text, "()'\"<>,#", ""), ".");
 
 		if (strippedText.endsWith(";")) {
 			strippedText = strippedText.substring(0, strippedText.length() - 1);
