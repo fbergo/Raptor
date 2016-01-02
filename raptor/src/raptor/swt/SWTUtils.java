@@ -45,22 +45,19 @@ public class SWTUtils {
 	public static final String[] OTHER_MONOSPACED_FONTS = { "Monospace",
 			"Monaco", "DejaVu Sans Mono", "Nimbus Mono L",
 			"WenQuanYi Zen Hei Mono", "Courier 10 Pitch", "Courier" };
-	
+
 	public static boolean isRightClick(MouseEvent e) {
-		boolean isRightClickKeyMask = (e.stateMask & SWT.ALT) != 0
-		|| (e.stateMask & SWT.COMMAND) != 0
-		|| (e.stateMask & SWT.CONTROL) != 0;
-        return e.button == 3 || (e.button == 1 && isRightClickKeyMask);
+		return e.button == 3;
 	}
-	
+
 	public static void center(Shell shell) {
-        Rectangle bds = shell.getDisplay().getBounds();
-        Point p = shell.getSize();
+		Rectangle bds = shell.getDisplay().getBounds();
+		Point p = shell.getSize();
 
-        int nLeft = (bds.width - p.x) / 2;
-        int nTop = (bds.height - p.y) / 2;
+		int nLeft = (bds.width - p.x) / 2;
+		int nTop = (bds.height - p.y) / 2;
 
-        shell.setBounds(nLeft, nTop, p.x, p.y);
+		shell.setBounds(nLeft, nTop, p.x, p.y);
 	}
 
 	/**
@@ -255,8 +252,8 @@ public class SWTUtils {
 		}
 
 		if (openNewWindow) {
-			Raptor.getInstance().getWindow().addRaptorWindowItem(
-					new GamesWindowItem(connector));
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(new GamesWindowItem(connector));
 		}
 	}
 
@@ -279,8 +276,8 @@ public class SWTUtils {
 		}
 
 		if (openNewWindow) {
-			Raptor.getInstance().getWindow().addRaptorWindowItem(
-					new BugButtonsWindowItem(connector));
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(new BugButtonsWindowItem(connector));
 		}
 	}
 
@@ -304,8 +301,8 @@ public class SWTUtils {
 		}
 
 		if (openNewWindow) {
-			BugWhoWindowItem item = new BugWhoWindowItem(connector
-					.getBughouseService());
+			BugWhoWindowItem item = new BugWhoWindowItem(
+					connector.getBughouseService());
 			Raptor.getInstance().getWindow().addRaptorWindowItem(item);
 		}
 	}
@@ -330,17 +327,18 @@ public class SWTUtils {
 		}
 
 		if (openNewWindow) {
-			SeekTableWindowItem item = new SeekTableWindowItem(connector
-					.getSeekService());
+			SeekTableWindowItem item = new SeekTableWindowItem(
+					connector.getSeekService());
 			Raptor.getInstance().getWindow().addRaptorWindowItem(item);
 		}
 	}
-	
+
 	/**
 	 * Opens a seek table window item if one is not already open for the
 	 * specified connector.
 	 */
-	public static void openGamesBotWindowItem(FicsConnector connector,String playerName) {
+	public static void openGamesBotWindowItem(FicsConnector connector,
+			String playerName) {
 		RaptorWindowItem[] items = Raptor.getInstance().getWindow()
 				.getWindowItems(GameBotHistoryWindowItem.class);
 
@@ -357,10 +355,10 @@ public class SWTUtils {
 		}
 
 		if (openNewWindow) {
-			GameBotHistoryWindowItem item = new GameBotHistoryWindowItem(connector,playerName);
+			GameBotHistoryWindowItem item = new GameBotHistoryWindowItem(
+					connector, playerName);
 			Raptor.getInstance().getWindow().addRaptorWindowItem(item);
 		}
 	}
-
 
 }

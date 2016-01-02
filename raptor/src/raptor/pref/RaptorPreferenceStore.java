@@ -441,7 +441,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 				"https://github.com/Raptor-Fics-Interface/Raptor");
 		setDefault(APP_SOUND_ENABLED, true);
 		setDefault(APP_USER_TAGS,
-				"+Partner,-Partner,Cool,Dupe,Friend,Jerk,Lagger,Noob,Premover,Troll,Strange");
+				"Dupe,Friend,Lagger,Idiot,Good Partner,No Partner,Premover,Troll");
 		setDefault(APP_PGN_FILE, Raptor.USER_RAPTOR_HOME_PATH
 				+ "/games/raptorGames.pgn");
 		setDefault(APP_LAYOUT, "Layout1");

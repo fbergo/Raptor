@@ -35,7 +35,8 @@ import raptor.util.RaptorLogger;
 import raptor.util.RaptorStringTokenizer;
 
 public class UserTagService {
-	private static final RaptorLogger LOG = RaptorLogger.getLog(UserTagService.class);
+	private static final RaptorLogger LOG = RaptorLogger
+			.getLog(UserTagService.class);
 	private static final String TAG_FILE = Raptor.USER_RAPTOR_HOME_PATH
 			+ "/logs/tags.txt";
 	private static UserTagService singletonInstance;
@@ -145,7 +146,8 @@ public class UserTagService {
 		StringBuilder result = new StringBuilder(1000);
 		String[] users = set.toArray(new String[0]);
 		for (int i = 0; i < users.length; i++) {
-            result.append(users[i]).append(i < users.length - 1 ? FIELD_SEPARATOR : "");
+			result.append(users[i]).append(
+					i < users.length - 1 ? FIELD_SEPARATOR : "");
 		}
 		return result.toString();
 	}
@@ -170,8 +172,8 @@ public class UserTagService {
 	}
 
 	public String[] getTags() {
-		String[] tags = Raptor.getInstance().getPreferences().getStringArray(
-				PreferenceKeys.APP_USER_TAGS);
+		String[] tags = Raptor.getInstance().getPreferences()
+				.getStringArray(PreferenceKeys.APP_USER_TAGS);
 		Arrays.sort(tags);
 		return tags;
 
@@ -192,10 +194,23 @@ public class UserTagService {
 			System.arraycopy(oldTags, 0, newTags, 0, oldTags.length);
 			newTags[oldTags.length] = tag;
 			Arrays.sort(newTags);
-			Raptor.getInstance().getPreferences().setValue(
-					PreferenceKeys.APP_USER_TAGS, newTags);
+			Raptor.getInstance().getPreferences()
+					.setValue(PreferenceKeys.APP_USER_TAGS, newTags);
 			Raptor.getInstance().getPreferences().save();
 		}
+	}
+
+	public boolean isUserInTag(String tag, String userId) {
+		Set<String> tagList = tagToUsersMap.get(tag.toLowerCase());
+
+		if (LOG.isDebugEnabled())
+			LOG.debug(userId + " " + tag + " Users in tag: " + tagList);
+
+		boolean result = false;
+		if (tagList != null) {
+			result = tagList.contains(userId.toLowerCase());
+		}
+		return result;
 	}
 
 	public String[] getUsersInTag(String tag) {

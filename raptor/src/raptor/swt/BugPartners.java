@@ -16,6 +16,7 @@ package raptor.swt;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.DisposeEvent;
@@ -40,8 +41,9 @@ import raptor.connector.Connector;
 import raptor.international.L10n;
 import raptor.pref.PreferenceKeys;
 import raptor.service.BughouseService;
-import raptor.service.ThreadService;
 import raptor.service.BughouseService.BughouseServiceListener;
+import raptor.service.ThreadService;
+import raptor.service.UserTagService;
 import raptor.swt.RaptorTable.RaptorTableAdapter;
 import raptor.swt.chat.ChatUtils;
 import raptor.util.RaptorRunnable;
@@ -168,12 +170,15 @@ public class BugPartners extends Composite {
 				});
 
 		table = new RaptorTable(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL
-				| SWT.SINGLE | SWT.FULL_SELECTION);
+				| SWT.FULL_SELECTION | SWT.MULTI);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		table.addColumn(local.getString("bugPartners2"), SWT.LEFT, 25, true, new RatingComparator());
-		table.addColumn(local.getString("bugPartners3"), SWT.LEFT, 50, true, null);
-		table.addColumn(local.getString("bugPartners4"), SWT.LEFT, 25, true, null);
+		table.addColumn(local.getString("bugPartners2"), SWT.LEFT, 25, true,
+				new RatingComparator());
+		table.addColumn(local.getString("bugPartners3"), SWT.LEFT, 50, true,
+				null);
+		table.addColumn(local.getString("bugPartners4"), SWT.LEFT, 25, true,
+				null);
 
 		// Sort once so it will sort by rating descending.
 		table.sort(0);
@@ -222,8 +227,7 @@ public class BugPartners extends Composite {
 					selectedIndexes = table.getTable().getSelectionIndices();
 				}
 				if (selectedIndexes == null || selectedIndexes.length == 0) {
-					Raptor.getInstance().alert(
-							local.getString("bugPartners6"));
+					Raptor.getInstance().alert(local.getString("bugPartners6"));
 				} else {
 					synchronized (table.getTable()) {
 						for (int i = 0; i < selectedIndexes.length; i++) {
@@ -288,10 +292,19 @@ public class BugPartners extends Composite {
 				result.add(bugger);
 			}
 		}
+
 		return result.toArray(new Bugger[0]);
 	}
 
 	protected boolean passesFilterCriteria(Bugger bugger) {
+		if (StringUtils.equalsIgnoreCase(bugger.getName(), getConnector()
+				.getUserName())) {
+			return false;
+		} else if (UserTagService.getInstance().isUserInTag("No Partner",
+				bugger.getName())) {
+			return false;
+		}
+
 		int minFilterRating = Integer.parseInt(minAvailablePartnersFilter
 				.getText());
 		int maxFilterRating = Integer.parseInt(maxAvailablePartnersFilter
@@ -316,6 +329,7 @@ public class BugPartners extends Composite {
 
 				synchronized (table.getTable()) {
 					Bugger[] currentBuggers = getFilteredBuggers();
+
 					String[][] newData = new String[currentBuggers.length][3];
 					for (int i = 0; i < currentBuggers.length; i++) {
 						newData[i][0] = currentBuggers[i].getRating();

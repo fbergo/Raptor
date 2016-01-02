@@ -460,6 +460,20 @@ public class RaptorTable extends Composite {
 		}
 	}
 
+	public String[][] getAllSelectedRowData() {
+		int[] selectedIndecies = table.getSelectionIndices();
+
+		if (selectedIndecies == null || selectedIndecies.length == 0) {
+			return null;
+		} else {
+			String[][] result = new String[selectedIndecies.length][];
+			for (int i = 0; i < selectedIndecies.length; i++) {
+				result[i] = getRowText(selectedIndecies[i]);
+			}
+			return result;
+		}
+	}
+
 	/**
 	 * Returns the backing table this RaptorTable uses.
 	 */
