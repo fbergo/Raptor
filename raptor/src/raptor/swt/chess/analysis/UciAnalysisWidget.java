@@ -400,7 +400,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 			}
 		});
 
-		updateEnginesCombo();
+		createEnginesCombo();
 
 		updateFromPrefs();
 		return composite;
@@ -416,8 +416,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 
 	public void onShow() {
 		clear();
-		updateEnginesCombo();
-		// updateCustomButtons();
 		start();
 		composite.layout(true, true);
 	}
@@ -519,7 +517,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		}
 	}
 
-	protected void updateEnginesCombo() {
+	protected void createEnginesCombo() {
 
 		engineCombo.removeAll();
 
