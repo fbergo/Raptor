@@ -203,8 +203,8 @@ public class UserTagService {
 	public boolean isUserInTag(String tag, String userId) {
 		Set<String> tagList = tagToUsersMap.get(tag.toLowerCase());
 
-		if (LOG.isDebugEnabled())
-			LOG.debug(userId + " " + tag + " Users in tag: " + tagList);
+//		if (LOG.isDebugEnabled())
+//			LOG.debug(userId + " " + tag + " Users in tag: " + tagList);
 
 		boolean result = false;
 		if (tagList != null) {
