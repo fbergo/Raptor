@@ -13,6 +13,7 @@
  */
 package raptor.swt;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -32,12 +33,10 @@ import raptor.connector.Connector;
 import raptor.international.L10n;
 import raptor.pref.PreferenceKeys;
 import raptor.service.BughouseService;
-import raptor.service.ThreadService;
 import raptor.service.BughouseService.BughouseServiceListener;
+import raptor.service.ThreadService;
 import raptor.swt.RaptorTable.RaptorTableAdapter;
-import raptor.util.IntegerComparator;
 import raptor.util.RaptorRunnable;
-import raptor.util.RatingComparator;
 
 public class BugGames extends Composite {
 
@@ -46,7 +45,7 @@ public class BugGames extends Composite {
 			Quadrant.VII, Quadrant.VIII, Quadrant.IX };
 
 	protected BughouseService service;
-	
+
 	protected static L10n local = L10n.getInstance();
 
 	protected RaptorTable bugGamesTable;
@@ -58,11 +57,9 @@ public class BugGames extends Composite {
 				ThreadService
 						.getInstance()
 						.scheduleOneShot(
-								Raptor
-										.getInstance()
+								Raptor.getInstance()
 										.getPreferences()
-										.getInt(
-												PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL) * 1000,
+										.getInt(PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL) * 1000,
 								this);
 			}
 		}
@@ -99,32 +96,29 @@ public class BugGames extends Composite {
 				| SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
 		bugGamesTable
 				.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		bugGamesTable.addColumn(local.getString("bugGames1"), SWT.LEFT, 10, true,
-				new IntegerComparator());
-		bugGamesTable.addColumn(local.getString("bugGames2"), SWT.LEFT, 10, true,
-				new IntegerComparator());
-		bugGamesTable.addColumn(local.getString("bugGames3"), SWT.LEFT, 14, true,
-				new RatingComparator());
-		bugGamesTable.addColumn(local.getString("bugGames4"), SWT.LEFT, 19, true, null);
-		bugGamesTable.addColumn(local.getString("bugGames5"), SWT.LEFT, 14, true,
-				new RatingComparator());
-		bugGamesTable.addColumn(local.getString("bugGames6"), SWT.LEFT, 19, true, null);
-		bugGamesTable.addColumn(local.getString("bugGames7"), SWT.LEFT, 14, true, null);
+		bugGamesTable.addColumn(local.getString("bugGames1"), SWT.LEFT, 10,
+				true, null);
+		bugGamesTable.addColumn(local.getString("bugGames2"), SWT.LEFT, 14,
+				true, null);
+		bugGamesTable.addColumn(local.getString("bugGames3"), SWT.LEFT, 30,
+				true, null);
+		bugGamesTable.addColumn(local.getString("bugGames4"), SWT.LEFT, 30,
+				true, null);
 
 		bugGamesTable.addRaptorTableListener(new RaptorTableAdapter() {
 			@Override
 			public void rowDoubleClicked(MouseEvent event, String[] rowData) {
-				service.getConnector().onObserveGame(rowData[0]);
+				if (StringUtils.isNotBlank(rowData[0])) {
+					service.getConnector().onObserveGame(rowData[0]);
+				}
 			}
 		});
 
-		// sort once so it will be on white elo descending when new data
-		// arrives.
-		bugGamesTable.sort(2);
+		bugGamesTable.setSortable(false);
 
 		Composite buttonsComposite = new Composite(this, SWT.NONE);
-		buttonsComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
-				false));
+		buttonsComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				true, false));
 		buttonsComposite.setLayout(new RowLayout());
 
 		Button obsButton = new Button(buttonsComposite, SWT.PUSH);
@@ -138,12 +132,14 @@ public class BugGames extends Composite {
 					int selectedIndex = bugGamesTable.getTable()
 							.getSelectionIndex();
 					if (selectedIndex != -1) {
-						service.getConnector().onObserveGame(
-								bugGamesTable.getTable().getItem(selectedIndex)
-										.getText(0));
+						String gameNumber = bugGamesTable.getTable()
+								.getItem(selectedIndex).getText(0);
+						if (StringUtils.isNotBlank(gameNumber)) {
+							service.getConnector().onObserveGame(gameNumber);
+						}
 					} else {
-						Raptor.getInstance().alert(
-								local.getString("bugGames9"));
+						Raptor.getInstance()
+								.alert(local.getString("bugGames9"));
 					}
 				}
 
@@ -160,11 +156,9 @@ public class BugGames extends Composite {
 			ThreadService
 					.getInstance()
 					.scheduleOneShot(
-							Raptor
-									.getInstance()
+							Raptor.getInstance()
 									.getPreferences()
-									.getInt(
-											PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL) * 1000,
+									.getInt(PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL) * 1000,
 							timer);
 		}
 
@@ -188,34 +182,45 @@ public class BugGames extends Composite {
 							bugGames = new BugGame[0];
 						}
 
-						String[][] rowData = new String[bugGames.length * 2][7];
-						for (int i = 0; i < bugGames.length; i++) {
-							rowData[i * 2][0] = bugGames[i].getGame1Id();
-							rowData[i * 2][1] = bugGames[i].getGame2Id();
-							rowData[i * 2][2] = bugGames[i].getGame1White()
-									.getRating();
-							rowData[i * 2][3] = bugGames[i].getGame1White()
-									.getName();
-							rowData[i * 2][4] = bugGames[i].getGame1Black()
-									.getRating();
-							rowData[i * 2][5] = bugGames[i].getGame1Black()
-									.getName();
-							rowData[i * 2][6] = bugGames[i].getTimeControl()
-									+ " " + (bugGames[i].isRated() ? "r" : "u");
+						int rowDataRows = bugGames.length == 0 ? 0
+								: bugGames.length * 3 - 1;
 
-							rowData[i * 2 + 1][0] = bugGames[i].getGame2Id();
-							rowData[i * 2 + 1][1] = bugGames[i].getGame1Id();
-							rowData[i * 2 + 1][2] = bugGames[i].getGame2White()
-									.getRating();
-							rowData[i * 2 + 1][3] = bugGames[i].getGame2White()
-									.getName();
-							rowData[i * 2 + 1][4] = bugGames[i].getGame2Black()
-									.getRating();
-							rowData[i * 2 + 1][5] = bugGames[i].getGame2Black()
-									.getName();
-							rowData[i * 2 + 1][6] = bugGames[i]
-									.getTimeControl()
+						String[][] rowData = new String[rowDataRows][4];
+						for (int i = 0; i < bugGames.length; i++) {
+							int index = i * 3;
+							rowData[index][0] = bugGames[i].getGame1Id();
+							rowData[index][1] = bugGames[i].getTimeControl()
 									+ " " + (bugGames[i].isRated() ? "r" : "u");
+							rowData[index][2] = bugGames[i].getGame1White()
+									.getName()
+									+ "("
+									+ bugGames[i].getGame1White().getRating()
+									+ ")";
+							rowData[index][3] = bugGames[i].getGame1Black()
+									.getName()
+									+ "("
+									+ bugGames[i].getGame1Black().getRating()
+									+ ")";
+
+							rowData[index + 1][0] = bugGames[i].getGame2Id();
+							rowData[index + 1][1] = "";
+							rowData[index + 1][2] = bugGames[i].getGame2White()
+									.getName()
+									+ "("
+									+ bugGames[i].getGame2White().getRating()
+									+ ")";
+							rowData[index + 1][3] = bugGames[i].getGame2Black()
+									.getName()
+									+ "("
+									+ bugGames[i].getGame2Black().getRating()
+									+ ")";
+
+							if (i < (bugGames.length - 1)) {
+								rowData[index + 2][0] = "";
+								rowData[index + 2][1] = "";
+								rowData[index + 2][2] = "";
+								rowData[index + 2][3] = "";
+							}
 						}
 						bugGamesTable.refreshTable(rowData);
 					}

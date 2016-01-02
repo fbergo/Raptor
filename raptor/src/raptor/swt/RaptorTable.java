@@ -19,8 +19,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import raptor.util.RaptorLogger;
- 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableCursor;
 import org.eclipse.swt.events.ControlAdapter;
@@ -33,16 +31,17 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.graphics.Color;
 
+import raptor.util.RaptorLogger;
 import raptor.util.RaptorStringUtils;
 
 /**
@@ -156,7 +155,8 @@ public class RaptorTable extends Composite {
 		}
 	}
 
-	private static final RaptorLogger LOG = RaptorLogger.getLog(RaptorTable.class);
+	private static final RaptorLogger LOG = RaptorLogger
+			.getLog(RaptorTable.class);
 
 	protected static final Comparator<String> STRING_COMPARATOR = new Comparator<String>() {
 		public int compare(String arg0, String arg1) {
@@ -172,11 +172,12 @@ public class RaptorTable extends Composite {
 	protected TableItemComparator lastComparator;
 	protected List<RaptorTableListener> tableListeners = new ArrayList<RaptorTableListener>(
 			2);
+	protected boolean isSortable = true;
 	protected int fixedWidth;
 	protected int fixedHeight;
 	protected TableCursor cursor;
 	protected boolean ignoreCursorSelection;
-	
+
 	private static boolean useLinuxWorkaround = System.getProperty("os.name")
 			.startsWith("Linux");
 	private static Color activeMoveColor = Display.getCurrent().getSystemColor(
@@ -317,6 +318,14 @@ public class RaptorTable extends Composite {
 				}
 			});
 		}
+	}
+
+	public boolean isSortable() {
+		return isSortable;
+	}
+
+	public void setSortable(boolean isSortable) {
+		this.isSortable = isSortable;
 	}
 
 	/**
@@ -514,7 +523,7 @@ public class RaptorTable extends Composite {
 			}
 
 			// sort
-			if (lastComparator != null) {
+			if (isSortable && lastComparator != null) {
 				sort(lastComparator);
 			}
 
@@ -568,7 +577,7 @@ public class RaptorTable extends Composite {
 	/**
 	 * If usesTableCursor this will select the specified row and column.
 	 */
-	public void select(int row, int column) {                                 
+	public void select(int row, int column) {
 		table.deselectAll();
 
 		if (useLinuxWorkaround) {
@@ -599,16 +608,15 @@ public class RaptorTable extends Composite {
 		synchronized (table) {
 			if (useLinuxWorkaround) {
 				TableItem item = table.getItem(table.getItemCount() - 1);
-				item.setForeground(
-						table.getColumnCount(), activeMoveColor);
+				item.setForeground(table.getColumnCount(), activeMoveColor);
 				return;
 			}
-			
+
 			if (table.getItemCount() > 0) {
 				table.deselectAll();
 				table.setSelection(table.getItemCount() - 1);
 				int column = getNonBlankColumnCount();
-				
+
 				if (cursor != null) {
 					cursor.setSelection(table.getSelectionIndex(), column);
 					cursor.setVisible(true);
@@ -617,12 +625,12 @@ public class RaptorTable extends Composite {
 			}
 		}
 	}
-	
+
 	protected int getNonBlankColumnCount() {
 		int column = 0;
 		for (int i = table.getColumnCount() - 1; i >= 0; i--) {
-			if (StringUtils.isNotBlank(table.getItem(
-					table.getItemCount() - 1).getText(i))) {
+			if (StringUtils.isNotBlank(table.getItem(table.getItemCount() - 1)
+					.getText(i))) {
 				column = i;
 				break;
 			}
@@ -658,25 +666,27 @@ public class RaptorTable extends Composite {
 	 * toggles them if the same column is sorted twice.
 	 */
 	public void sort(int index) {
-		synchronized (table) {
-			table.setRedraw(false);
+		if (isSortable) {
+			synchronized (table) {
+				table.setRedraw(false);
 
-			ColumnInfo info = columnInfos.get(index);
-			wasLastSortAscending = lastStortedColumn == null || (lastStortedColumn != info.column || !wasLastSortAscending);
-			lastStortedColumn = info.column;
-			lastComparator = new TableItemComparator(info.comparator,
-					info.index, wasLastSortAscending);
-			sort(lastComparator);
+				ColumnInfo info = columnInfos.get(index);
+				wasLastSortAscending = lastStortedColumn == null
+						|| (lastStortedColumn != info.column || !wasLastSortAscending);
+				lastStortedColumn = info.column;
+				lastComparator = new TableItemComparator(info.comparator,
+						info.index, wasLastSortAscending);
+				sort(lastComparator);
 
-			table.setRedraw(true);
-			table.layout(true);
-			table.redraw();
+				table.setRedraw(true);
+				table.layout(true);
+				table.redraw();
 
-			for (RaptorTableListener listener : tableListeners) {
-				listener.tableSorted();
+				for (RaptorTableListener listener : tableListeners) {
+					listener.tableSorted();
+				}
 			}
 		}
-
 	}
 
 	/**
@@ -706,27 +716,30 @@ public class RaptorTable extends Composite {
 	 * Sorts the table using the specified comparator.
 	 */
 	protected void sort(Comparator<TableItem> comparator) {
-		long startTime = System.currentTimeMillis();
+		if (isSortable) {
+			long startTime = System.currentTimeMillis();
 
-		TableItem[] beforeSort = table.getItems();
-		TableItem[] sorted = new TableItem[beforeSort.length];
+			TableItem[] beforeSort = table.getItems();
+			TableItem[] sorted = new TableItem[beforeSort.length];
 
-		System.arraycopy(beforeSort, 0, sorted, 0, beforeSort.length);
+			System.arraycopy(beforeSort, 0, sorted, 0, beforeSort.length);
 
-		Arrays.sort(sorted, comparator);
-		String[][] data = new String[sorted.length][];
-		for (int i = 0; i < sorted.length; i++) {
-			data[i] = getData(sorted[i]);
-		}
+			Arrays.sort(sorted, comparator);
+			String[][] data = new String[sorted.length][];
+			for (int i = 0; i < sorted.length; i++) {
+				data[i] = getData(sorted[i]);
+			}
 
-		for (int i = 0; i < sorted.length; i++) {
-			TableItem item = new TableItem(table, SWT.NONE, i);
-			item.setText(data[i]);
-			beforeSort[i].dispose();
-		}
+			for (int i = 0; i < sorted.length; i++) {
+				TableItem item = new TableItem(table, SWT.NONE, i);
+				item.setText(data[i]);
+				beforeSort[i].dispose();
+			}
 
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Sorted in " + (System.currentTimeMillis() - startTime));
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Sorted in "
+						+ (System.currentTimeMillis() - startTime));
+			}
 		}
 	}
 }
