@@ -577,8 +577,7 @@ public class ChatUtils {
 
 			if (connector instanceof FicsConnector) {
 				MenuItem websiteLookupItem = new MenuItem(menu, SWT.CASCADE);
-				websiteLookupItem.setText(local.getString("chatUtils16")
-						+ person);
+				websiteLookupItem.setText(local.getString("chatUtils16"));
 				Menu websiteMenu = new Menu(menu);
 				websiteLookupItem.setMenu(websiteMenu);
 

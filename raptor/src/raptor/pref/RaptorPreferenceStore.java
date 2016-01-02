@@ -741,9 +741,9 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 
 		setDefault(
 				FICS_PERSON_COMMANDS,
-				"finger $person,follow $person,partner $person,history $person,journal $person,"
-						+ "observe $person,stored $person,variables $person,"
-						+ "separator,oldpstat $userName $person,pstat $userName $person");
+				"finger $person,follow $person,history $person,journal $person,"
+						+ "observe $person,partner $person,stored $person,variables $person,"
+						+ "separator,pstat $userName $person,oldpstat $userName $person");
 
 		setDefault(
 				FICS_PERSON_MATCH_COMMANDS,
