@@ -77,7 +77,6 @@ import raptor.service.GameService;
 import raptor.service.GameService.GameInfo;
 import raptor.service.GameService.Offer;
 import raptor.service.GameService.Offer.OfferType;
-import raptor.swt.UserInfoDialog;
 import raptor.util.RaptorLogger;
 import raptor.util.RaptorStringTokenizer;
 
@@ -106,8 +105,6 @@ public class IcsParser implements GameConstants {
 	protected BugWhoGParser bugWhoGParser;
 	protected BugWhoPParser bugWhoPParser;
 	protected BugWhoUParser bugWhoUParser;
-
-	protected UserInfoDialog fullUserInfoDialog;
 
 	protected GameInfoParser gameInfoParser;
 
@@ -149,8 +146,6 @@ public class IcsParser implements GameConstants {
 	 * resort to this to link the bug games together.
 	 */
 	protected List<String> bugGamesWithoutBoard2 = new ArrayList<String>(10);
-
-	private ChatEvent finger, var;
 
 	public IcsParser(boolean isBicsParser) {
 		this.isBicsParser = isBicsParser;
@@ -266,35 +261,6 @@ public class IcsParser implements GameConstants {
 				} else {
 					events.add(bugWhoEvent);
 				}
-			}
-		}
-
-		if (fullUserInfoDialog != null) {
-			for (ChatEvent event : events) {
-				if (event.getType() == ChatType.FINGER) {
-					LOG.debug("Received finger for usinfo: "
-							+ event.getMessage());
-					finger = event;
-				} else if (event.getType() == ChatType.VARIABLES) {
-					LOG.debug("Received var for usinfo: " + event.getMessage());
-					var = event;
-				}
-			}
-
-			if (finger != null && events.contains(finger))
-				events.remove(finger);
-
-			if (var != null && events.contains(var))
-				events.remove(var);
-
-			if (finger != null && var != null) {
-				UserInfoParser pars = new UserInfoParser(finger.getMessage(),
-						var.getMessage());
-				LOG.debug("Parser output: " + pars.getOnFor() + " "
-						+ pars.getInterface());
-				fullUserInfoDialog.updateData(pars.getOnFor(),
-						pars.getInterface(), "", finger.getMessage());
-				setParseFullUserInfo(null);
 			}
 		}
 
@@ -550,7 +516,7 @@ public class IcsParser implements GameConstants {
 				GameEndMessage gameEndMessage = gameEndParser.parse(line);
 				if (gameEndMessage != null) {
 					process(gameEndMessage, connector.getGameService());
-                    result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
+					result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
 					trimAtEnd = true;
 					continue;
 				}
@@ -559,7 +525,7 @@ public class IcsParser implements GameConstants {
 						.parse(line);
 				if (illegalMoveMessage != null) {
 					process(illegalMoveMessage, connector.getGameService());
-                    result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
+					result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
 					continue;
 				}
 
@@ -568,7 +534,7 @@ public class IcsParser implements GameConstants {
 				if (removingObsGameMessage != null) {
 					process(removingObsGameMessage, inboundMessage,
 							connector.getGameService());
-                    result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
+					result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
 					continue;
 				}
 
@@ -582,7 +548,7 @@ public class IcsParser implements GameConstants {
 				if (noLongerExaminingGameMessage != null) {
 					process(noLongerExaminingGameMessage,
 							connector.getGameService());
-                    result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
+					result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
 					continue;
 				}
 
@@ -608,7 +574,7 @@ public class IcsParser implements GameConstants {
 					processExaminedGameBecameSetup();
 				}
 
-                result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
+				result.append(line).append(tok.hasMoreTokens() ? "\n" : "");
 			}
 			return trimAtEnd ? result.toString().trim() : result.toString();
 		}
@@ -694,7 +660,8 @@ public class IcsParser implements GameConstants {
 				break;
 			}
 			game.setHeader(PgnHeader.ResultDescription, message.description);
-			game.setHeader(PgnHeader.PlyCount, String.valueOf(game.getHalfMoveCount()));
+			game.setHeader(PgnHeader.PlyCount,
+					String.valueOf(game.getHalfMoveCount()));
 			game.clearState(Game.ACTIVE_STATE | Game.IS_CLOCK_TICKING_STATE);
 			game.addState(Game.INACTIVE_STATE);
 			service.fireGameInactive(game.getId());
@@ -731,8 +698,8 @@ public class IcsParser implements GameConstants {
 			if (style12 != null) {
 				examineGamesWaitingOnMoves.remove(message.gameId);
 				game = IcsUtils.createExaminedGame(style12, message);
-				B1Message b1Message = examineB1sWaitingOnMoves.get(game
-						.getId());
+				B1Message b1Message = examineB1sWaitingOnMoves
+						.get(game.getId());
 				if (b1Message != null) {
 					updateGameForB1(game, b1Message);
 					examineB1sWaitingOnMoves.remove(game.getId());
@@ -762,8 +729,8 @@ public class IcsParser implements GameConstants {
 
 				examineGamesWaitingOnMoves.remove(message.gameId);
 				game = IcsUtils.createExaminedGame(style12, message);
-				B1Message b1Message = examineB1sWaitingOnMoves.get(game
-						.getId());
+				B1Message b1Message = examineB1sWaitingOnMoves
+						.get(game.getId());
 				if (b1Message != null) {
 					updateGameForB1(game, b1Message);
 				}
@@ -796,18 +763,16 @@ public class IcsParser implements GameConstants {
 				}
 			} else {
 				// TODO: somehow fix it without this hack
-				/*Game[] games = connector.getGameService().getAllActiveGames();
-				boolean result = false;
-				for (Game gm : games) {
-					if (gm.isInState(Game.EXAMINING_STATE)
-							|| gm.isInState(Game.SETUP_STATE)) {
-						result = true;
-						break;
-					}
-				}
-				if (!result)*/
-					IcsUtils.updateGamesMoves(game, message);
-				
+				/*
+				 * Game[] games =
+				 * connector.getGameService().getAllActiveGames(); boolean
+				 * result = false; for (Game gm : games) { if
+				 * (gm.isInState(Game.EXAMINING_STATE) ||
+				 * gm.isInState(Game.SETUP_STATE)) { result = true; break; } }
+				 * if (!result)
+				 */
+				IcsUtils.updateGamesMoves(game, message);
+
 				service.fireGameMovesAdded(game.getId());
 			}
 		}
@@ -929,7 +894,7 @@ public class IcsParser implements GameConstants {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Handles disconnections. Currently removes all active games from the game
 	 * service.
@@ -1225,7 +1190,7 @@ public class IcsParser implements GameConstants {
 			}
 			// Now add the move to the game.
 			// Game Ends and Refreshes dont involve adding a move.
-			if (IcsUtils.addCurrentMove(game, message,connector)) {
+			if (IcsUtils.addCurrentMove(game, message, connector)) {
 				if (LOG.isDebugEnabled()) {
 					LOG.debug("Position was a move firing state changed.");
 				}
@@ -1291,7 +1256,8 @@ public class IcsParser implements GameConstants {
 	}
 
 	/**
-	 * Setup and examine and observing examine style 12 adjustments flow through here.
+	 * Setup and examine and observing examine style 12 adjustments flow through
+	 * here.
 	 */
 	protected void processStyle12ExamineAndSetupAdjustment(Game game,
 			Style12Message message, GameService service, String entireMessage) {
@@ -1350,8 +1316,8 @@ public class IcsParser implements GameConstants {
 			IcsUtils.resetGame(game, message);
 
 			service.fireGameStateChanged(message.gameId, false);
-			
-			//Send a moves request to get the move list.
+
+			// Send a moves request to get the move list.
 			connector.sendMessage("moves " + message.gameId, true,
 					ChatType.MOVES);
 		}
@@ -1382,13 +1348,4 @@ public class IcsParser implements GameConstants {
 			}
 		}
 	}
-
-	public synchronized void setParseFullUserInfo(UserInfoDialog b) {
-		fullUserInfoDialog = b;
-		if (b == null) {
-			finger = null;
-			var = null;
-		}
-	}
-
 }

@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import raptor.util.RaptorLogger;
- 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,8 +32,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import raptor.Raptor;
 import raptor.action.ActionUtils;
 import raptor.action.RaptorAction;
-import raptor.action.SeparatorAction;
 import raptor.action.RaptorAction.RaptorActionContainer;
+import raptor.action.SeparatorAction;
 import raptor.action.chat.FicsSeekAction;
 import raptor.action.chat.PendingOffersAction;
 import raptor.action.chat.PrependAction;
@@ -45,17 +43,15 @@ import raptor.action.chat.SpeakWhispersAction;
 import raptor.action.chat.TellsMissedWhileIWasAwayAction;
 import raptor.action.chat.ToggleScrollLock;
 import raptor.chat.ChatEvent;
-import raptor.chat.ChatType;
 import raptor.chat.ChatLogger.ChatEventParseListener;
+import raptor.chat.ChatType;
 import raptor.connector.Connector;
 import raptor.connector.fics.FicsConnector;
-import raptor.connector.ics.IcsConnector;
 import raptor.international.L10n;
 import raptor.service.ActionScriptService;
 import raptor.service.ThreadService;
 import raptor.service.UserTagService;
 import raptor.swt.SWTUtils;
-import raptor.swt.UserInfoDialog;
 import raptor.swt.chat.controller.BughousePartnerController;
 import raptor.swt.chat.controller.ChannelController;
 import raptor.swt.chat.controller.GameChatController;
@@ -63,15 +59,18 @@ import raptor.swt.chat.controller.PersonController;
 import raptor.swt.chat.controller.RegExController;
 import raptor.swt.chat.controller.ToolBarItemKey;
 import raptor.util.BrowserUtils;
+import raptor.util.RaptorLogger;
 import raptor.util.RaptorRunnable;
 
 public class ChatUtils {
 	public static final String FORWARD_CHAR = " `1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./?><MNBVCXZ\":LKJHGFDSA|}{POIUYTREWQ+_)(*&^%$#@!~";
-	private static final RaptorLogger LOG = RaptorLogger.getLog(ChatUtils.class);
+	private static final RaptorLogger LOG = RaptorLogger
+			.getLog(ChatUtils.class);
 	public static final String whiteSpaceChars = " \r\n\t";
 	protected static L10n local = L10n.getInstance();
-	
-	protected static final Pattern urlPattern = Pattern.compile("[\\!\\#\\$\\&\\-\\;\\=\\?\\-\\[\\]\\_a-z\\~]+\\.[^ ]+",
+
+	protected static final Pattern urlPattern = Pattern.compile(
+			"[\\!\\#\\$\\&\\-\\;\\=\\?\\-\\[\\]\\_a-z\\~]+\\.[^ ]+",
 			Pattern.CASE_INSENSITIVE);
 
 	public static boolean isWhiteSpaceChar(char c) {
@@ -103,12 +102,13 @@ public class ChatUtils {
 			public void run() {
 				console.getController().setSoundDisabled(true);
 				console.getController().getConnector().getChatService()
-						.getChatLogger().parseFile(
-								new ChatEventParseListener() {
+						.getChatLogger()
+						.parseFile(new ChatEventParseListener() {
 
-									public boolean onNewEventParsed(
-											final ChatEvent event) {
-										console.getDisplay().syncExec(
+							public boolean onNewEventParsed(
+									final ChatEvent event) {
+								console.getDisplay()
+										.syncExec(
 												new RaptorRunnable(console
 														.getController()
 														.getConnector()) {
@@ -121,22 +121,20 @@ public class ChatUtils {
 																	.getController()
 																	.isAcceptingChatEvent(
 																			event)) {
-																console
-																		.getController()
+																console.getController()
 																		.onChatEvent(
 																				event);
 															}
 														}
 													}
 												});
-										return true;
-									}
+								return true;
+							}
 
-									public void onParseCompleted() {
-										console.getController()
-												.setSoundDisabled(false);
-									}
-								});
+							public void onParseCompleted() {
+								console.getController().setSoundDisabled(false);
+							}
+						});
 			}
 		});
 	}
@@ -194,18 +192,22 @@ public class ChatUtils {
 	}
 
 	public static String getUrl(String text) {
-		String strippedText = text == null ? "" : StringUtils.removeEnd(StringUtils.replaceChars(text, "()'\"<>,", ""),".");
-		
+		String strippedText = text == null ? "" : StringUtils.removeEnd(
+				StringUtils.replaceChars(text, "()'\"<>,", ""), ".");
+
 		if (strippedText.endsWith(";")) {
-			strippedText = strippedText.substring(0,strippedText.length() - 1);
+			strippedText = strippedText.substring(0, strippedText.length() - 1);
 		}
-		if ((strippedText.startsWith("http://") || strippedText.startsWith("https://"))) {
+		if ((strippedText.startsWith("http://") || strippedText
+				.startsWith("https://"))) {
 			return strippedText;
-			
-		} 		
-		else if ((strippedText.endsWith(".com") || strippedText.endsWith(".org")
-						|| strippedText.endsWith(".gov") || strippedText.endsWith(".edu") || strippedText
-						.startsWith("www.")) || urlPattern.matcher(strippedText).matches()) {
+
+		} else if ((strippedText.endsWith(".com")
+				|| strippedText.endsWith(".org")
+				|| strippedText.endsWith(".gov")
+				|| strippedText.endsWith(".edu") || strippedText
+					.startsWith("www."))
+				|| urlPattern.matcher(strippedText).matches()) {
 			return "http://" + strippedText;
 		}
 		return null;
@@ -217,7 +219,7 @@ public class ChatUtils {
 	 */
 	public static String getUrl(StyledText text, int position) {
 		String candidateWord = getWord(text, position);
-	
+
 		if (candidateWord != null) {
 			return getUrl(candidateWord);
 		} else {
@@ -275,24 +277,24 @@ public class ChatUtils {
 
 	public static void openChannelTab(Connector connector, String channel,
 			boolean isSelected) {
-		if (!Raptor.getInstance().getWindow().containsChannelItem(connector,
-				channel)) {
+		if (!Raptor.getInstance().getWindow()
+				.containsChannelItem(connector, channel)) {
 			ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
 					new ChannelController(connector, channel));
-			Raptor.getInstance().getWindow().addRaptorWindowItem(windowItem,
-					false, isSelected);
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(windowItem, false, isSelected);
 			ChatUtils.appendPreviousChatsToController(windowItem.getConsole());
 		}
 	}
 
 	public static void openGameChatTab(Connector connector, String gameId,
 			boolean isSelected) {
-		if (!Raptor.getInstance().getWindow().containsGameChatTab(connector,
-				gameId)) {
+		if (!Raptor.getInstance().getWindow()
+				.containsGameChatTab(connector, gameId)) {
 			ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
 					new GameChatController(connector, gameId));
-			Raptor.getInstance().getWindow().addRaptorWindowItem(windowItem,
-					false, isSelected);
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(windowItem, false, isSelected);
 			ChatUtils.appendPreviousChatsToController(windowItem.getConsole());
 		}
 	}
@@ -302,20 +304,20 @@ public class ChatUtils {
 				.containsPartnerTellItem(connector)) {
 			ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
 					new BughousePartnerController(connector));
-			Raptor.getInstance().getWindow().addRaptorWindowItem(windowItem,
-					false, isSelected);
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(windowItem, false, isSelected);
 			ChatUtils.appendPreviousChatsToController(windowItem.getConsole());
 		}
 	}
 
 	public static void openPersonTab(Connector connector, String person,
 			boolean isSelected) {
-		if (!Raptor.getInstance().getWindow().containsPersonalTellItem(
-				connector, person)) {
+		if (!Raptor.getInstance().getWindow()
+				.containsPersonalTellItem(connector, person)) {
 			ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
 					new PersonController(connector, person));
-			Raptor.getInstance().getWindow().addRaptorWindowItem(windowItem,
-					false, isSelected);
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(windowItem, false, isSelected);
 			ChatUtils.appendPreviousChatsToController(windowItem.getConsole());
 		}
 	}
@@ -326,8 +328,8 @@ public class ChatUtils {
 				.containsPartnerTellItem(connector)) {
 			ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
 					new RegExController(connector, regularExpression));
-			Raptor.getInstance().getWindow().addRaptorWindowItem(windowItem,
-					false, isSelected);
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(windowItem, false, isSelected);
 			ChatUtils.appendPreviousChatsToController(windowItem.getConsole());
 		}
 	}
@@ -352,185 +354,231 @@ public class ChatUtils {
 		return word;
 	}
 
+	private static void addPersonTabsMenu(Menu menu, final Connector connector,
+			final String person) {
+		MenuItem addTabsItem = new MenuItem(menu, SWT.CASCADE);
+		addTabsItem.setText(local.getString("chatUtils20"));
+		Menu addTabs = new Menu(menu);
+		addTabsItem.setMenu(addTabs);
+
+		MenuItem item = new MenuItem(addTabs, SWT.PUSH);
+		item.setText(local.getString("chatUtils1") + person);
+		item.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				if (!Raptor.getInstance().getWindow()
+						.containsPersonalTellItem(connector, person)) {
+					ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
+							new PersonController(connector, person));
+					Raptor.getInstance().getWindow()
+							.addRaptorWindowItem(windowItem, false);
+					ChatUtils
+							.appendPreviousChatsToController(windowItem.console);
+				}
+			}
+		});
+
+		if (connector instanceof FicsConnector) {
+			MenuItem gamebotItem = new MenuItem(addTabs, SWT.PUSH);
+			gamebotItem.setText(local.getString("chatUtils2") + person);
+			gamebotItem.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					SWTUtils.openGamesBotWindowItem((FicsConnector) connector,
+							person);
+				}
+			});
+		}
+	}
+
+	private static void addPersonCommandsMenu(Menu menu,
+			final Connector connector, final String person) {
+		MenuItem commandsItem = new MenuItem(menu, SWT.CASCADE);
+		commandsItem.setText(local.getString("chatUtils21"));
+		Menu commands = new Menu(menu);
+		commandsItem.setMenu(commands);
+
+		final String[][] connectorPersonQuickItems = connector
+				.getPersonCommandActions(person);
+		if (connectorPersonQuickItems != null) {
+			for (int i = 0; i < connectorPersonQuickItems.length; i++) {
+				if (connectorPersonQuickItems[i][0].equals("separator")) {
+					new MenuItem(commands, SWT.SEPARATOR);
+				} else {
+					MenuItem item = new MenuItem(commands, SWT.PUSH);
+					item.setText(connectorPersonQuickItems[i][0]);
+					final int index = i;
+					item.addListener(SWT.Selection, new Listener() {
+						public void handleEvent(Event e) {
+							connector
+									.sendMessage(connectorPersonQuickItems[index][1]);
+						}
+					});
+				}
+			}
+		}
+	}
+
+	private static void addPersonMatchCommandsMenu(Menu menu,
+			final Connector connector, final String person) {
+		MenuItem commandsItem = new MenuItem(menu, SWT.CASCADE);
+		commandsItem.setText(local.getString("chatUtils22"));
+		Menu commands = new Menu(menu);
+		commandsItem.setMenu(commands);
+
+		// Add quick items for the connector.
+		final String[][] connectorPersonQuickItems = connector
+				.getPersonMatchActions(person);
+		if (connectorPersonQuickItems != null) {
+			for (int i = 0; i < connectorPersonQuickItems.length; i++) {
+				if (connectorPersonQuickItems[i][0].equals("separator")) {
+					new MenuItem(commands, SWT.SEPARATOR);
+				} else {
+					MenuItem item = new MenuItem(commands, SWT.PUSH);
+					item.setText(connectorPersonQuickItems[i][0]);
+					final int index = i;
+					item.addListener(SWT.Selection, new Listener() {
+						public void handleEvent(Event e) {
+							connector
+									.sendMessage(connectorPersonQuickItems[index][1]);
+						}
+					});
+				}
+			}
+		}
+	}
+
+	private static void addPersonListMenu(Menu menu, final Connector connector,
+			final String person) {
+		MenuItem listsMenu = new MenuItem(menu, SWT.CASCADE);
+		listsMenu.setText(local.getString("chatUtils23"));
+		Menu lists = new Menu(menu);
+		listsMenu.setMenu(lists);
+
+		// Add quick items for the connector.
+		final String[][] connectorPersonQuickItems = connector
+				.getPersonListActions(person);
+		if (connectorPersonQuickItems != null) {
+			for (int i = 0; i < connectorPersonQuickItems.length; i++) {
+				if (connectorPersonQuickItems[i][0].equals("separator")) {
+					new MenuItem(lists, SWT.SEPARATOR);
+				} else {
+					MenuItem item = new MenuItem(lists, SWT.PUSH);
+					item.setText(connectorPersonQuickItems[i][0]);
+					final int index = i;
+					item.addListener(SWT.Selection, new Listener() {
+						public void handleEvent(Event e) {
+							connector
+									.sendMessage(connectorPersonQuickItems[index][1]);
+						}
+					});
+				}
+			}
+		}
+		
+		new MenuItem(lists, SWT.SEPARATOR);
+
+		if (!connector.isOnExtendedCensor(person)) {
+
+			MenuItem extCensor = new MenuItem(lists, SWT.PUSH);
+			extCensor.setText("+extcensor " + person);
+			extCensor.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					connector.addExtendedCensor(person);
+					connector.publishEvent(new ChatEvent(null,
+							ChatType.INTERNAL, local.getString("chatUtils6")
+									+ person + local.getString("chatUtils7")));
+				}
+			});
+		} else {
+			MenuItem extCensor = new MenuItem(lists, SWT.PUSH);
+			extCensor.setText("-extcensor " + person);
+			extCensor.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					boolean result = connector.removeExtendedCensor(person);
+					connector.publishEvent(new ChatEvent(null,
+							ChatType.INTERNAL, result ? local
+									.getString("chatUtils8")
+									+ person
+									+ local.getString("chatUtils7")
+									: " Person " + person
+											+ local.getString("chatUtils9")));
+				}
+			});
+		}
+		new MenuItem(lists, SWT.SEPARATOR);
+		
+		String[] tags = UserTagService.getInstance().getTags();
+		Arrays.sort(tags);
+		if (tags.length > 0) {
+			MenuItem addTagsItem = new MenuItem(lists, SWT.CASCADE);
+			addTagsItem.setText(local.getString("chatUtils10") + person
+					+ "'");
+			Menu addTags = new Menu(lists);
+			addTagsItem.setMenu(addTags);
+
+			for (final String tag : tags) {
+				MenuItem tagMenuItem = new MenuItem(addTags, SWT.PUSH);
+				tagMenuItem.setText(tag);
+				tagMenuItem.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(Event e) {
+						UserTagService.getInstance().addUser(tag, person);
+						connector.publishEvent(new ChatEvent(null,
+								ChatType.INTERNAL, local
+										.getString("chatUtils6")
+										+ tag
+										+ local.getString("chatUtils12")
+										+ person));
+					}
+				});
+			}
+		}
+
+		tags = UserTagService.getInstance().getTags(person);
+		Arrays.sort(tags);
+		if (tags.length > 0) {
+			MenuItem addTagsItem = new MenuItem(lists, SWT.CASCADE);
+			addTagsItem.setText(local.getString("chatUtils13") + person
+					+ "'");
+			Menu addTags = new Menu(lists);
+			addTagsItem.setMenu(addTags);
+
+			for (final String tag : tags) {
+				MenuItem tagMenuItem = new MenuItem(addTags, SWT.PUSH);
+				tagMenuItem.setText(tag);
+				tagMenuItem.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(Event e) {
+						UserTagService.getInstance().clearTag(tag, person);
+						connector.publishEvent(new ChatEvent(null,
+								ChatType.INTERNAL, local
+										.getString("chatUtils8")
+										+ tag
+										+ local.getString("chatUtils15")
+										+ person));
+					}
+				});
+			}
+		}
+	}
+
 	public static void addPersonMenuItems(final Menu menu,
 			final Connector connector, final String personsName) {
 		if (connector.isLikelyPerson(personsName)) {
+			final String person = connector.parsePerson(personsName);
+
+			addPersonTabsMenu(menu, connector, person);
+			addPersonCommandsMenu(menu, connector, person);
+			addPersonMatchCommandsMenu(menu, connector, person);
+			addPersonListMenu(menu, connector, person);
+
 			if (menu.getItemCount() > 0) {
 				new MenuItem(menu, SWT.SEPARATOR);
 			}
-			final String person = connector.parsePerson(personsName);
-			MenuItem item = new MenuItem(menu, SWT.PUSH);
-			item.setText(local.getString("chatUtils1") + person);
-			item.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					if (!Raptor.getInstance().getWindow()
-							.containsPersonalTellItem(connector, person)) {
-						ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
-								new PersonController(connector, person));
-						Raptor.getInstance().getWindow().addRaptorWindowItem(
-								windowItem, false);
-						ChatUtils
-								.appendPreviousChatsToController(windowItem.console);
-					}
-				}
-			});
 
-			if (connector instanceof FicsConnector) {
-				MenuItem gamebotItem = new MenuItem(menu, SWT.PUSH);
-				gamebotItem.setText(local.getString("chatUtils2") + person);
-				gamebotItem.addListener(SWT.Selection, new Listener() {
-					public void handleEvent(Event e) {
-						SWTUtils.openGamesBotWindowItem(
-								(FicsConnector) connector, person);
-					}
-				});
-			}
-
-			// Add quick items for the connector.
-			final String[][] connectorPersonQuickItems = connector
-					.getPersonQuickActions(person);
-			if (connectorPersonQuickItems != null) {
-				for (int i = 0; i < connectorPersonQuickItems.length; i++) {
-					if (connectorPersonQuickItems[i][0].equals("separator")) {
-						new MenuItem(menu, SWT.SEPARATOR);
-					} else {
-						item = new MenuItem(menu, SWT.PUSH);
-						item.setText(connectorPersonQuickItems[i][0]);
-						final int index = i;
-						
-						if (item.getText().startsWith(L10n.getInstance().getString("fullUinfo"))) {
-							item.addListener(SWT.Selection, new Listener() {
-								public void handleEvent(Event e) {
-									UserInfoDialog dialog = new UserInfoDialog();
-									((IcsConnector) connector).getContext()
-											.getParser().setParseFullUserInfo(dialog);
-									connector
-											.sendMessage(
-													"finger "
-															+ connectorPersonQuickItems[index][1],
-													true);
-									connector
-											.sendMessage(
-													"var "
-															+ connectorPersonQuickItems[index][1],
-													true);
-									dialog.open();
-								}
-							});
-						}
-						else {
-							item.addListener(SWT.Selection, new Listener() {
-								public void handleEvent(Event e) {
-									connector
-											.sendMessage(connectorPersonQuickItems[index][1]);
-								}
-							});							
-						}
-					}
-				}
-			}
-
-			// Add the sub-menu of options for the connector.
-			final String[][] connectorPersonItems = connector
-					.getPersonActions(person);
-			if (connectorPersonItems != null) {
-				MenuItem personCommands = new MenuItem(menu, SWT.CASCADE);
-				personCommands.setText(local.getString("chatUtils4") //+ connector.getShortName()
-						+ local.getString("chatUtils5"));
-				Menu personCommandsMenu = new Menu(menu);
-				personCommands.setMenu(personCommandsMenu);
-
-				for (int i = 0; i < connectorPersonItems.length; i++) {
-					if (connectorPersonItems[i][0].equals("separator")) {
-						new MenuItem(personCommandsMenu, SWT.SEPARATOR);
-					} else {
-						item = new MenuItem(personCommandsMenu, SWT.PUSH);
-						item.setText(connectorPersonItems[i][0]);
-						final int index = i;
-						item.addListener(SWT.Selection, new Listener() {
-							public void handleEvent(Event e) {
-								connector
-										.sendMessage(connectorPersonItems[index][1]);
-							}
-						});
-					}
-				}
-			}
-
-			if (!connector.isOnExtendedCensor(person)) {
-
-				MenuItem extCensor = new MenuItem(menu, SWT.PUSH);
-				extCensor.setText("+extcensor " + person);
-				extCensor.addListener(SWT.Selection, new Listener() {
-					public void handleEvent(Event e) {
-						connector.addExtendedCensor(person);
-						connector.publishEvent(new ChatEvent(null,
-								ChatType.INTERNAL, local.getString("chatUtils6") + person
-										+ local.getString("chatUtils7")));
-					}
-				});
-			} else {
-				MenuItem extCensor = new MenuItem(menu, SWT.PUSH);
-				extCensor.setText("-extcensor " + person);
-				extCensor.addListener(SWT.Selection, new Listener() {
-					public void handleEvent(Event e) {
-						boolean result = connector.removeExtendedCensor(person);
-						connector.publishEvent(new ChatEvent(null,
-								ChatType.INTERNAL, result ? local.getString("chatUtils8") + person
-										+ local.getString("chatUtils7") : " Person "
-										+ person
-										+ local.getString("chatUtils9")));
-					}
-				});
-			}
-
-			String[] tags = UserTagService.getInstance().getTags();
-			Arrays.sort(tags);
-			if (tags.length > 0) {
-				MenuItem addTagsItem = new MenuItem(menu, SWT.CASCADE);
-				addTagsItem.setText(local.getString("chatUtils10") + person + "'");
-				Menu addTags = new Menu(menu);
-				addTagsItem.setMenu(addTags);
-
-				for (final String tag : tags) {
-					MenuItem tagMenuItem = new MenuItem(addTags, SWT.PUSH);
-					tagMenuItem.setText(tag);
-					tagMenuItem.addListener(SWT.Selection, new Listener() {
-						public void handleEvent(Event e) {
-							UserTagService.getInstance().addUser(tag, person);
-							connector.publishEvent(new ChatEvent(null,
-									ChatType.INTERNAL, local.getString("chatUtils6") + tag
-											+ local.getString("chatUtils12") + person));
-						}
-					});
-				}
-			}
-
-			tags = UserTagService.getInstance().getTags(person);
-			Arrays.sort(tags);
-			if (tags.length > 0) {
-				MenuItem addTagsItem = new MenuItem(menu, SWT.CASCADE);
-				addTagsItem.setText(local.getString("chatUtils13") + person + "'");
-				Menu addTags = new Menu(menu);
-				addTagsItem.setMenu(addTags);
-
-				for (final String tag : tags) {
-					MenuItem tagMenuItem = new MenuItem(addTags, SWT.PUSH);
-					tagMenuItem.setText(tag);
-					tagMenuItem.addListener(SWT.Selection, new Listener() {
-						public void handleEvent(Event e) {
-							UserTagService.getInstance().clearTag(tag, person);
-							connector.publishEvent(new ChatEvent(null,
-									ChatType.INTERNAL, local.getString("chatUtils8") + tag
-											+ local.getString("chatUtils15") + person));
-						}
-					});
-				}
-			}
+			
 
 			if (connector instanceof FicsConnector) {
 				MenuItem websiteLookupItem = new MenuItem(menu, SWT.CASCADE);
-				websiteLookupItem.setText(local.getString("chatUtils16") + person);
+				websiteLookupItem.setText(local.getString("chatUtils16")
+						+ person);
 				Menu websiteMenu = new Menu(menu);
 				websiteLookupItem.setMenu(websiteMenu);
 
@@ -546,8 +594,7 @@ public class ChatUtils {
 				});
 
 				MenuItem ficsGamesStats = new MenuItem(websiteMenu, SWT.PUSH);
-				ficsGamesStats.setText(local.getString("chatUtils3")
-						+ person);
+				ficsGamesStats.setText(local.getString("chatUtils3") + person);
 				ficsGamesStats.addListener(SWT.Selection, new Listener() {
 					public void handleEvent(Event e) {
 						BrowserUtils
@@ -647,8 +694,7 @@ public class ChatUtils {
 			result.setImage(Raptor.getInstance().getIcon(action.getIcon()));
 		} else {
 			Raptor.getInstance().alert(
-					local.getString("chatUtils19")
-							+ action.getName());
+					local.getString("chatUtils19") + action.getName());
 		}
 
 		if (StringUtils.isNotBlank(action.getDescription())) {
@@ -666,7 +712,7 @@ public class ChatUtils {
 		});
 		return result;
 	}
-	
+
 	private static boolean isInRanges(int location, List<int[]> ranges) {
 		boolean result = false;
 		for (int[] range : ranges) {
@@ -677,40 +723,45 @@ public class ChatUtils {
 		}
 		return result;
 	}
-	
-	private static final String[] TOP_LEVEL_DOMAINS = {".com ", ".org ", ".edu ", ".gov ", ".uk ", ".net ", ".ca ", ".de ", ".jp ", ".fr ",
-		".ru ", ".au ", ".us ", ".ch ", ".it ", ".nl ", ".se ",".no ", ".es ", ".mil ",
-		".com\n", ".org\n", ".edu\n", ".gov\n", ".uk\n", ".net\n", ".ca\n", ".de\n", ".jp\n", ".fr\n",
-		".ru\n", ".au\n", ".us\n", ".ch\n", ".it\n", ".nl\n", ".se\n",".no\n", ".es\n", ".mil\n",
-		".com/", ".org/", ".edu/", ".gov/", ".uk/", ".net/", ".ca/", ".de/", ".jp/", ".fr/",
-		".ru/", ".au/", ".us/", ".ch/", ".it/", ".nl/", ".se/",".no/", ".es/", ".mil/"};
 
-	public static int getEndIndexOfUrl(int startIndex, List<int[]> linkRanges, String message, StringBuilder dom) {		
+	private static final String[] TOP_LEVEL_DOMAINS = { ".com ", ".org ",
+			".edu ", ".gov ", ".uk ", ".net ", ".ca ", ".de ", ".jp ", ".fr ",
+			".ru ", ".au ", ".us ", ".ch ", ".it ", ".nl ", ".se ", ".no ",
+			".es ", ".mil ", ".com\n", ".org\n", ".edu\n", ".gov\n", ".uk\n",
+			".net\n", ".ca\n", ".de\n", ".jp\n", ".fr\n", ".ru\n", ".au\n",
+			".us\n", ".ch\n", ".it\n", ".nl\n", ".se\n", ".no\n", ".es\n",
+			".mil\n", ".com/", ".org/", ".edu/", ".gov/", ".uk/", ".net/",
+			".ca/", ".de/", ".jp/", ".fr/", ".ru/", ".au/", ".us/", ".ch/",
+			".it/", ".nl/", ".se/", ".no/", ".es/", ".mil/" };
+
+	public static int getEndIndexOfUrl(int startIndex, List<int[]> linkRanges,
+			String message, StringBuilder dom) {
 		int endIndex = message.indexOf(TOP_LEVEL_DOMAINS[0]);
 		dom.append(TOP_LEVEL_DOMAINS[0]);
 		for (int i = 1; (endIndex == -1 || isInRanges(startIndex, linkRanges))
 				&& i < TOP_LEVEL_DOMAINS.length; i++) {
 			endIndex = message.indexOf(TOP_LEVEL_DOMAINS[i]);
-			dom.delete( 0, dom.length() );
+			dom.delete(0, dom.length());
 			dom.append(TOP_LEVEL_DOMAINS[i]);
 		}
-		
+
 		if (endIndex != -1 && isInRanges(startIndex, linkRanges)) {
 			endIndex = -1;
-		}		
+		}
 		return endIndex;
 	}
-	
-	public static int getEndIndexOfUrl(int startIndex, List<int[]> linkRanges, String message, int fromIndex, StringBuilder dom) {
+
+	public static int getEndIndexOfUrl(int startIndex, List<int[]> linkRanges,
+			String message, int fromIndex, StringBuilder dom) {
 		int endIndex = message.indexOf(TOP_LEVEL_DOMAINS[0], fromIndex);
 		dom.append(TOP_LEVEL_DOMAINS[0]);
 		for (int i = 1; (endIndex == -1 || isInRanges(startIndex, linkRanges))
 				&& i < TOP_LEVEL_DOMAINS.length; i++) {
 			endIndex = message.indexOf(TOP_LEVEL_DOMAINS[i], fromIndex);
-			dom.delete( 0, dom.length() );
+			dom.delete(0, dom.length());
 			dom.append(TOP_LEVEL_DOMAINS[i]);
 		}
-		
+
 		if (endIndex != -1 && isInRanges(startIndex, linkRanges)) {
 			endIndex = -1;
 		}

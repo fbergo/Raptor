@@ -172,17 +172,29 @@ public interface Connector {
 	 * 
 	 * This method should return a small list of commands.
 	 */
-	public String[][] getPersonQuickActions(String person);
-
+	public String[][] getPersonCommandActions(String person);
+	
 	/**
-	 * Returns descriptions and messages to send to the connector. This is
+	 * Returns descriptions and messages to send to the connector.This is
 	 * intended to be used to generate pop-up menus. Returns a String[n][2]
 	 * where 0 is the description and 1 is the message to send to the connector.
 	 * 
-	 * This method should return a comprehensive list of commands. It is
-	 * intended to be nested in a sub-menu.
+	 * This method should return a small list of commands.
 	 */
-	public String[][] getPersonActions(String person);
+	public String[][] getPersonMatchActions(String person);
+	
+	/**
+	 * Returns descriptions and messages to send to the connector.This is
+	 * intended to be used to generate pop-up menus. Returns a String[n][2]
+	 * where 0 is the description and 1 is the message to send to the connector.
+	 * 
+	 * This method should return a small list of commands.
+	 */
+	public String[][] getPersonListActions(String person);
+
+
+
+
 
 	/**
 	 * Returns the prefix to use for person tells. On fics this would be 'tell

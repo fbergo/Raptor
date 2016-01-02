@@ -738,15 +738,27 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(FICS_NO_WRAP_ENABLED, true);
 		setDefault(FICS_CHANNEL_COMMANDS,
 				"+channel $channel,-channel $channel,in $channel");
-		setDefault(FICS_PERSON_QUICK_COMMANDS,
-				"finger $person,follow $person,partner $person");
+
 		setDefault(
 				FICS_PERSON_COMMANDS,
-				"history $person,journal $person,"
-						+ "observe $person,oldpstat $userName $person,pstat $userName $person,"
-						+ "stored $person,variables $person,separator,"
-						+ "+censor $person,-censor $person,+gnotify $person,-gnotify $person,+noplay $person,-noplay $person,+notify $person,-notify $person,separator,"
-						+ "match $person 1 0,match $person 3 0,match $person 5 0,match $person 15 0");
+				"finger $person,follow $person,partner $person,history $person,journal $person,"
+						+ "observe $person,stored $person,variables $person,"
+						+ "separator,oldpstat $userName $person,pstat $userName $person");
+
+		setDefault(
+				FICS_PERSON_MATCH_COMMANDS,
+				"match $person 1 0,match $person 3 0,match $person 5 0,match $person 15 0,separator,"
+						+ "match $person 1 0 atomic,match $person 3 0 atomic,match $person 5 0 atomic,separator,"
+						+ "match $person 1 0 bughouse,match $person 2 0 bughouse,match $person 3 0 bughouse,separator,"
+						+ "match $person 1 0 losers,match $person 2 0 losers,match $person 3 0 losers,separator,"
+						+ "match $person 1 0 suicide,match $person 2 0 suicide,match $person 3 0 suicide,separator,"
+						+ "match $person 1 0 zh,match $person 3 0 zh,match $person 5 0 zh,separator,"
+						+ "match $person 1 0 wildfr,match $person 2 0 wildfr,match $person 3 0 wildfr");
+
+		setDefault(
+				FICS_PERSON_LIST_COMMANDS,
+				"+censor $person,-censor $person,separator,+notify $person,-notify $person,separator,+gnotify $person,-gnotify $person,separator,+noplay $person,-noplay $person");
+
 		setDefault(FICS_GAME_COMMANDS,
 				"observe $gameId,allobservers $gameId,moves $gameId");
 		setDefault(

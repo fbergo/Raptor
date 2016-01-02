@@ -24,7 +24,7 @@ import raptor.pref.fields.ListFieldEditor;
 
 public class FicsRightClickPersonMenu extends FieldEditorPreferencePage {
 	protected static L10n local = L10n.getInstance();
-	
+
 	public FicsRightClickPersonMenu() {
 		super(FLAT);
 		setTitle(local.getString("ficsRClkPP1"));
@@ -33,17 +33,17 @@ public class FicsRightClickPersonMenu extends FieldEditorPreferencePage {
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new LabelFieldEditor(
-				"none",
-				WordUtils
-						.wrap(local.getString("ficsRClkPP2"),
-								70)
-						+ "\n ", getFieldEditorParent()));
-
-		addField(new ListFieldEditor(PreferenceKeys.FICS_PERSON_QUICK_COMMANDS,
-				local.getString("ficsRClkPP3"), getFieldEditorParent(), ',', 75));
+		addField(new LabelFieldEditor("none", WordUtils.wrap(
+				local.getString("ficsRClkPP2"), 70)
+				+ "\n ", getFieldEditorParent()));
 
 		addField(new ListFieldEditor(PreferenceKeys.FICS_PERSON_COMMANDS,
 				local.getString("ficsRClkPP4"), getFieldEditorParent(), ',', 75));
+
+		addField(new ListFieldEditor(PreferenceKeys.FICS_PERSON_MATCH_COMMANDS,
+				local.getString("ficsRClkPP5"), getFieldEditorParent(), ',', 75));
+
+		addField(new ListFieldEditor(PreferenceKeys.FICS_PERSON_LIST_COMMANDS,
+				local.getString("ficsRClkPP6"), getFieldEditorParent(), ',', 75));
 	}
 }

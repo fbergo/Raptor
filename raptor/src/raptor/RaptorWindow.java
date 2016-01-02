@@ -713,7 +713,7 @@ public class RaptorWindow extends ApplicationWindow {
 					RaptorTabFolder folder = getRaptorTabFolder(item
 							.getPreferredQuadrant());
 					new RaptorTabItem(folder, SWT.NONE, item, true, folder
-                            .getItemCount() == 0 || isSelecting);
+							.getItemCount() == 0 || isSelecting);
 					folder.setMinimized(false);
 					restoreFolders();
 				}
@@ -725,7 +725,7 @@ public class RaptorWindow extends ApplicationWindow {
 					RaptorTabFolder folder = getRaptorTabFolder(item
 							.getPreferredQuadrant());
 					new RaptorTabItem(folder, SWT.NONE, item, true, folder
-                            .getItemCount() == 0 || isSelecting);
+							.getItemCount() == 0 || isSelecting);
 					folder.setMinimized(false);
 					restoreFolders();
 				}
@@ -1557,30 +1557,30 @@ public class RaptorWindow extends ApplicationWindow {
 		});
 
 		fileMenu.add(new Separator());
-//		fileMenu.add(new Action(local.getString("rapWinL9")) {
-//			@Override
-//			public void run() {
-//				BrowserUtils
-//						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/AdditionalChessSets");
-//			}
-//		});
-//		fileMenu.add(new Action(local.getString("rapWinL10")) {
-//			@Override
-//			public void run() {
-//				FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
-//				fd.setFilterPath("");
-//
-//				fd.setText(local.getString("rapWinL11"));
-//				String[] filterExt = { "*.zip" };
-//				fd.setFilterExtensions(filterExt);
-//				final String selected = fd.open();
-//				if (!StringUtils.isBlank(selected)) {
-//					ChessSetInstallDialog dialog = new ChessSetInstallDialog(
-//							getShell(), selected);
-//					dialog.open();
-//				}
-//			}
-//		});
+		// fileMenu.add(new Action(local.getString("rapWinL9")) {
+		// @Override
+		// public void run() {
+		// BrowserUtils
+		// .openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/AdditionalChessSets");
+		// }
+		// });
+		// fileMenu.add(new Action(local.getString("rapWinL10")) {
+		// @Override
+		// public void run() {
+		// FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
+		// fd.setFilterPath("");
+		//
+		// fd.setText(local.getString("rapWinL11"));
+		// String[] filterExt = { "*.zip" };
+		// fd.setFilterExtensions(filterExt);
+		// final String selected = fd.open();
+		// if (!StringUtils.isBlank(selected)) {
+		// ChessSetInstallDialog dialog = new ChessSetInstallDialog(
+		// getShell(), selected);
+		// dialog.open();
+		// }
+		// }
+		// });
 
 		if (!OSUtils.isLikelyOSXCocoa()) {
 			fileMenu.add(new Separator());
@@ -1852,14 +1852,14 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/Thanks");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/Thanks.wiki");
 			}
 		});
 		helpMenu.add(new Action(local.getString("rapWinL33")) {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/ThirdPartyContent");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/ThirdPartyContent.wiki");
 
 			}
 		});
@@ -1870,7 +1870,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/NewToRaptor");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/NewToFics.wiki");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL36")) {
@@ -1884,17 +1884,19 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/FAQ");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/FAQ.wiki");
 
 			}
 		});
-		raptorHelp.add(new Action(local.getString("rapWinL38")) {
-			@Override
-			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/LinuxSoundIssues");
-			}
-		});
+		if (OSUtils.isLikelyLinux()) {
+			raptorHelp.add(new Action(local.getString("rapWinL38")) {
+				@Override
+				public void run() {
+					BrowserUtils
+							.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/LinuxSoundIssues.wiki");
+				}
+			});
+		}
 		raptorHelp.add(new Action(local.getString("rapWinL39")) {
 			@Override
 			public void run() {
@@ -1905,7 +1907,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/Scripting");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/Scripting.wiki");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL41")) {
@@ -1964,7 +1966,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorissues/entry");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/issues");
 			}
 		});
 	}

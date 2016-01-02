@@ -34,6 +34,8 @@ public interface PreferenceKeys {
 	public static final String CHANNEL_REGEX_TAB_INFO = "channel-reg-ex-tab-infov2.0";
 	public static final String GAME_COMMANDS = "games-commands";
 	public static final String PERSON_COMMANDS = "person-commands";
+	public static final String PERSON_MATCH_COMMANDS = "person-match-commands";
+	public static final String PERSON_LIST_COMMANDS = "person-list-commands";
 	public static final String PERSON_QUICK_COMMANDS = "person-quick-commands";
 	public static final String CHANNEL_COMMANDS = "channel-commands";
 	public static final String KEEP_ALIVE_COMMAND = "keep-alive-command";
@@ -277,7 +279,8 @@ public interface PreferenceKeys {
 	public static final String FICS_GAME_COMMANDS = "fics-games-commands";
 	public static final String FICS_CHANNEL_COMMANDS = "fics-channel-commands";
 	public static final String FICS_PERSON_COMMANDS = "fics-person-commands";
-	public static final String FICS_PERSON_QUICK_COMMANDS = "fics-person-quick-commands";
+	public static final String FICS_PERSON_MATCH_COMMANDS = "fics-person-match-commands";
+	public static final String FICS_PERSON_LIST_COMMANDS = "fics-person-list-commands";
 	public static final String FICS_NO_WRAP_ENABLED = "fics-no-wrap-enabled";
 	public static final String FICS_KEEP_ALIVE_COMMAND = "fics-keep-alive-command";
 	public static final String FICS_REGULAR_EXPRESSIONS_TO_BLOCK = "fics-"
@@ -319,46 +322,6 @@ public interface PreferenceKeys {
 	public static final String FICS_TERTIARY_SERVER_URL = "fics-Tertiary-server-url";
 	public static final String FICS_TERTIARY_TIMESEAL_ENABLED = "fics-Tertiary-timeseal-enabled";
 	public static final String FICS_TERTIARY_USER_NAME = "fics-Tertiary-user-name";
-
-	public static final String BICS_AUTO_CONNECT = "bics-auto-connect";
-	public static final String BICS_KEEP_ALIVE = "bics-keep-alive";
-	public static final String BICS_LOGIN_SCRIPT = "bics-login-script";
-	public static final String BICS_PROFILE = "bics-profile";
-	public static final String BICS_CLOSE_TABS_ON_DISCONNECT = "bics-close-tabs-on-disconnect";
-	public static final String BICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP = "bics-show-bug-buttons-on-partnership";
-	public static final String BICS_GAME_COMMANDS = "bics-games-commands";
-	public static final String BICS_CHANNEL_COMMANDS = "bics-channel-commands";
-	public static final String BICS_PERSON_COMMANDS = "bics-person-commands";
-	public static final String BICS_PERSON_QUICK_COMMANDS = "bics-person-quick-commands";
-	public static final String BICS_KEEP_ALIVE_COMMAND = "bics-keep-alive-command";
-	public static final String BICS_REGULAR_EXPRESSIONS_TO_BLOCK = "bics-"
-			+ REGULAR_EXPRESSIONS_TO_BLOCK;
-	public static final String BICS_REMOVE_BLANK_LINES = "bics-"
-			+ REMOVE_BLANK_LINES;
-
-	public static final String BICS_PRIMARY_IS_ANON_GUEST = "bics-Primary-is-anon-guest";
-	public static final String BICS_PRIMARY_IS_NAMED_GUEST = "bics-Primary-is-named-guest";
-	public static final String BICS_PRIMARY_PASSWORD = "bics-Primary-password";
-	public static final String BICS_PRIMARY_PORT = "bics-Primary-port";
-	public static final String BICS_PRIMARY_SERVER_URL = "bics-Primary-server-url";
-	public static final String BICS_PRIMARY_TIMESEAL_ENABLED = "bics-Primary-timeseal-enabled";
-	public static final String BICS_PRIMARY_USER_NAME = "bics-Primary-user-name";
-
-	public static final String BICS_SECONDARY_IS_ANON_GUEST = "bics-Secondary-is-anon-guest";
-	public static final String BICS_SECONDARY_IS_NAMED_GUEST = "bics-Secondary-is-named-guest";
-	public static final String BICS_SECONDARY_PASSWORD = "bics-Secondary-password";
-	public static final String BICS_SECONDARY_PORT = "bics-Secondary-port";
-	public static final String BICS_SECONDARY_SERVER_URL = "bics-Secondary-server-url";
-	public static final String BICS_SECONDARY_TIMESEAL_ENABLED = "bics-Secondary-timeseal-enabled";
-	public static final String BICS_SECONDARY_USER_NAME = "bics-Secondary-user-name";
-
-	public static final String BICS_TERTIARY_IS_ANON_GUEST = "bics-Tertiary-is-anon-guest";
-	public static final String BICS_TERTIARY_IS_NAMED_GUEST = "bics-Tertiary-is-named-guest";
-	public static final String BICS_TERTIARY_PASSWORD = "bics-Tertiary-password";
-	public static final String BICS_TERTIARY_PORT = "bics-Tertiary-port";
-	public static final String BICS_TERTIARY_SERVER_URL = "bics-Tertiary-server-url";
-	public static final String BICS_TERTIARY_TIMESEAL_ENABLED = "bics-Tertiary-timeseal-enabled";
-	public static final String BICS_TERTIARY_USER_NAME = "bics-Tertiary-user-name";
 
 	public static final String SPEECH_PROCESS_NAME = "speech_process_name";
 

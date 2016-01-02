@@ -83,21 +83,28 @@ public class GameBotHistoryWindowItem implements RaptorConnectorWindowItem {
 
 		@Override
 		public void gameBotPlayerNotInDB(String playerName) {
-			statusLabel.setText(playerName
-					+ local.getString("gbotHistWI1"));
+			statusLabel.setText(playerName + local.getString("gbotHistWI1"));
 			isPlayerNotFound = true;
 		}
 	};
 
 	protected String[][] convertPage(String[][] gamesBotPage) {
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI2"), SWT.LEFT, 10, false, null);
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI3"), SWT.LEFT, 10, false, null);
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI4"), SWT.LEFT, 8, false, null);
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI5"), SWT.LEFT, 20, false, null);
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI6"), SWT.LEFT, 8, false, null);
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI7"), SWT.LEFT, 20, false, null);
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI8"), SWT.LEFT, 8, false, null);
-		// gameBotPageTable.addColumn(local.getString("gbotHistWI9"), SWT.LEFT, 10, true, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI2"), SWT.LEFT,
+		// 10, false, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI3"), SWT.LEFT,
+		// 10, false, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI4"), SWT.LEFT,
+		// 8, false, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI5"), SWT.LEFT,
+		// 20, false, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI6"), SWT.LEFT,
+		// 8, false, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI7"), SWT.LEFT,
+		// 20, false, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI8"), SWT.LEFT,
+		// 8, false, null);
+		// gameBotPageTable.addColumn(local.getString("gbotHistWI9"), SWT.LEFT,
+		// 10, true, null);
 		// 241433469:aire:CDay:1525:1624:0-1:blitz:1:5:0:Fla:A40:82:1264389026
 
 		String[][] result = new String[gamesBotPage.length][9];
@@ -161,9 +168,11 @@ public class GameBotHistoryWindowItem implements RaptorConnectorWindowItem {
 	 * Invoked after this control is moved to a new quadrant.
 	 */
 	public void afterQuadrantMove(Quadrant newQuadrant) {
-		Raptor.getInstance().getPreferences().setValue(
-				getConnector().getShortName() + "-"
-						+ PreferenceKeys.GAME_BOT_QUADRANT, newQuadrant);
+		Raptor.getInstance()
+				.getPreferences()
+				.setValue(
+						getConnector().getShortName() + "-"
+								+ PreferenceKeys.GAME_BOT_QUADRANT, newQuadrant);
 	}
 
 	public boolean confirmClose() {
@@ -193,9 +202,12 @@ public class GameBotHistoryWindowItem implements RaptorConnectorWindowItem {
 	}
 
 	public Quadrant getPreferredQuadrant() {
-		return Raptor.getInstance().getPreferences().getQuadrant(
-				getConnector().getShortName() + "-"
-						+ PreferenceKeys.GAMES_TAB_QUADRANT);
+		return Raptor
+				.getInstance()
+				.getPreferences()
+				.getQuadrant(
+						getConnector().getShortName() + "-"
+								+ PreferenceKeys.GAMES_TAB_QUADRANT);
 	}
 
 	public String getTitle() {
@@ -259,8 +271,8 @@ public class GameBotHistoryWindowItem implements RaptorConnectorWindowItem {
 			public void widgetSelected(SelectionEvent arg0) {
 				if (!isPlayerNotFound && currentPage == pages.size() - 1) {
 					if (!hasRetrievedAllPages) {
-						statusLabel.setText(local.getString("gbotHistWI22") + player
-								+ local.getString("gbotHistWI23"));
+						statusLabel.setText(local.getString("gbotHistWI22")
+								+ player + local.getString("gbotHistWI23"));
 						composite.layout(true, true);
 						connector.getGameBotService().nextPage();
 					}
@@ -279,14 +291,22 @@ public class GameBotHistoryWindowItem implements RaptorConnectorWindowItem {
 		gameBotPageTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true));
 
-		gameBotPageTable.addColumn(local.getString("gbotHistWI2"), SWT.LEFT, 0, false, null);
-		gameBotPageTable.addColumn(local.getString("gbotHistWI3"), SWT.LEFT, 24, false, null);
-		gameBotPageTable.addColumn(local.getString("gbotHistWI4"), SWT.LEFT, 12, false, null);
-		gameBotPageTable.addColumn(local.getString("gbotHistWI5"), SWT.LEFT, 20, false, null);
-		gameBotPageTable.addColumn(local.getString("gbotHistWI6"), SWT.LEFT, 8, false, null);
-		gameBotPageTable.addColumn(local.getString("gbotHistWI7"), SWT.LEFT, 20, false, null);
-		gameBotPageTable.addColumn(local.getString("gbotHistWI8"), SWT.LEFT, 8, false, null);
-		gameBotPageTable.addColumn(local.getString("gbotHistWI9"), SWT.LEFT, 8, true, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI2"), SWT.LEFT, 0,
+				false, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI3"), SWT.LEFT,
+				24, false, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI4"), SWT.LEFT,
+				12, false, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI5"), SWT.LEFT,
+				20, false, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI6"), SWT.LEFT, 8,
+				false, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI7"), SWT.LEFT,
+				20, false, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI8"), SWT.LEFT, 8,
+				false, null);
+		gameBotPageTable.addColumn(local.getString("gbotHistWI9"), SWT.LEFT, 8,
+				true, null);
 
 		gameBotPageTable.addRaptorTableListener(new RaptorTableAdapter() {
 			@Override
@@ -331,33 +351,15 @@ public class GameBotHistoryWindowItem implements RaptorConnectorWindowItem {
 							.containsPersonalTellItem(getConnector(), person)) {
 						ChatConsoleWindowItem windowItem = new ChatConsoleWindowItem(
 								new PersonController(getConnector(), person));
-						Raptor.getInstance().getWindow().addRaptorWindowItem(
-								windowItem, false);
+						Raptor.getInstance().getWindow()
+								.addRaptorWindowItem(windowItem, false);
 						ChatUtils.appendPreviousChatsToController(windowItem
 								.getConsole());
 					}
 				}
 			});
 
-			final String[][] connectorPersonItems = getConnector()
-					.getPersonActions(person);
-			if (connectorPersonItems != null) {
-				for (int i = 0; i < connectorPersonItems.length; i++) {
-					if (connectorPersonItems[i][0].equals("separator")) {
-						new MenuItem(menu, SWT.SEPARATOR);
-					} else {
-						item = new MenuItem(menu, SWT.PUSH);
-						item.setText(connectorPersonItems[i][0]);
-						final int index = i;
-						item.addListener(SWT.Selection, new Listener() {
-							public void handleEvent(Event e) {
-								getConnector().sendMessage(
-										connectorPersonItems[index][1]);
-							}
-						});
-					}
-				}
-			}
+			ChatUtils.addPersonMenuItems(menu, getConnector(), person);
 		}
 	}
 
@@ -369,8 +371,8 @@ public class GameBotHistoryWindowItem implements RaptorConnectorWindowItem {
 					return;
 				}
 				synchronized (gameBotPageTable.getTable()) {
-					statusLabel.setText(local.getString("gbotHistWI22") + player + ": ("
-							+ (currentPage + 1) + " of "
+					statusLabel.setText(local.getString("gbotHistWI22")
+							+ player + ": (" + (currentPage + 1) + " of "
 							+ (hasRetrievedAllPages ? pages.size() : "?")
 							+ " pages.)");
 					gameBotPageTable.refreshTable(pages.get(pageId));
