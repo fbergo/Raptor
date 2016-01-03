@@ -1,4 +1,4 @@
-# Offical Raptor Project Site
+# Offical Raptor Open Source Project Site
 Raptor is a multiplatform chess interface for [freechess.org](freechess.org) (aka FICS).
 
 
