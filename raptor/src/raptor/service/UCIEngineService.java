@@ -69,7 +69,7 @@ public class UCIEngineService {
 			if (OSUtils.isLikelyOSX()) {
 				result = "./projectFiles/Raptor.app.cocoa64/contents/MacOS/stockfish/Mac/stockfish-6-64";
 			} else if (OSUtils.isLikelyLinux()) {
-				result = "./projectFiles/linux/stockfish/Linux/stockfish-6-64";
+				result = "./projectFiles/linux/stockfish/Linux/stockfish_6_64";
 			} else if (OSUtils.isLikelyWindows()) {
 				result = "./projectFiles/Windows/stockfish/Windows/stockfish-6-64";
 			}
@@ -77,7 +77,7 @@ public class UCIEngineService {
 			if (OSUtils.isLikelyOSX()) {
 				result = "stockfish/Mac/stockfish-6-64";
 			} else if (OSUtils.isLikelyLinux()) {
-				result = "stockfish/Linux/stockfish-6-64";
+				result = "stockfish/Linux/stockfish_6_64";
 			} else if (OSUtils.isLikelyWindows()) {
 				result = "stockfish/Windows/stockfish-6-64";
 			}
