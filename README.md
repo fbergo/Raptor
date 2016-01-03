@@ -2,10 +2,10 @@
 Raptor is a multiplatform chess interface for [freechess.org](freechess.org) (aka FICS).
 
 
-Downloads: (Version: 1.0 Beta) (Requires Java JRE 7+ 64 bit)
- * [Mac OSX (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_OS_X_Cocoa_x86_64.dmg)
- * [Linux (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
- * [Windows (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
+Downloads: (Requires Java JRE 7+ 64 bit)
+ * [Raptor 1.0 beta Mac OSX (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_OS_X_Cocoa_x86_64.dmg)
+ * [Raptor 1.0 beta Linux (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
+ * [Raptor 1.0 beta Windows (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
 
 ## Move to github
 Raptor has recently moved from [google code](https://code.google.com/p/raptor-chess-interface/) to github.
