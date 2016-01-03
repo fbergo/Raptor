@@ -535,22 +535,5 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Selecting UCIEngine " + engines[0].getUserName() + ")");
 		}
-
-		startStopButton.setText(local.getString("uciAnalW_7"));
-		ThreadService.getInstance().run(new Runnable() {
-			public void run() {
-				try {
-					engine = UCIEngineService.getInstance().getEngine()
-							.getDeepCopy();
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("Changing engine to : "
-								+ engine.getUserName());
-					}
-					start();
-				} catch (Throwable t) {
-					LOG.error("Error switching chess engines", t);
-				}
-			}
-		});
 	}
 }
