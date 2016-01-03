@@ -263,8 +263,7 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys,
 				new PreferenceNode("fics", new FicsRightClickGamesMenu()),
 				new PreferenceNode("fics", new FicsRightClickPersonMenu()),
 
-				new PreferenceNode("fics", new ConnectorQuadrantsPage("fics")),
-				new PreferenceNode("fics", new ConnectorQuadrantsPage("fics2")), };
+				new PreferenceNode("fics", new ConnectorQuadrantsPage("fics")) };
 
 	}
 
