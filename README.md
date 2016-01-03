@@ -31,6 +31,9 @@ Currently I am working on release 1.0. Features include:
 
 ##Videos
 [Play Chess Beautifully and Clearly with Raptor](https://www.youtube.com/watch?v=we8rQ_mygh0)
+[How to Play Bughouse on Raptor FICS](https://www.youtube.com/watch?v=we8rQ_mygh0)
+[Bughouse on FICS: Chicken & Eekarf vs Jkiller & Bugzilla](https://www.youtube.com/watch?v=we8rQ_mygh0)
+[Some random guy playing a 15 0](https://www.youtube.com/watch?v=we8rQ_mygh0)
 
 ##Screenshots
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-2.png)
