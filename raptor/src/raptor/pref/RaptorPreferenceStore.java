@@ -438,7 +438,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		PreferenceConverter.setDefault(this, APP_STATUS_BAR_COLOR, new RGB(0,
 				0, 0));
 		setDefault(APP_HOME_URL,
-				"https://github.com/Raptor-Fics-Interface/Raptor");
+				"https://raptor-fics-interface.github.io/Raptor/");
 		setDefault(APP_SOUND_ENABLED, true);
 		setDefault(APP_USER_TAGS,
 				"Dupe,Friend,Lagger,Idiot,Good Partner,No Partner,Premover,Troll");
