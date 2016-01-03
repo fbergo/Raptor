@@ -200,7 +200,7 @@ public class BugTeams extends Composite {
 			@Override
 			public void rowRightClicked(MouseEvent event, String[] rowData) {
 				Menu menu = new Menu(BugTeams.this.getShell(), SWT.POP_UP);
-				ChatUtils.addPersonMenuItems(menu, getConnector(), rowData[1]);
+				ChatUtils.addPersonMenuItems(menu, getConnector(), parsePlayerName(rowData[1]));
 				if (menu.getItemCount() > 0) {
 					menu.setLocation(player1Table.getTable().toDisplay(event.x, event.y));
 					menu.setVisible(true);
@@ -223,7 +223,7 @@ public class BugTeams extends Composite {
 			@Override
 			public void rowRightClicked(MouseEvent event, String[] rowData) {
 				Menu menu = new Menu(BugTeams.this.getShell(), SWT.POP_UP);
-				ChatUtils.addPersonMenuItems(menu, getConnector(), rowData[1]);
+				ChatUtils.addPersonMenuItems(menu, getConnector(), parsePlayerName(rowData[0]));
 				if (menu.getItemCount() > 0) {
 					menu.setLocation(player2Table.getTable().toDisplay(event.x, event.y));
 					menu.setVisible(true);
@@ -522,7 +522,11 @@ public class BugTeams extends Composite {
 
 	private String getPlayerName(int row, boolean isPlayer1Table) {
 		String fullText = (isPlayer1Table ? player1Table : player2Table).getRowText(row)[isPlayer1Table ? 1 : 0];
-		RaptorStringTokenizer tok = new RaptorStringTokenizer(fullText, " ");
+		return parsePlayerName(fullText);
+	}
+
+	private String parsePlayerName(String playerAndRatingValue) {
+		RaptorStringTokenizer tok = new RaptorStringTokenizer(playerAndRatingValue, " ");
 		tok.nextToken();
 		return tok.nextToken();
 	}
