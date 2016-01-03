@@ -13,8 +13,8 @@ If you are a former contributor please let cday know your github user id on fics
 
 ## Contributors needed
 Raptor is in need of some contributors in the following areas. If you would like to help contact cday on fics. Currently the project needs:
+* Testing/Managing Issues
 * Translations to other languages
-* Converting wiki pages from google code format to github format.
 * Help adding/fixing features.
 * Linux package created.
 * Windows installer created.
