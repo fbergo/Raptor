@@ -29,6 +29,9 @@ Currently I am working on release 1.0. Features include:
 * Inclusion of all chess sets in the expansion pack.
 * Timeseal 2
 
+##Videos
+[Play Chess Beautifully and Clearly with Raptor](https://www.youtube.com/watch?v=we8rQ_mygh0)
+
 ##Screenshots
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-2.png)
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-3.png)
