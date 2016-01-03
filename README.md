@@ -14,6 +14,8 @@ Raptor is in need of some contributors in the following areas. If you would like
 * Translations to other languages
 * Converting wiki pages from google code format to github format.
 * Help adding/fixing features.
+* Linux package created.
+* Windows installer created.
 
 ## Release 1.0 beta
 Currently I am working on release 1.0. Features include:
