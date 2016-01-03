@@ -35,7 +35,6 @@ public class OSXSpeech implements Speech {
 	public void speak(final String text) {
 		ThreadService.getInstance().run(new Runnable() {
 			public void run() {
-				synchronized (OSXSpeech.this) {
 					try {
 						Process process = Runtime.getRuntime().exec(
 								new String[] { "say", text });
@@ -43,7 +42,6 @@ public class OSXSpeech implements Speech {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}
 			}
 		});
 	}
