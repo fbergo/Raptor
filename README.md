@@ -4,6 +4,7 @@ Currently supports:
 * Windows 64 bit
 * Mac OSX 64 bit
 * Linux 64 bit
+* (Requires) Java JRE 1.7+
 
 ## Move to github
 Raptor has recently moved from [google code](https://code.google.com/p/raptor-chess-interface/) to github.
