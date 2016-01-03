@@ -29,7 +29,6 @@ Currently I am working on release 1.0. Features include:
 * Timeseal 2
 
 ##Screenshots
-![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-1.png)
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-2.png)
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-3.png)
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-4.png)
