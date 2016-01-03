@@ -18,7 +18,6 @@ Raptor is in need of some contributors in the following areas. If you would like
 ## Release 1.0 beta
 Currently I am working on release 1.0. Features include:
 * Bundled stockfish 6.
-* Only Linux 64, OS X 64, and Windows 64 are supported.
 * Java 7 JRE is required.
 * Lots of bug fixes. (including the elusive timeseal bug).
 * Removal of features that nobody ever used. 
