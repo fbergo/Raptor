@@ -12,7 +12,7 @@
 	  -->
 	<property name="swtEnv" value="MacCocoa64" />
 
-	<property name="version" value="v1.0" />
+	<property name="version" value="v1.0beta" />
 	<property name="dist.dir" value="install" />
 	<property name="src.dir" value="src" />
 	<property name="build.dir" value="target" />
@@ -125,7 +125,7 @@
 			</fileset>
 		</copy>
 
-		<chmod dir="${install.dir}/*" perm="755" />
+		<chmod dir="${install.dir}/**" perm="755" />
 
 		<zip destfile="${uploads.dir}/Raptor_${version}_Windows64.zip">
 			<zipfileset dir="${install.dir}" prefix="Raptor_${version}" dirmode="777" filemode="755">
@@ -150,7 +150,7 @@
 			</fileset>
 		</copy>
 
-		<chmod dir="${install.dir}/*" perm="755" />
+		<chmod dir="${install.dir}/**" perm="755" />
 
 		<zip destfile="${uploads.dir}/Raptor_${version}_Linux_x86_64_GTK2.zip">
 			<zipfileset dir="${install.dir}" prefix="Raptor_${version}" dirmode="777" filemode="755">
@@ -184,18 +184,7 @@
 			</fileset>
 		</move>
 
-		<chmod dir="${install.dir}/Raptor.app" perm="755" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/raptor" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Chrisdesign" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Eyes" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Fantasy" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Portable" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Spacial" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/set/Wiki" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/sounds" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/resources/square" includes="**/*" perm="777" />
-		<chmod dir="${install.dir}/Raptor.app/Contents/MacOS/defaultHomeDir" includes="**/*" perm="777" />
+		<chmod dir="${install.dir}/Raptor.app**" perm="755" />
 
 		<exec executable="hdiutil">
 			<arg value="create" />
