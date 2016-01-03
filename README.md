@@ -29,6 +29,14 @@ Currently I am working on release 1.0. Features include:
 * Timeseal 2
 
 ##Screenshots
-* ![](https://cloud.githubusercontent.com/assets/11840077/8396572/f42eb464-1dab-11e5-8fb6-699378b417be.png)
-* ![](https://cloud.githubusercontent.com/assets/11840077/8396573/f8a82480-1dab-11e5-9e00-0d310f4e9df4.png)
-* ![](https://cloud.githubusercontent.com/assets/11840077/8396574/fbf5b9a4-1dab-11e5-8d80-17258c62d3de.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-1.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-2.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-3.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-4.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-5.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-6.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-7.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-8.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-9.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-10.png)
+![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-11.png)
