@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import raptor.chess.BughouseGame;
 import raptor.chess.Game;
 import raptor.chess.Move;
 import raptor.chess.Result;
@@ -57,8 +58,7 @@ public class PlayingStatisticsService {
 
 	}
 
-	public void addStatisticsForGameEnd(Connector connector, Game game,
-			boolean isUserWhite) {
+	public void addStatisticsForGameEnd(Connector connector, Game game, boolean isUserWhite) {
 		double score = -1.0;
 
 		if (game.getResult() == Result.BLACK_WON) {
@@ -73,12 +73,11 @@ public class PlayingStatisticsService {
 			PlayingGameResult gameResult = new PlayingGameResult();
 			gameResult.score = score;
 			gameResult.variant = game.getVariant();
-			gameResult.opponentName = isUserWhite ? game
-					.getHeader(PgnHeader.Black) : game
-					.getHeader(PgnHeader.White);
-			String opponentRating = isUserWhite ? game
-					.getHeader(PgnHeader.BlackElo) : game
-					.getHeader(PgnHeader.WhiteElo);
+			gameResult.opponentName = isUserWhite ? game.getHeader(PgnHeader.Black) : game.getHeader(PgnHeader.White);
+			setOpponentsRating(game, gameResult, isUserWhite);
+			String opponentRating = isUserWhite ? game.getHeader(PgnHeader.BlackElo)
+					: game.getHeader(PgnHeader.WhiteElo);
+
 			if (opponentRating.contains("E")) {
 				gameResult.opponentRating = 1600;
 
@@ -86,8 +85,7 @@ public class PlayingStatisticsService {
 				gameResult.opponentRating = Integer.parseInt(opponentRating);
 			}
 
-			List<PlayingGameResult> results = connectorToResultsList
-					.get(connector);
+			List<PlayingGameResult> results = connectorToResultsList.get(connector);
 			if (results == null) {
 				results = new ArrayList<PlayingGameResult>(20);
 				connectorToResultsList.put(connector, results);
@@ -120,14 +118,12 @@ public class PlayingStatisticsService {
 
 		if (results != null) {
 			for (PlayingGameResult gameResult : results) {
-				if (gameResult.variant == variant && gameResult.score != -1.0
-						&& gameResult.opponentRating >= 0) {
+				if (gameResult.variant == variant && gameResult.score != -1.0 && gameResult.opponentRating >= 0) {
 					n++;
 					if (gameResult.score == .5) {
 						totalScore += gameResult.opponentRating;
 					} else if (gameResult.score == 0) {
-						totalScore += Math.max(gameResult.opponentRating - 400,
-								100);
+						totalScore += Math.max(gameResult.opponentRating - 400, 100);
 					} else {
 						totalScore += gameResult.opponentRating + 400;
 					}
@@ -148,12 +144,10 @@ public class PlayingStatisticsService {
 	 * 
 	 * Assumes addStatisticsForGameEnd has already been invoked.
 	 */
-	public String getStatisticsString(Connector connector, Game game,
-			boolean isUserWhite) {
+	public String getStatisticsString(Connector connector, Game game, boolean isUserWhite) {
 		Result result = game.getResult();
-		if (game.isInState(Game.PLAYING_STATE) && result == Result.BLACK_WON
-				|| result == Result.WHITE_WON || result == Result.DRAW
-				&& game.getHalfMoveCount() > 1) {
+		if (game.isInState(Game.PLAYING_STATE) && result == Result.BLACK_WON || result == Result.WHITE_WON
+				|| result == Result.DRAW && game.getHalfMoveCount() > 1) {
 			int playerPremoves = 0;
 			int opponentPremoves = 0;
 
@@ -169,55 +163,45 @@ public class PlayingStatisticsService {
 				if (movesProcessed > 1) {
 					TimeTakenForMove[] moveTime = move.getTimeTakenForMove();
 					if (moveTime != null && moveTime.length > 0) {
-						if (isUserWhite && move.isWhitesMove() || !isUserWhite
-								&& !move.isWhitesMove()) {
+						if (isUserWhite && move.isWhitesMove() || !isUserWhite && !move.isWhitesMove()) {
 							if (moveTime[0].getMilliseconds() <= 150) {
 								playerPremoves++;
 							}
 							numPlayerMoves++;
-							totalPlayerMovesTime += moveTime[0]
-									.getMilliseconds();
+							totalPlayerMovesTime += moveTime[0].getMilliseconds();
 
 						} else {
 							if (moveTime[0].getMilliseconds() <= 150) {
 								opponentPremoves++;
 							}
 							numOpponentMoves++;
-							totalOpponentMovesTime += moveTime[0]
-									.getMilliseconds();
+							totalOpponentMovesTime += moveTime[0].getMilliseconds();
 						}
 					}
 				}
 				movesProcessed++;
 			}
 
-			int[] performanceRating = getPreformanceRating(connector, game
-					.getVariant());
-			String opponentName = isUserWhite ? game.getHeader(PgnHeader.Black)
-					: game.getHeader(PgnHeader.White);
+			int[] performanceRating = getPreformanceRating(connector, game.getVariant());
+			String opponentName = isUserWhite ? game.getHeader(PgnHeader.Black) : game.getHeader(PgnHeader.White);
 			VsStats vsStats = getVsStats(connector, opponentName);
 
 			String yourAvgMoveTime = numPlayerMoves == 0 ? "Unknown"
-					: new BigDecimal((float)totalPlayerMovesTime / (float)numPlayerMoves
-							/ 1000.0).setScale(1, BigDecimal.ROUND_HALF_UP)
-							.toString()
-							+ "sec";
+					: new BigDecimal((float) totalPlayerMovesTime / (float) numPlayerMoves / 1000.0)
+							.setScale(1, BigDecimal.ROUND_HALF_UP).toString() + "sec";
 
 			String oppAvgMoveTime = numOpponentMoves == 0 ? "Unknown"
-					: new BigDecimal((float)totalOpponentMovesTime / (float)numOpponentMoves
-							/ 1000.0).setScale(1, BigDecimal.ROUND_HALF_UP)
-							.toString()
-							+ "sec";
+					: new BigDecimal((float) totalOpponentMovesTime / (float) numOpponentMoves / 1000.0)
+							.setScale(1, BigDecimal.ROUND_HALF_UP).toString() + "sec";
 
-			String performance = performanceRating != null ? "Performance("
-					+ game.getVariant().name() + " " + performanceRating[0]
-					+ " game(s)): " + performanceRating[1] + "\n" : "";
+			String performance = performanceRating != null ? "Performance(" + game.getVariant().name() + " "
+					+ performanceRating[0] + " game(s)): " + performanceRating[1] + "\n" : "";
 
-			String vsStat = vsStats.gamesPlayed > 0 ? "Series(" + opponentName
-					+ "): " + vsStats.totalScore + "/" + vsStats.gamesPlayed
-					+ "\n" : "";
+			String vsStat = vsStats.gamesPlayed > 0
+					? "Series(" + opponentName + "): " + vsStats.totalScore + "/" + vsStats.gamesPlayed + "\n" : "";
 
-			return performance + vsStat + "Average Move Time(you/opponent): " + yourAvgMoveTime + "/" + oppAvgMoveTime + "\nPremoves(you/opp): " + playerPremoves + "/" + opponentPremoves;
+			return performance + vsStat + "Average Move Time(you/opponent): " + yourAvgMoveTime + "/" + oppAvgMoveTime
+					+ "\nPremoves(you/opp): " + playerPremoves + "/" + opponentPremoves;
 
 		}
 		return null;
@@ -243,5 +227,30 @@ public class PlayingStatisticsService {
 			}
 		}
 		return result;
+	}
+
+	private int getRating(boolean isWhite, Game game) {
+		String ratingString = isWhite ? game.getHeader(PgnHeader.WhiteElo) : game.getHeader(PgnHeader.BlackElo);
+		int result = 0;
+
+		if (StringUtils.isNumeric(ratingString)) {
+			result = Integer.parseInt(ratingString);
+		} else {
+			result = 1600;
+		}
+		
+		return result;
+	}
+
+	private void setOpponentsRating(Game game, PlayingGameResult gameResult, boolean isUserWhite) {
+		int opponentRating = getRating(!isUserWhite, game);
+
+		if (game instanceof BughouseGame) {
+			// average opponents rating.
+			BughouseGame otherGame = (BughouseGame) game;
+			int intOppRating2 = getRating(isUserWhite, otherGame);
+
+			opponentRating = (opponentRating + intOppRating2) / 2;
+		}
 	}
 }
