@@ -95,7 +95,8 @@ public interface PreferenceKeys {
 
 	public static final String BUG_ARENA_PARTNERS_INDEX = "bughouse-arena-partners-index";
 	public static final String BUG_ARENA_MAX_PARTNERS_INDEX = "bughouse-arena-max-partners-index";
-	public static final String BUG_ARENA_TEAMS_INDEX = "bughouse-arena-teams-index";
+	public static final String BUG_ARENA_TEAMS_LOW_INDEX = "bughouse-arena-teams-low-index";
+	public static final String BUG_ARENA_TEAMS_HIGH_INDEX = "bughouse-arena-teams-high-index";
 	public static final String BUG_ARENA_HI_LOW_INDEX = "bughouse-arena-hi-low-index";
 	public static final String BUG_ARENA_TEAMS_IS_RATED = "bughosue-arena-teams-is-rated";
 	public static final String BUG_ARENA_SELECTED_TAB = "bughosue-arena-selectedTab";

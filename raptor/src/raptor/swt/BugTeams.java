@@ -27,6 +27,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -45,14 +46,17 @@ import raptor.service.ThreadService;
 import raptor.swt.RaptorTable.RaptorTableAdapter;
 import raptor.swt.chat.ChatUtils;
 import raptor.util.RaptorRunnable;
+import raptor.util.RaptorStringTokenizer;
 
 public class BugTeams extends Composite {
 	protected BughouseService service;
-	protected Combo availablePartnershipsFilter;
+	protected Combo teamLowRating;
+	protected Combo teamHighRating;
 	protected Combo matchHighLowBoth;
 	protected RaptorTable player1Table;
 	protected RaptorTable player2Table;
 	protected boolean isActive = false;
+	protected Button autoMatch2_0;
 	protected Button isRated;
 	protected static L10n local = L10n.getInstance();
 
@@ -60,13 +64,10 @@ public class BugTeams extends Composite {
 		public void run() {
 			if (isActive && !isDisposed()) {
 				service.refreshAvailablePartnerships();
-				ThreadService
-						.getInstance()
-						.scheduleOneShot(
-								Raptor.getInstance()
-										.getPreferences()
-										.getInt(PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL) * 1000,
-								this);
+				ThreadService.getInstance().scheduleOneShot(
+						Raptor.getInstance().getPreferences().getInt(PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL)
+								* 1000,
+						this);
 			}
 		}
 	};
@@ -103,26 +104,105 @@ public class BugTeams extends Composite {
 	public void init() {
 		setLayout(new GridLayout(1, false));
 
+		Composite ratingFilterComposite = new Composite(BugTeams.this, SWT.NONE);
+		ratingFilterComposite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false));
+		ratingFilterComposite.setLayout(new RowLayout());
+
+		teamLowRating = new Combo(ratingFilterComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		teamLowRating.add("0");
+		teamLowRating.add("1000");
+		teamLowRating.add("2000");
+		teamLowRating.add("2500");
+		teamLowRating.add("3000");
+		teamLowRating.add("3200");
+		teamLowRating.add("3400");
+		teamLowRating.add("3600");
+		teamLowRating.add("3800");
+		teamLowRating.add("4000");
+		teamLowRating.add("4200");
+		teamLowRating.add("4400");
+		teamLowRating.add("4600");
+		teamLowRating.add("4800");
+		teamLowRating.add("5000");
+		teamLowRating.add("5200");
+		teamLowRating.add("5400");
+		teamLowRating.add("5600");
+		teamLowRating.add("5800");
+		teamLowRating.add("6000");
+		teamLowRating.add("6200");
+		teamLowRating.add("6400");
+		teamLowRating.add("9999");
+
+		teamLowRating.select(Raptor.getInstance().getPreferences().getInt(PreferenceKeys.BUG_ARENA_TEAMS_LOW_INDEX));
+		teamLowRating.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.BUG_ARENA_TEAMS_LOW_INDEX,
+						teamLowRating.getSelectionIndex());
+				Raptor.getInstance().getPreferences().save();
+				refreshTable();
+			}
+		});
+
+		CLabel label2 = new CLabel(ratingFilterComposite, SWT.LEFT);
+		label2.setText(local.getString("bugTeams5"));
+
+		teamHighRating = new Combo(ratingFilterComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		teamHighRating.add("0");
+		teamHighRating.add("1000");
+		teamHighRating.add("2000");
+		teamHighRating.add("2500");
+		teamHighRating.add("3000");
+		teamHighRating.add("3200");
+		teamHighRating.add("3400");
+		teamHighRating.add("3600");
+		teamHighRating.add("3800");
+		teamHighRating.add("4000");
+		teamHighRating.add("4200");
+		teamHighRating.add("4400");
+		teamHighRating.add("4600");
+		teamHighRating.add("4800");
+		teamHighRating.add("5000");
+		teamHighRating.add("5200");
+		teamHighRating.add("5400");
+		teamHighRating.add("5600");
+		teamHighRating.add("5800");
+		teamHighRating.add("6000");
+		teamHighRating.add("6200");
+		teamHighRating.add("6400");
+		teamHighRating.add("9999");
+
+		teamHighRating.select(Raptor.getInstance().getPreferences().getInt(PreferenceKeys.BUG_ARENA_TEAMS_HIGH_INDEX));
+		teamHighRating.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.BUG_ARENA_TEAMS_HIGH_INDEX,
+						teamHighRating.getSelectionIndex());
+				Raptor.getInstance().getPreferences().save();
+				refreshTable();
+			}
+		});
+
 		Composite tableComposite = new Composite(this, SWT.NONE);
-		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true));
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		tableComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
-		player1Table = new RaptorTable(tableComposite, SWT.BORDER
-				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
-		player1Table.addColumn(local.getString("bugTeams1"), SWT.LEFT, 20,
-				false, null);
-		player1Table.addColumn(local.getString("bugTeams2"), SWT.LEFT, 45,
-				false, null);
-		player1Table.addColumn(local.getString("bugTeams3"), SWT.LEFT, 35,
-				false, null);
+
+		player1Table = new RaptorTable(tableComposite,
+				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
+		player1Table.addColumn(local.getString("bugTeams.teamElo"), SWT.LEFT, 20, false, null);
+		player1Table.addColumn(local.getString("bugTeams.name"), SWT.LEFT, 50, false, null);
+		player1Table.addColumn(local.getString("bugTeams.status"), SWT.LEFT, 30, false, null);
 		player1Table.addRaptorTableListener(new RaptorTableAdapter() {
 			@Override
 			public void rowRightClicked(MouseEvent event, String[] rowData) {
 				Menu menu = new Menu(BugTeams.this.getShell(), SWT.POP_UP);
 				ChatUtils.addPersonMenuItems(menu, getConnector(), rowData[1]);
 				if (menu.getItemCount() > 0) {
-					menu.setLocation(player1Table.getTable().toDisplay(event.x,
-							event.y));
+					menu.setLocation(player1Table.getTable().toDisplay(event.x, event.y));
 					menu.setVisible(true);
 					while (!menu.isDisposed() && menu.isVisible()) {
 						if (!BugTeams.this.getDisplay().readAndDispatch()) {
@@ -134,14 +214,10 @@ public class BugTeams extends Composite {
 			}
 		});
 
-		player2Table = new RaptorTable(tableComposite, SWT.BORDER
-				| SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
-		player2Table.addColumn(local.getString("bugTeams1"), SWT.LEFT, 20,
-				false, null);
-		player2Table.addColumn(local.getString("bugTeams2"), SWT.LEFT, 45,
-				false, null);
-		player2Table.addColumn(local.getString("bugTeams3"), SWT.LEFT, 35,
-				false, null);
+		player2Table = new RaptorTable(tableComposite,
+				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
+		player2Table.addColumn(local.getString("bugTeams.name"), SWT.LEFT, 50, false, null);
+		player2Table.addColumn(local.getString("bugTeams.status"), SWT.LEFT, 30, false, null);
 		player2Table.addRaptorTableListener(new RaptorTableAdapter() {
 
 			@Override
@@ -149,8 +225,7 @@ public class BugTeams extends Composite {
 				Menu menu = new Menu(BugTeams.this.getShell(), SWT.POP_UP);
 				ChatUtils.addPersonMenuItems(menu, getConnector(), rowData[1]);
 				if (menu.getItemCount() > 0) {
-					menu.setLocation(player2Table.getTable().toDisplay(event.x,
-							event.y));
+					menu.setLocation(player2Table.getTable().toDisplay(event.x, event.y));
 					menu.setVisible(true);
 					while (!menu.isDisposed() && menu.isVisible()) {
 						if (!BugTeams.this.getDisplay().readAndDispatch()) {
@@ -166,84 +241,56 @@ public class BugTeams extends Composite {
 		isRated = new Button(BugTeams.this, SWT.CHECK);
 		isRated.setLayoutData(new GridData(SWT.LEFT, SWT.NONE, true, false));
 		isRated.setText(local.getString("bugTeams4"));
-		isRated.setSelection(Raptor.getInstance().getPreferences()
-				.getBoolean(PreferenceKeys.BUG_ARENA_TEAMS_IS_RATED));
+		isRated.setSelection(Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.BUG_ARENA_TEAMS_IS_RATED));
 		isRated.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				Raptor.getInstance()
-						.getPreferences()
-						.setValue(PreferenceKeys.BUG_ARENA_TEAMS_IS_RATED,
-								isRated.getSelection());
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.BUG_ARENA_TEAMS_IS_RATED,
+						isRated.getSelection());
+			}
+		});
+
+		autoMatch2_0 = new Button(BugTeams.this, SWT.CHECK);
+		autoMatch2_0.setLayoutData(new GridData(SWT.LEFT, SWT.NONE, true, false));
+		autoMatch2_0.setText(local.getString("bugTeamsAutoMatch20"));
+		autoMatch2_0.setSelection(false);
+		autoMatch2_0.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				if (autoMatch2_0.getSelection()) {
+					matchAll(2, 0);
+				}
 			}
 		});
 
 		Composite controlsComposite = new Composite(BugTeams.this, SWT.NONE);
-		controlsComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
-				true, false));
+		controlsComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
 		controlsComposite.setLayout(new GridLayout(4, false));
 
 		CLabel label = new CLabel(controlsComposite, SWT.LEFT);
-		label.setText(local.getString("bugTeams5"));
-		availablePartnershipsFilter = new Combo(controlsComposite,
-				SWT.DROP_DOWN | SWT.READ_ONLY);
-		availablePartnershipsFilter.add("0");
-		availablePartnershipsFilter.add("1000");
-		availablePartnershipsFilter.add("2000");
-		availablePartnershipsFilter.add("2500");
-		availablePartnershipsFilter.add("3000");
-		availablePartnershipsFilter.add("3200");
-		availablePartnershipsFilter.add("3400");
-		availablePartnershipsFilter.add("3600");
-		availablePartnershipsFilter.add("3800");
-		availablePartnershipsFilter.add("4000");
-		availablePartnershipsFilter.add("4200");
-		availablePartnershipsFilter.add("4400");
-		availablePartnershipsFilter.select(Raptor.getInstance()
-				.getPreferences().getInt(PreferenceKeys.BUG_ARENA_TEAMS_INDEX));
-		availablePartnershipsFilter
-				.addSelectionListener(new SelectionListener() {
-					public void widgetDefaultSelected(SelectionEvent e) {
-					}
+		label.setText(local.getString("bugTeams6"));
 
-					public void widgetSelected(SelectionEvent e) {
-						Raptor.getInstance()
-								.getPreferences()
-								.setValue(
-										PreferenceKeys.BUG_ARENA_TEAMS_INDEX,
-										availablePartnershipsFilter
-												.getSelectionIndex());
-						Raptor.getInstance().getPreferences().save();
-						refreshTable();
-					}
-				});
-
-		CLabel label2 = new CLabel(controlsComposite, SWT.LEFT);
-		label2.setText(local.getString("bugTeams6"));
-		matchHighLowBoth = new Combo(controlsComposite, SWT.DROP_DOWN
-				| SWT.READ_ONLY);
+		matchHighLowBoth = new Combo(controlsComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		matchHighLowBoth.add(local.getString("bugTeams7"));
 		matchHighLowBoth.add(local.getString("bugTeams8"));
 		matchHighLowBoth.add(local.getString("bugTeams9"));
-		matchHighLowBoth.select(Raptor.getInstance().getPreferences()
-				.getInt(PreferenceKeys.BUG_ARENA_HI_LOW_INDEX));
+		matchHighLowBoth.select(Raptor.getInstance().getPreferences().getInt(PreferenceKeys.BUG_ARENA_HI_LOW_INDEX));
 		matchHighLowBoth.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				Raptor.getInstance()
-						.getPreferences()
-						.setValue(PreferenceKeys.BUG_ARENA_HI_LOW_INDEX,
-								matchHighLowBoth.getSelectionIndex());
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.BUG_ARENA_HI_LOW_INDEX,
+						matchHighLowBoth.getSelectionIndex());
 			}
 		});
 
 		Composite matchComposite = new Composite(BugTeams.this, SWT.NONE);
-		matchComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false));
+		matchComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
 		matchComposite.setLayout(new GridLayout(4, false));
 
 		CLabel matchSelectedLabel = new CLabel(matchComposite, SWT.LEFT);
@@ -259,16 +306,14 @@ public class BugTeams extends Composite {
 				int[] selectedIndexes = null;
 				boolean matchedSomeone = false;
 				synchronized (player1Table) {
-					selectedIndexes = player1Table.getTable()
-							.getSelectionIndices();
+					selectedIndexes = player1Table.getTable().getSelectionIndices();
 
 					for (int i = 0; i < selectedIndexes.length; i++) {
 						match(true, selectedIndexes[i], 1, 0);
 						matchedSomeone = true;
 					}
 
-					selectedIndexes = player2Table.getTable()
-							.getSelectionIndices();
+					selectedIndexes = player2Table.getTable().getSelectionIndices();
 
 					for (int i = 0; i < selectedIndexes.length; i++) {
 						match(false, selectedIndexes[i], 1, 0);
@@ -292,16 +337,14 @@ public class BugTeams extends Composite {
 				int[] selectedIndexes = null;
 				boolean matchedSomeone = false;
 				synchronized (player1Table) {
-					selectedIndexes = player1Table.getTable()
-							.getSelectionIndices();
+					selectedIndexes = player1Table.getTable().getSelectionIndices();
 
 					for (int i = 0; i < selectedIndexes.length; i++) {
 						match(true, selectedIndexes[i], 2, 0);
 						matchedSomeone = true;
 					}
 
-					selectedIndexes = player2Table.getTable()
-							.getSelectionIndices();
+					selectedIndexes = player2Table.getTable().getSelectionIndices();
 
 					for (int i = 0; i < selectedIndexes.length; i++) {
 						match(false, selectedIndexes[i], 2, 0);
@@ -325,16 +368,14 @@ public class BugTeams extends Composite {
 				int[] selectedIndexes = null;
 				boolean matchedSomeone = false;
 				synchronized (player1Table) {
-					selectedIndexes = player1Table.getTable()
-							.getSelectionIndices();
+					selectedIndexes = player1Table.getTable().getSelectionIndices();
 
 					for (int i = 0; i < selectedIndexes.length; i++) {
 						match(true, selectedIndexes[i], 3, 0);
 						matchedSomeone = true;
 					}
 
-					selectedIndexes = player2Table.getTable()
-							.getSelectionIndices();
+					selectedIndexes = player2Table.getTable().getSelectionIndices();
 
 					for (int i = 0; i < selectedIndexes.length; i++) {
 						match(false, selectedIndexes[i], 3, 0);
@@ -401,16 +442,14 @@ public class BugTeams extends Composite {
 
 			for (int i = 0; i < items; i++) {
 				if (local.getString("bugTeams7").equals(matchHighLow)) {
-					if ((isHigh(true, i) && isUserHigh)
-							|| (!isHigh(true, i) && !isUserHigh)) {
+					if ((isHigh(true, i) && isUserHigh) || (!isHigh(true, i) && !isUserHigh)) {
 						match(true, i, time, inc);
 					} else {
 						match(false, i, time, inc);
 
 					}
 				} else if (local.getString("bugTeams8").equals(matchHighLow)) {
-					if ((!isHigh(true, i) && isUserHigh)
-							|| (isHigh(true, i) && !isUserHigh)) {
+					if ((!isHigh(true, i) && isUserHigh) || (isHigh(true, i) && !isUserHigh)) {
 						match(true, i, time, inc);
 					} else {
 						match(false, i, time, inc);
@@ -431,8 +470,7 @@ public class BugTeams extends Composite {
 		synchronized (player1Table) {
 			int items = player1Table.getTable().getItems().length;
 			for (int i = 0; userRow == -1 && i < items; i++) {
-				if (player1Table.getTable().getItems()[i].getText(1)
-						.equalsIgnoreCase(service.getConnector().getUserName())) {
+				if (getPlayerName(i, true).equalsIgnoreCase(service.getConnector().getUserName())) {
 					userRow = i;
 					result = isHigh(true, i);
 				}
@@ -440,9 +478,7 @@ public class BugTeams extends Composite {
 
 			if (userRow == -1) {
 				for (int i = 0; userRow == -1 && i < items; i++) {
-					if (player2Table.getTable().getItems()[i].getText(1)
-							.equalsIgnoreCase(
-									service.getConnector().getUserName())) {
+					if (getPlayerName(i, false).equalsIgnoreCase(service.getConnector().getUserName())) {
 						userRow = i;
 						result = isHigh(false, i);
 					}
@@ -453,51 +489,51 @@ public class BugTeams extends Composite {
 	}
 
 	private boolean isHigh(boolean isTable1, int row) {
-		String player1Elo = player1Table.getRowText(row)[0];
-		String player2Elo = player2Table.getRowText(row)[0];
+		int player1EloInt = getPlayerRating(row, true);
+		int player2EloInt = getPlayerRating(row, false);
 
-		int player1EloInt = 0;
-		int player2EloInt = 0;
-
-		try {
-			player1EloInt = Integer.parseInt(player1Elo);
-		} catch (NumberFormatException e) {
-		}
-		try {
-			player2EloInt = Integer.parseInt(player2Elo);
-		} catch (NumberFormatException e2) {
-		}
-
-		return isTable1 ? player1EloInt > player2EloInt
-				: player2EloInt > player1EloInt;
+		return isTable1 ? player1EloInt > player2EloInt : player2EloInt > player1EloInt;
 	}
 
 	private void match(boolean isTable1, int row, int time, int inc) {
-		String player1Name = player1Table.getRowText(row)[1];
-		String player2Name = player2Table.getRowText(row)[1];
+		String player1Name = getPlayerName(row, true);
+		String player2Name = getPlayerName(row, false);
 
 		String userName = service.getConnector().getUserName();
 
-		if (!userName.equalsIgnoreCase(player1Name)
-				&& !userName.equalsIgnoreCase(player2Name)) {
-			service.getConnector().matchBughouse(
-					isTable1 ? player1Name : player2Name,
-					isRated.getSelection(), time, inc);
+		if (!userName.equalsIgnoreCase(player1Name) && !userName.equalsIgnoreCase(player2Name)) {
+			service.getConnector().matchBughouse(isTable1 ? player1Name : player2Name, isRated.getSelection(), time,
+					inc);
 		}
 
+	}
+
+	private int getPlayerRating(int row, boolean isPlayer1Table) {
+		String fullText = (isPlayer1Table ? player1Table : player2Table).getRowText(row)[isPlayer1Table ? 1 : 0];
+		RaptorStringTokenizer tok = new RaptorStringTokenizer(fullText, " ");
+		int result = 0;
+
+		try {
+			result = Integer.parseInt(tok.nextToken());
+		} catch (NumberFormatException e) {
+		}
+		return result;
+	}
+
+	private String getPlayerName(int row, boolean isPlayer1Table) {
+		String fullText = (isPlayer1Table ? player1Table : player2Table).getRowText(row)[isPlayer1Table ? 1 : 0];
+		RaptorStringTokenizer tok = new RaptorStringTokenizer(fullText, " ");
+		tok.nextToken();
+		return tok.nextToken();
 	}
 
 	public void onActivate() {
 		if (!isActive) {
 			isActive = true;
 			service.refreshAvailablePartnerships();
-			ThreadService
-					.getInstance()
-					.scheduleOneShot(
-							Raptor.getInstance()
-									.getPreferences()
-									.getInt(PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL) * 1000,
-							timer);
+			ThreadService.getInstance().scheduleOneShot(
+					Raptor.getInstance().getPreferences().getInt(PreferenceKeys.APP_WINDOW_ITEM_POLL_INTERVAL) * 1000,
+					timer);
 		}
 
 	}
@@ -524,10 +560,10 @@ public class BugTeams extends Composite {
 	}
 
 	protected boolean passesFilterCriteria(Partnership partnership) {
-		int filterRating = Integer.parseInt(availablePartnershipsFilter
-				.getText());
-		int buggerRating = partnership.getTeamRating();
-		return buggerRating >= filterRating;
+		int lowRating = Integer.parseInt(teamLowRating.getText());
+		int highRating = Integer.parseInt(teamHighRating.getText());
+		int teamRating = partnership.getTeamRating();
+		return teamRating >= lowRating && teamRating <= highRating;
 	}
 
 	protected void refreshTable() {
@@ -546,22 +582,22 @@ public class BugTeams extends Composite {
 
 					for (int i = 0; i < partnerships.length; i++) {
 						Partnership partnership = partnerships[i];
+						player1Data[i][0] = "" + partnership.getTeamRating();
+						player1Data[i][1] = partnership.getBugger1().getRating() + " "
+								+ partnership.getBugger1().getName();
+						player1Data[i][2] = partnership.getBugger1().getStatus().toString();
 
-						player1Data[i][0] = partnership.getBugger1()
-								.getRating();
-						player1Data[i][1] = partnership.getBugger1().getName();
-						player1Data[i][2] = partnership.getBugger1()
-								.getStatus().toString();
-
-						player2Data[i][0] = partnership.getBugger2()
-								.getRating();
-						player2Data[i][1] = partnership.getBugger2().getName();
-						player2Data[i][2] = partnership.getBugger2()
-								.getStatus().toString();
+						player2Data[i][0] = partnership.getBugger2().getRating() + " "
+								+ partnership.getBugger2().getName();
+						player2Data[i][1] = partnership.getBugger2().getStatus().toString();
 
 					}
 					player1Table.refreshTable(player1Data);
 					player2Table.refreshTable(player2Data);
+				}
+
+				if (autoMatch2_0.getSelection()) {
+					matchAll(2, 0);
 				}
 			}
 		});

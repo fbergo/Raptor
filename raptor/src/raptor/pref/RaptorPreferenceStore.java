@@ -607,7 +607,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(BUG_ARENA_PARTNERS_INDEX, 0);
 		setDefault(BUG_ARENA_MAX_PARTNERS_INDEX,
 				BugPartners.getRatings().length - 1);
-		setDefault(BUG_ARENA_TEAMS_INDEX, 0);
+		setDefault(BUG_ARENA_TEAMS_LOW_INDEX, 0);
+		setDefault(BUG_ARENA_TEAMS_HIGH_INDEX, 22);
 		setDefault(BUG_ARENA_TEAMS_IS_RATED, true);
 		setDefault(BUG_ARENA_SELECTED_TAB, 0);
 		setDefault(BUG_ARENA_HI_LOW_INDEX, 0);
