@@ -125,7 +125,7 @@
 			</fileset>
 		</copy>
 
-		<chmod dir="${install.dir}/**" perm="755" />
+		<chmod dir="${install.dir}" perm="755" maxparallel="100" includes="**/**" />
 
 		<zip destfile="${uploads.dir}/Raptor_${version}_Windows64.zip">
 			<zipfileset dir="${install.dir}" prefix="Raptor_${version}" dirmode="777" filemode="755">
@@ -150,7 +150,7 @@
 			</fileset>
 		</copy>
 
-		<chmod dir="${install.dir}/**" perm="755" />
+		<chmod dir="${install.dir}" perm="755" maxparallel="100" includes="**/**" />
 
 		<zip destfile="${uploads.dir}/Raptor_${version}_Linux_x86_64_GTK2.zip">
 			<zipfileset dir="${install.dir}" prefix="Raptor_${version}" dirmode="777" filemode="755">
@@ -176,7 +176,7 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		
+
 		<move todir="${install.dir}/Raptor.app/Contents/MacOS">
 			<fileset dir="${install.dir}">
 				<include name="**/*" />
@@ -184,7 +184,7 @@
 			</fileset>
 		</move>
 
-		<chmod dir="${install.dir}/**" perm="755" />
+		<chmod dir="${install.dir}" perm="755" maxparallel="100" includes="**/**" />
 
 		<exec executable="hdiutil">
 			<arg value="create" />
