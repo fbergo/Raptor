@@ -1811,7 +1811,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 		case CSHOUT:
 		case KIBITZ:
 		case WHISPER:
-		case TOLD:
 			result = isOnExtendedCensor(event.getSource());
 			break;
 		}
