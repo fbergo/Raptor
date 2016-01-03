@@ -184,7 +184,7 @@
 			</fileset>
 		</move>
 
-		<chmod dir="${install.dir}/Raptor.app**" perm="755" />
+		<chmod dir="${install.dir}/**" perm="755" />
 
 		<exec executable="hdiutil">
 			<arg value="create" />
