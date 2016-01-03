@@ -393,6 +393,16 @@ public class ChessBoardPage extends FieldEditorPreferencePage {
 
 	@Override
 	protected void createFieldEditors() {
+		ComboFieldEditor layoutsFieldEditor = new ComboFieldEditor(
+				PreferenceKeys.BOARD_LAYOUT, local.getString("chessBP10"),
+				LAYOUTS, getFieldEditorParent());
+		addField(layoutsFieldEditor);
+		
+		ComboFieldEditor moveListLayoutEditor = new ComboFieldEditor(
+				PreferenceKeys.BOARD_MOVE_LIST_CLASS, local.getString("chessBP11"),
+				MOVE_LISTS, getFieldEditorParent());
+		addField(moveListLayoutEditor);
+		
 		String[] sets = ChessBoardUtils.getChessSetNames();
 		String[][] setNameValues = new String[sets.length][2];
 
@@ -400,11 +410,6 @@ public class ChessBoardPage extends FieldEditorPreferencePage {
 			setNameValues[i][0] = sets[i];
 			setNameValues[i][1] = sets[i];
 		}
-
-		setFieldEditor = new ChessBoardPageComboFieldEditor(
-				PreferenceKeys.BOARD_CHESS_SET_NAME, local.getString("chessBP4"),
-				setNameValues, getFieldEditorParent());
-		addField(setFieldEditor);
 
 		isUsingSolidColorsEditor = new ChessBoardPageBooleanFieldEditor(
 				PreferenceKeys.BOARD_IS_USING_SOLID_BACKGROUND_COLORS,
@@ -439,16 +444,11 @@ public class ChessBoardPage extends FieldEditorPreferencePage {
 				local.getString("chessBP9"), BACKGROUND_EFFECT_VALUES,
 				getFieldEditorParent());
 		addField(backgroundEffectCombo);
-
-		ComboFieldEditor layoutsFieldEditor = new ComboFieldEditor(
-				PreferenceKeys.BOARD_LAYOUT, local.getString("chessBP10"),
-				LAYOUTS, getFieldEditorParent());
-		addField(layoutsFieldEditor);
-
-		ComboFieldEditor moveListLayoutEditor = new ComboFieldEditor(
-				PreferenceKeys.BOARD_MOVE_LIST_CLASS, local.getString("chessBP11"),
-				MOVE_LISTS, getFieldEditorParent());
-		addField(moveListLayoutEditor);
+		
+		setFieldEditor = new ChessBoardPageComboFieldEditor(
+				PreferenceKeys.BOARD_CHESS_SET_NAME, local.getString("chessBP4"),
+				setNameValues, getFieldEditorParent());
+		addField(setFieldEditor);
 
 		pieceResize = new ChessBoardPageComboFieldEditor(
 				PreferenceKeys.BOARD_PIECE_SIZE_ADJUSTMENT,
