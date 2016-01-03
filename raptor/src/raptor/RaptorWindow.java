@@ -1852,14 +1852,14 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/Thanks.wiki");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Thanks");
 			}
 		});
 		helpMenu.add(new Action(local.getString("rapWinL33")) {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/ThirdPartyContent.wiki");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Third-Party-Content");
 
 			}
 		});
@@ -1870,7 +1870,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/NewToFics.wiki");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/New-to-Fics");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL36")) {
@@ -1880,23 +1880,6 @@ public class RaptorWindow extends ApplicationWindow {
 						.openHtml(AliasService.getInstance().getAliasHtml());
 			}
 		});
-		raptorHelp.add(new Action(local.getString("rapWinL37")) {
-			@Override
-			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/FAQ.wiki");
-
-			}
-		});
-		if (OSUtils.isLikelyLinux()) {
-			raptorHelp.add(new Action(local.getString("rapWinL38")) {
-				@Override
-				public void run() {
-					BrowserUtils
-							.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/LinuxSoundIssues.wiki");
-				}
-			});
-		}
 		raptorHelp.add(new Action(local.getString("rapWinL39")) {
 			@Override
 			public void run() {
@@ -1907,14 +1890,14 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/blob/master/wiki/Scripting.wiki");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Scripting");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL41")) {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/UsefulTips");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Useful-Tips");
 
 			}
 		});
@@ -1925,7 +1908,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptorwiki/NewToFics");
+						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/New-to-Fics");
 			}
 		});
 		ficsHelp.add(new Action(local.getString("rapWinL44")) {
