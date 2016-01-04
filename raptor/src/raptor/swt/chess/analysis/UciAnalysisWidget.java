@@ -68,8 +68,7 @@ import raptor.util.RaptorRunnable;
 import raptor.util.RaptorStringUtils;
 
 public class UciAnalysisWidget implements EngineAnalysisWidget {
-	private static final RaptorLogger LOG = RaptorLogger
-			.getLog(UciAnalysisWidget.class);
+	private static final RaptorLogger LOG = RaptorLogger.getLog(UciAnalysisWidget.class);
 
 	protected ChessBoardController controller;
 	protected Composite composite, topLine;
@@ -83,226 +82,145 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		}
 
 		public void engineSentInfo(final UCIInfo[] infos) {
-			Raptor.getInstance().getDisplay()
-					.asyncExec(new RaptorRunnable(controller.getConnector()) {
-						@Override
-						public void execute() {
-							String score = null;
-							String time = null;
-							String depth = null;
-							String nodes = null;
-							List<String> pvs = new ArrayList<String>(3);
+			Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
+				@Override
+				public void execute() {
+					String score = null;
+					String time = null;
+					String depth = null;
+					String nodes = null;
+					List<String> pvs = new ArrayList<String>(3);
 
-							for (UCIInfo info : infos) {
-								if (info instanceof ScoreInfo) {
-									ScoreInfo scoreInfo = (ScoreInfo) info;
-									if (((ScoreInfo) info).getMateInMoves() != 0) {
-										score = "Mate in "
-												+ scoreInfo.getMateInMoves();
-									} else if (scoreInfo.isLowerBoundScore()) {
-										score = "-inf";
-									} else if (scoreInfo.isUpperBoundScore()) {
-										score = "+inf";
+					for (UCIInfo info : infos) {
+						if (info instanceof ScoreInfo) {
+							ScoreInfo scoreInfo = (ScoreInfo) info;
+							if (((ScoreInfo) info).getMateInMoves() != 0) {
+								score = "Mate in " + scoreInfo.getMateInMoves();
+							} else if (scoreInfo.isLowerBoundScore()) {
+								score = "-inf";
+							} else if (scoreInfo.isUpperBoundScore()) {
+								score = "+inf";
+							} else {
+								double scoreAsDouble = controller.getGame().isWhitesMove()
+										|| !engine.isMultiplyBlackScoreByMinus1()
+												? scoreInfo.getValueInCentipawns() / 100.0
+												: -scoreInfo.getValueInCentipawns() / 100.0;
+
+								score = "" + new BigDecimal(scoreAsDouble).setScale(2, BigDecimal.ROUND_HALF_UP)
+										.toString();
+							}
+						} else if (info instanceof DepthInfo) {
+							DepthInfo depthInfo = (DepthInfo) info;
+							depth = depthInfo.getSearchDepthPlies() + " plies";
+						} else if (info instanceof NodesSearchedInfo) {
+							NodesSearchedInfo nodesSearchedInfo = (NodesSearchedInfo) info;
+							nodes = RaptorStringUtils.formatAsNumber("" + nodesSearchedInfo.getNodesSearched() / 1000);
+						} else if (info instanceof TimeInfo) {
+							TimeInfo timeInfo = (TimeInfo) info;
+							time = new BigDecimal(timeInfo.getTimeMillis() / 1000.0)
+									.setScale(1, BigDecimal.ROUND_HALF_UP).toString();
+						} else if (info instanceof BestLineFoundInfo) {
+							BestLineFoundInfo bestLineFoundInfo = (BestLineFoundInfo) info;
+							StringBuilder line = new StringBuilder(100);
+							Game gameClone = controller.getGame().deepCopy(true);
+							gameClone.addState(Game.UPDATING_SAN_STATE);
+							gameClone.clearState(Game.UPDATING_ECO_HEADERS_STATE);
+
+							boolean isFirstMove = true;
+
+							for (UCIMove move : bestLineFoundInfo.getMoves()) {
+								try {
+									Move gameMove = null;
+
+									if (move.isPromotion()) {
+										gameMove = gameClone.makeMove(move.getStartSquare(), move.getEndSquare(),
+												move.getPromotedPiece());
 									} else {
-										double scoreAsDouble = controller
-												.getGame().isWhitesMove()
-												|| !engine
-														.isMultiplyBlackScoreByMinus1() ? scoreInfo
-												.getValueInCentipawns() / 100.0
-												: -scoreInfo
-														.getValueInCentipawns() / 100.0;
-
-										score = ""
-												+ new BigDecimal(scoreAsDouble)
-														.setScale(
-																2,
-																BigDecimal.ROUND_HALF_UP)
-														.toString();
+										gameMove = gameClone.makeMove(move.getStartSquare(), move.getEndSquare());
 									}
-								} else if (info instanceof DepthInfo) {
-									DepthInfo depthInfo = (DepthInfo) info;
-									depth = depthInfo.getSearchDepthPlies()
-											+ " plies";
-								} else if (info instanceof NodesSearchedInfo) {
-									NodesSearchedInfo nodesSearchedInfo = (NodesSearchedInfo) info;
-									nodes = RaptorStringUtils.formatAsNumber(""
-											+ nodesSearchedInfo
-													.getNodesSearched() / 1000);
-								} else if (info instanceof TimeInfo) {
-									TimeInfo timeInfo = (TimeInfo) info;
-									time = new BigDecimal(timeInfo
-											.getTimeMillis() / 1000.0)
-											.setScale(1,
-													BigDecimal.ROUND_HALF_UP)
-											.toString();
-								} else if (info instanceof BestLineFoundInfo) {
-									BestLineFoundInfo bestLineFoundInfo = (BestLineFoundInfo) info;
-									StringBuilder line = new StringBuilder(100);
-									Game gameClone = controller.getGame()
-											.deepCopy(true);
-									gameClone.addState(Game.UPDATING_SAN_STATE);
-									gameClone
-											.clearState(Game.UPDATING_ECO_HEADERS_STATE);
 
-									boolean isFirstMove = true;
-
-									for (UCIMove move : bestLineFoundInfo
-											.getMoves()) {
-										try {
-											Move gameMove = null;
-
-											if (move.isPromotion()) {
-												gameMove = gameClone.makeMove(
-														move.getStartSquare(),
-														move.getEndSquare(),
-														move.getPromotedPiece());
-											} else {
-												gameMove = gameClone.makeMove(
-														move.getStartSquare(),
-														move.getEndSquare());
-											}
-
-											String san = GameUtils.convertSanToUseUnicode(
-													gameMove.getSan(),
-													gameMove.isWhitesMove());
-											String moveNumber = isFirstMove
-													&& !gameMove.isWhitesMove() ? gameMove
-													.getFullMoveCount()
-													+ ") ... " : gameMove
-													.isWhitesMove() ? gameMove
-													.getFullMoveCount() + ") "
-													: "";
-											line.append((line.equals("") ? ""
-													: " ")
-													+ moveNumber
-													+ san
-													+ (gameClone.isInCheck() ? "+"
-															: "")
-													+ (gameClone.isCheckmate() ? "#"
-															: ""));
-											isFirstMove = false;
-										} catch (Throwable t) {
-											if (LOG.isInfoEnabled()) {
-												LOG.info(
-														"Illegal line found skipping line (This can occur if the position was "
-																+ "changing when the analysis line was being calculated).",
-														t);
-											}
-											break;
-										}
+									String san = GameUtils.convertSanToUseUnicode(gameMove.getSan(),
+											gameMove.isWhitesMove());
+									String moveNumber = isFirstMove && !gameMove.isWhitesMove()
+											? gameMove.getFullMoveCount() + ") ... "
+											: gameMove.isWhitesMove() ? gameMove.getFullMoveCount() + ") " : "";
+									line.append((line.equals("") ? "" : " ") + moveNumber + san
+											+ (gameClone.isInCheck() ? "+" : "")
+											+ (gameClone.isCheckmate() ? "#" : ""));
+									isFirstMove = false;
+								} catch (Throwable t) {
+									if (LOG.isInfoEnabled()) {
+										LOG.info("Illegal line found skipping line (This can occur if the position was "
+												+ "changing when the analysis line was being calculated).", t);
 									}
-									pvs.add(line.toString());
+									break;
 								}
 							}
-
-							if (score != null
-									&& (!score.startsWith("+inf") && !score
-											.startsWith("-inf"))) {
-								final String finalScore = score;
-								final String finalTime = time;
-								final String finalDepth = depth;
-								final String finalNodes = nodes;
-								final List<String> finalPVs = pvs;
-
-								Raptor.getInstance()
-										.getDisplay()
-										.asyncExec(
-												new RaptorRunnable(controller
-														.getConnector()) {
-													@Override
-													public void execute() {
-														if (composite
-																.isDisposed()) {
-															return;
-														}
-														if (!finalPVs.isEmpty()) {
-															String[][] data = new String[bestMoves
-																	.getRowCount()
-																	+ finalPVs
-																			.size()][5];
-
-															for (int i = 0; i < finalPVs
-																	.size(); i++) {
-																data[0][0] = StringUtils
-																		.defaultString(finalScore);
-																data[0][1] = StringUtils
-																		.defaultString(finalDepth);
-																data[0][2] = StringUtils
-																		.defaultString(finalTime);
-																data[0][3] = StringUtils
-																		.defaultString(finalNodes);
-																data[0][4] = StringUtils
-																		.defaultString(finalPVs
-																				.get(i));
-															}
-
-															for (int i = 0; i < bestMoves
-																	.getRowCount(); i++) {
-																for (int j = 0; j < bestMoves
-																		.getColumnCount(); j++) {
-																	data[i
-																			+ finalPVs
-																					.size()][j] = bestMoves
-																			.getText(
-																					i,
-																					j);
-																}
-															}
-
-															bestMoves
-																	.refreshTable(data);
-														} else if (bestMoves
-																.getRowCount() > 0) {
-															if (StringUtils
-																	.isNotBlank(finalScore)) {
-																bestMoves
-																		.setText(
-																				0,
-																				0,
-																				finalScore);
-															}
-															if (StringUtils
-																	.isNotBlank(finalDepth)) {
-																bestMoves
-																		.setText(
-																				0,
-																				1,
-																				finalDepth);
-															}
-															if (StringUtils
-																	.isNotBlank(finalTime)) {
-																bestMoves
-																		.setText(
-																				0,
-																				2,
-																				finalTime);
-															}
-
-															if (StringUtils
-																	.isNotBlank(finalNodes)) {
-																bestMoves
-																		.setText(
-																				0,
-																				3,
-																				finalNodes);
-															}
-														}
-													}
-												});
-							}
+							pvs.add(line.toString());
 						}
-					});
+					}
+
+					if (score != null && (!score.startsWith("+inf") && !score.startsWith("-inf"))) {
+						final String finalScore = score;
+						final String finalTime = time;
+						final String finalDepth = depth;
+						final String finalNodes = nodes;
+						final List<String> finalPVs = pvs;
+
+						Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
+							@Override
+							public void execute() {
+								if (composite.isDisposed()) {
+									return;
+								}
+								if (!finalPVs.isEmpty()) {
+									String[][] data = new String[bestMoves.getRowCount() + finalPVs.size()][5];
+
+									for (int i = 0; i < finalPVs.size(); i++) {
+										data[0][0] = StringUtils.defaultString(finalScore);
+										data[0][1] = StringUtils.defaultString(finalDepth);
+										data[0][2] = StringUtils.defaultString(finalTime);
+										data[0][3] = StringUtils.defaultString(finalNodes);
+										data[0][4] = StringUtils.defaultString(finalPVs.get(i));
+									}
+
+									for (int i = 0; i < bestMoves.getRowCount(); i++) {
+										for (int j = 0; j < bestMoves.getColumnCount(); j++) {
+											data[i + finalPVs.size()][j] = bestMoves.getText(i, j);
+										}
+									}
+
+									bestMoves.refreshTable(data);
+								} else if (bestMoves.getRowCount() > 0) {
+									if (StringUtils.isNotBlank(finalScore)) {
+										bestMoves.setText(0, 0, finalScore);
+									}
+									if (StringUtils.isNotBlank(finalDepth)) {
+										bestMoves.setText(0, 1, finalDepth);
+									}
+									if (StringUtils.isNotBlank(finalTime)) {
+										bestMoves.setText(0, 2, finalTime);
+									}
+
+									if (StringUtils.isNotBlank(finalNodes)) {
+										bestMoves.setText(0, 3, finalNodes);
+									}
+								}
+							}
+						});
+					}
+				}
+			});
 		}
 	};
 
 	public void clear() {
-		Raptor.getInstance().getDisplay()
-				.asyncExec(new RaptorRunnable(controller.getConnector()) {
-					@Override
-					public void execute() {
-						bestMoves.clearTable();
-					}
-				});
+		Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
+			@Override
+			public void execute() {
+				bestMoves.clearTable();
+			}
+		});
 	}
 
 	public Composite create(Composite parent) {
@@ -344,8 +262,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		startStopButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (startStopButton.getText().equals(
-						local.getString("uciAnalW_32"))) {
+				if (startStopButton.getText().equals(local.getString("uciAnalW_32"))) {
 					start();
 					startStopButton.setText(local.getString("uciAnalW_33"));
 				} else {
@@ -355,33 +272,24 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 			}
 		});
 
-		bestMoves = new RaptorTable(composite, SWT.BORDER | SWT.FULL_SELECTION,
-				false, true);
+		bestMoves = new RaptorTable(composite, SWT.BORDER | SWT.FULL_SELECTION, false, true);
 		bestMoves.setToolTipText(local.getString("uciAnalW_37"));
-		bestMoves.addColumn(local.getString("uciAnalW_38"), SWT.LEFT, 10,
-				false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_39"), SWT.LEFT, 10,
-				false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_40"), SWT.LEFT, 10,
-				false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_41"), SWT.LEFT, 10,
-				false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_42"), SWT.LEFT, 60,
-				false, null);
-		bestMoves.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-				1));
+		bestMoves.addColumn(local.getString("uciAnalW_38"), SWT.LEFT, 10, false, null);
+		bestMoves.addColumn(local.getString("uciAnalW_39"), SWT.LEFT, 10, false, null);
+		bestMoves.addColumn(local.getString("uciAnalW_40"), SWT.LEFT, 10, false, null);
+		bestMoves.addColumn(local.getString("uciAnalW_41"), SWT.LEFT, 10, false, null);
+		bestMoves.addColumn(local.getString("uciAnalW_42"), SWT.LEFT, 60, false, null);
+		bestMoves.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		bestMoves.addRaptorTableListener(new RaptorTableAdapter() {
 			@Override
 			public void rowRightClicked(MouseEvent event, final String[] rowData) {
-				Menu menu = new Menu(UciAnalysisWidget.this.composite
-						.getShell(), SWT.POP_UP);
+				Menu menu = new Menu(UciAnalysisWidget.this.composite.getShell(), SWT.POP_UP);
 				MenuItem item = new MenuItem(menu, SWT.PUSH);
 				item.setText(local.getString("uciAnalW_43"));
 				item.addListener(SWT.Selection, new Listener() {
 					public void handleEvent(Event e) {
-						Clipboard clipboard = new Clipboard(composite
-								.getDisplay());
+						Clipboard clipboard = new Clipboard(composite.getDisplay());
 						String text = GameUtils.removeUnicodePieces(rowData[4]);
 						TextTransfer textTransfer = TextTransfer.getInstance();
 						Transfer[] transfers = new Transfer[] { textTransfer };
@@ -421,15 +329,14 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 	}
 
 	public void quit() {
-		Raptor.getInstance().getDisplay()
-				.asyncExec(new RaptorRunnable(controller.getConnector()) {
-					@Override
-					public void execute() {
-						if (!composite.isDisposed()) {
-							clear();
-						}
-					}
-				});
+		Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
+			@Override
+			public void execute() {
+				if (!composite.isDisposed()) {
+					clear();
+				}
+			}
+		});
 		if (engine != null) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
@@ -448,22 +355,19 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
 					engine.quit();
-					Raptor.getInstance().getDisplay()
-							.asyncExec(new RaptorRunnable() {
-								@Override
-								public void execute() {
-									startStopButton.setText(local
-											.getString("uciAnalW_44"));
-								}
-							});
+					Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
+						@Override
+						public void execute() {
+							startStopButton.setText(local.getString("uciAnalW_44"));
+						}
+					});
 				}
 			});
 		}
 	}
 
 	public void updateFromPrefs() {
-		Color background = Raptor.getInstance().getPreferences()
-				.getColor(PreferenceKeys.BOARD_BACKGROUND_COLOR);
+		Color background = Raptor.getInstance().getPreferences().getColor(PreferenceKeys.BOARD_BACKGROUND_COLOR);
 		composite.setBackground(background);
 		topLine.setBackground(background);
 	}
@@ -479,8 +383,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
 					if (LOG.isDebugEnabled()) {
-						LOG.debug("In UciAnalysisWidget.start("
-								+ engine.getUserName() + ")");
+						LOG.debug("In UciAnalysisWidget.start(" + engine.getUserName() + ")");
 					}
 					try {
 						if (!engine.isConnected()) {
@@ -489,8 +392,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 
 						if (controller.getGame().getVariant() == Variant.fischerRandom
 								&& engine.hasOption("UCI_Chess960")) {
-							UCICheck opt = (UCICheck) engine
-									.getOption("UCI_Chess960");
+							UCICheck opt = (UCICheck) engine.getOption("UCI_Chess960");
 							opt.setValue("true");
 						}
 
@@ -498,15 +400,13 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 						engine.setPosition(controller.getGame().toFen(), null);
 						engine.isReady();
 						engine.go(engine.getGoAnalysisParameters(), listener);
-						Raptor.getInstance().getDisplay()
-								.asyncExec(new RaptorRunnable() {
-									@Override
-									public void execute() {
-										startStopButton.setText(local
-												.getString("uciAnalW_54"));
-										bestMoves.clearTable();
-									}
-								});
+						Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
+							@Override
+							public void execute() {
+								startStopButton.setText(local.getString("uciAnalW_54"));
+								bestMoves.clearTable();
+							}
+						});
 
 					} catch (Throwable t) {
 						LOG.error("Error starting engine", t);
@@ -521,19 +421,13 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 
 		engineCombo.removeAll();
 
-		UCIEngine[] engines = new UCIEngine[] { UCIEngineService.getInstance()
-				.getEngine() };
+		engine = UCIEngineService.getInstance().getEngine();
 
-		for (UCIEngine engine : engines)
-			engineCombo.add(engine.getUserName());
+		engineCombo.add(engine.getUserName());
 
 		engineCombo.select(0);
 
 		topLine.pack(true);
 		topLine.layout(true, true);
-
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Selecting UCIEngine " + engines[0].getUserName() + ")");
-		}
 	}
 }
