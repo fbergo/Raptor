@@ -20,13 +20,8 @@ import org.apache.commons.lang.StringUtils;
 
 import raptor.Raptor;
 import raptor.service.ThreadService;
-import raptor.swt.ChessSetInstallDialog;
-import raptor.util.RaptorLogger;
 
 public class ProcessSpeech implements Speech {
-	private static final RaptorLogger LOG = RaptorLogger
-			.getLog(ProcessSpeech.class);
-	
 	protected Queue<String> speakQueue;
 
 	protected String command;
@@ -45,18 +40,16 @@ public class ProcessSpeech implements Speech {
 	public void speak(final String text) {
 		if (StringUtils.isBlank(text))
 			return;
-		
+
 		speakQueue.add(text);
 		ThreadService.getInstance().run(new Runnable() {
 			public void run() {
 				synchronized (ProcessSpeech.this) {
 					try {
-						Process process = Runtime.getRuntime().exec(
-								new String[] { command, speakQueue.poll() });
+						Process process = Runtime.getRuntime().exec(new String[] { command, speakQueue.poll() });
 						process.waitFor();
 					} catch (Exception e) {
-						Raptor.getInstance().onError(
-								"Error occured speaking text: " + text, e);
+						Raptor.getInstance().onError("Error occured speaking text: " + text, e);
 					}
 				}
 			}

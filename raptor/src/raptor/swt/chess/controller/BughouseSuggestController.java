@@ -326,6 +326,7 @@ public class BughouseSuggestController extends ObserveController {
 		refreshBoard();
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void userPressedMouseButton(MouseButtonAction button, int square) {
 		switch (button) {

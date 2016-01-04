@@ -73,7 +73,6 @@ import raptor.service.ThemeService;
 import raptor.service.ThemeService.Theme;
 import raptor.swt.BrowserWindowItem;
 import raptor.swt.BugButtonsWindowItem;
-import raptor.swt.ChessSetInstallDialog;
 import raptor.swt.ItemChangedListener;
 import raptor.swt.PgnProcessingDialog;
 import raptor.swt.ProfileDialog;
@@ -116,8 +115,7 @@ public class RaptorWindow extends ApplicationWindow {
 		protected Quadrant quad;
 		protected RaptorWindowSashForm raptorSash;
 
-		public RaptorTabFolder(RaptorWindowSashForm raptorSash, int style,
-				Quadrant quad) {
+		public RaptorTabFolder(RaptorWindowSashForm raptorSash, int style, Quadrant quad) {
 			super(raptorSash, style);
 			this.quad = quad;
 			this.raptorSash = raptorSash;
@@ -128,10 +126,8 @@ public class RaptorWindow extends ApplicationWindow {
 			setMaximizeVisible(true);
 			setMinimizeVisible(true);
 
-			setSelectionBackground(getDisplay().getSystemColor(
-					SWT.COLOR_LIST_SELECTION));
-			setSelectionForeground(getDisplay().getSystemColor(
-					SWT.COLOR_LIST_SELECTION_TEXT));
+			setSelectionBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION));
+			setSelectionForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
 		}
 
 		/**
@@ -176,8 +172,7 @@ public class RaptorWindow extends ApplicationWindow {
 		 */
 		public void passivate(boolean includeSelection) {
 			for (int i = 0; i < getItemCount(); i++) {
-				if (!includeSelection
-						&& getRaptorTabItemAt(i) == getRaptorTabItemSelection()) {
+				if (!includeSelection && getRaptorTabItemAt(i) == getRaptorTabItemSelection()) {
 				} else {
 					getRaptorTabItemAt(i).raptorItem.onPassivate();
 				}
@@ -221,8 +216,7 @@ public class RaptorWindow extends ApplicationWindow {
 				}
 			}
 
-			List<RaptorWindowSashForm> parents = new ArrayList<RaptorWindowSashForm>(
-					10);
+			List<RaptorWindowSashForm> parents = new ArrayList<RaptorWindowSashForm>(10);
 			Control currentSashParent = raptorSash;
 
 			// Build a list of all the parents. The last entry in the list will
@@ -270,9 +264,8 @@ public class RaptorWindow extends ApplicationWindow {
 
 		@Override
 		public String toString() {
-			return "RaptorTabFolder " + quad + " isVisible=" + isVisible()
-					+ " itemCount=" + getItemCount() + " currentSelection="
-					+ getRaptorTabItemSelection();
+			return "RaptorTabFolder " + quad + " isVisible=" + isVisible() + " itemCount=" + getItemCount()
+					+ " currentSelection=" + getRaptorTabItemSelection();
 		}
 
 		public void updateToolbar(boolean force) {
@@ -288,18 +281,16 @@ public class RaptorWindow extends ApplicationWindow {
 				Control currentSelectionToolbar = null;
 				if (currentSelection != null) {
 					if (LOG.isDebugEnabled()) {
-						LOG.debug("In updateToolbar selected RaptorWindowItem="
-								+ currentSelection.raptorItem + " quad=" + quad);
+						LOG.debug("In updateToolbar selected RaptorWindowItem=" + currentSelection.raptorItem + " quad="
+								+ quad);
 					}
 
-					currentSelectionToolbar = currentSelection.raptorItem
-							.getToolbar(this);
+					currentSelectionToolbar = currentSelection.raptorItem.getToolbar(this);
 				}
 				Control existingControl = getTopRight();
 				if (currentSelection != null) {
 					if (existingControl != currentSelectionToolbar) {
-						if (existingControl != null
-								&& !existingControl.isDisposed()) {
+						if (existingControl != null && !existingControl.isDisposed()) {
 							existingControl.setVisible(false);
 							setTopRight(null);
 						}
@@ -308,26 +299,22 @@ public class RaptorWindow extends ApplicationWindow {
 								LOG.debug("Setting up toolbar. ");
 							}
 							setTopRight(currentSelectionToolbar, SWT.RIGHT);
-							setTabHeight(Math.max(currentSelectionToolbar
-									.computeSize(SWT.DEFAULT, SWT.DEFAULT).y,
+							setTabHeight(Math.max(currentSelectionToolbar.computeSize(SWT.DEFAULT, SWT.DEFAULT).y,
 									getTabHeight()));
 							currentSelectionToolbar.setVisible(true);
 							currentSelectionToolbar.redraw();
 							layout(true);
 						}
-					} else if (existingControl != null
-							&& !existingControl.isVisible()) {
+					} else if (existingControl != null && !existingControl.isVisible()) {
 						existingControl.setVisible(true);
 						existingControl.redraw();
 					}
-				} else if (existingControl != null
-						&& !existingControl.isDisposed()) {
+				} else if (existingControl != null && !existingControl.isDisposed()) {
 					existingControl.setVisible(false);
 					setTopRight(null);
 				}
 				if (LOG.isDebugEnabled()) {
-					LOG.debug("Updated toolbar in "
-							+ (System.currentTimeMillis() - startTime));
+					LOG.debug("Updated toolbar in " + (System.currentTimeMillis() - startTime));
 				}
 			}
 		}
@@ -343,20 +330,17 @@ public class RaptorWindow extends ApplicationWindow {
 		protected RaptorWindowItem raptorItem;
 		protected RaptorTabFolder raptorParent;
 
-		public RaptorTabItem(RaptorTabFolder parent, int style,
-				RaptorWindowItem item) {
+		public RaptorTabItem(RaptorTabFolder parent, int style, RaptorWindowItem item) {
 			this(parent, style, item, true, true);
 		}
 
-		public RaptorTabItem(RaptorTabFolder parent, int style,
-				final RaptorWindowItem item, boolean isInitingItem,
+		public RaptorTabItem(RaptorTabFolder parent, int style, final RaptorWindowItem item, boolean isInitingItem,
 				boolean isSelecting) {
 			super(parent, style);
 			init(parent, item, isInitingItem, isSelecting);
 		}
 
-		public RaptorTabItem(RaptorTabFolder parent, int style,
-				final RaptorWindowItem item, boolean isInitingItem,
+		public RaptorTabItem(RaptorTabFolder parent, int style, final RaptorWindowItem item, boolean isInitingItem,
 				boolean isSelecting, int index) {
 			super(parent, style, index);
 			init(parent, item, isInitingItem, isSelecting);
@@ -367,7 +351,7 @@ public class RaptorWindow extends ApplicationWindow {
 			try {
 				super.dispose();
 			} catch (Throwable t) {
-			}// Eat it. Prob an already disposed issue.
+			} // Eat it. Prob an already disposed issue.
 			itemsManaged.remove(this);
 			try {
 				if (raptorItem != null) {
@@ -400,11 +384,9 @@ public class RaptorWindow extends ApplicationWindow {
 
 				// Now add the new raptor tab item to the new parent.
 				if (index == -1) {
-					new RaptorTabItem(newParent, getStyle(), raptorItem, false,
-							true);
+					new RaptorTabItem(newParent, getStyle(), raptorItem, false, true);
 				} else {
-					new RaptorTabItem(newParent, getStyle(), raptorItem, false,
-							true, index);
+					new RaptorTabItem(newParent, getStyle(), raptorItem, false, true, index);
 				}
 
 				// Invoke after move so the item can adjust to its new parent if
@@ -436,12 +418,11 @@ public class RaptorWindow extends ApplicationWindow {
 
 		@Override
 		public String toString() {
-			return "RaptorTabItem: " + getText() + " isVisible=" + " quadrant="
-					+ raptorParent.quad + getControl().isVisible();
+			return "RaptorTabItem: " + getText() + " isVisible=" + " quadrant=" + raptorParent.quad
+					+ getControl().isVisible();
 		}
 
-		protected void init(RaptorTabFolder parent,
-				final RaptorWindowItem item, boolean isInitingItem,
+		protected void init(RaptorTabFolder parent, final RaptorWindowItem item, boolean isInitingItem,
 				boolean isSelecting) {
 			raptorParent = parent;
 
@@ -459,8 +440,7 @@ public class RaptorWindow extends ApplicationWindow {
 
 			item.addItemChangedListener(listener = new ItemChangedListener() {
 				public void itemStateChanged() {
-					if (!disposed && item.getControl() != null
-							&& !item.getControl().isDisposed()) {
+					if (!disposed && item.getControl() != null && !item.getControl().isDisposed()) {
 						getShell().getDisplay().asyncExec(new RaptorRunnable() {
 							@Override
 							public void execute() {
@@ -477,9 +457,7 @@ public class RaptorWindow extends ApplicationWindow {
 									}
 								} catch (SWTException swt) {
 									if (LOG.isDebugEnabled()) {
-										LOG.debug(
-												"Error handling item state changed:",
-												swt);
+										LOG.debug("Error handling item state changed:", swt);
 									}
 									// Just eat it. It is probably a
 									// widget is
@@ -547,8 +525,7 @@ public class RaptorWindow extends ApplicationWindow {
 			long startTime = System.currentTimeMillis();
 			super.layout(changed);
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("Laid out " + key + " in "
-						+ (System.currentTimeMillis() - startTime));
+				LOG.debug("Laid out " + key + " in " + (System.currentTimeMillis() - startTime));
 			}
 		}
 
@@ -600,8 +577,7 @@ public class RaptorWindow extends ApplicationWindow {
 				}
 			}
 			setVisible(numberOfChildrenShowing > 0);
-			setMaximizedControl(numberOfChildrenShowing == 1 ? lastChildToShow
-					: null);
+			setMaximizedControl(numberOfChildrenShowing == 1 ? lastChildToShow : null);
 
 			layout();
 		}
@@ -617,13 +593,11 @@ public class RaptorWindow extends ApplicationWindow {
 
 		@Override
 		public String toString() {
-			return "RaptorSashForm " + key + " isVisible=" + isVisible()
-					+ " maxControl=" + getMaximizedControl();
+			return "RaptorSashForm " + key + " isVisible=" + isVisible() + " maxControl=" + getMaximizedControl();
 		}
 	}
 
-	protected List<RaptorTabItem> itemsManaged = Collections
-			.synchronizedList(new ArrayList<RaptorTabItem>());
+	protected List<RaptorTabItem> itemsManaged = Collections.synchronizedList(new ArrayList<RaptorTabItem>());
 
 	protected RaptorTabItem dragStartItem;
 
@@ -682,8 +656,7 @@ public class RaptorWindow extends ApplicationWindow {
 	 * RaptorWindowItem is visible so the RaptorWindowItem should handle these
 	 * as well.
 	 */
-	public void addRaptorWindowItem(final RaptorWindowItem item,
-			boolean isAsynch) {
+	public void addRaptorWindowItem(final RaptorWindowItem item, boolean isAsynch) {
 		addRaptorWindowItem(item, isAsynch, true);
 	}
 
@@ -700,8 +673,7 @@ public class RaptorWindow extends ApplicationWindow {
 	 * RaptorWindowItem is visible so the RaptorWindowItem should handle these
 	 * as well.
 	 */
-	public void addRaptorWindowItem(final RaptorWindowItem item,
-			boolean isAsynch, final boolean isSelecting) {
+	public void addRaptorWindowItem(final RaptorWindowItem item, boolean isAsynch, final boolean isSelecting) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Adding raptor window item " + item);
 		}
@@ -710,10 +682,8 @@ public class RaptorWindow extends ApplicationWindow {
 			getShell().getDisplay().syncExec(new RaptorRunnable() {
 				@Override
 				public void execute() {
-					RaptorTabFolder folder = getRaptorTabFolder(item
-							.getPreferredQuadrant());
-					new RaptorTabItem(folder, SWT.NONE, item, true, folder
-							.getItemCount() == 0 || isSelecting);
+					RaptorTabFolder folder = getRaptorTabFolder(item.getPreferredQuadrant());
+					new RaptorTabItem(folder, SWT.NONE, item, true, folder.getItemCount() == 0 || isSelecting);
 					folder.setMinimized(false);
 					restoreFolders();
 				}
@@ -722,10 +692,8 @@ public class RaptorWindow extends ApplicationWindow {
 			getShell().getDisplay().asyncExec(new RaptorRunnable() {
 				@Override
 				public void execute() {
-					RaptorTabFolder folder = getRaptorTabFolder(item
-							.getPreferredQuadrant());
-					new RaptorTabItem(folder, SWT.NONE, item, true, folder
-							.getItemCount() == 0 || isSelecting);
+					RaptorTabFolder folder = getRaptorTabFolder(item.getPreferredQuadrant());
+					new RaptorTabItem(folder, SWT.NONE, item, true, folder.getItemCount() == 0 || isSelecting);
 					folder.setMinimized(false);
 					restoreFolders();
 				}
@@ -742,8 +710,7 @@ public class RaptorWindow extends ApplicationWindow {
 		for (RaptorTabFolder folder : folders) {
 			for (int i = 0; i < folder.getItemCount(); i++) {
 				if (folder.getRaptorTabItemAt(i).raptorItem instanceof BugButtonsWindowItem) {
-					BugButtonsWindowItem item = (BugButtonsWindowItem) folder
-							.getRaptorTabItemAt(i).raptorItem;
+					BugButtonsWindowItem item = (BugButtonsWindowItem) folder.getRaptorTabItemAt(i).raptorItem;
 					if (item.getConnector() == connector) {
 						result = true;
 						break;
@@ -763,14 +730,11 @@ public class RaptorWindow extends ApplicationWindow {
 		for (RaptorTabFolder folder : folders) {
 			for (int i = 0; i < folder.getItemCount(); i++) {
 				if (folder.getRaptorTabItemAt(i).raptorItem instanceof ChatConsoleWindowItem) {
-					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder
-							.getRaptorTabItemAt(i).raptorItem;
+					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder.getRaptorTabItemAt(i).raptorItem;
 					if (item.getController().getConnector() == connector
 							&& item.getController() instanceof ChannelController) {
-						ChannelController controller = (ChannelController) item
-								.getController();
-						if (StringUtils.equalsIgnoreCase(
-								controller.getChannel(), channel)) {
+						ChannelController controller = (ChannelController) item.getController();
+						if (StringUtils.equalsIgnoreCase(controller.getChannel(), channel)) {
 							result = true;
 							break;
 						}
@@ -790,14 +754,11 @@ public class RaptorWindow extends ApplicationWindow {
 		for (RaptorTabFolder folder : folders) {
 			for (int i = 0; i < folder.getItemCount(); i++) {
 				if (folder.getRaptorTabItemAt(i).raptorItem instanceof ChatConsoleWindowItem) {
-					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder
-							.getRaptorTabItemAt(i).raptorItem;
+					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder.getRaptorTabItemAt(i).raptorItem;
 					if (item.getController().getConnector() == connector
 							&& item.getController() instanceof GameChatController) {
-						GameChatController controller = (GameChatController) item
-								.getController();
-						if (StringUtils.equalsIgnoreCase(
-								controller.getGameId(), gameId)) {
+						GameChatController controller = (GameChatController) item.getController();
+						if (StringUtils.equalsIgnoreCase(controller.getGameId(), gameId)) {
 							result = true;
 							break;
 						}
@@ -816,8 +777,7 @@ public class RaptorWindow extends ApplicationWindow {
 		for (RaptorTabFolder folder : folders) {
 			for (int i = 0; i < folder.getItemCount(); i++) {
 				if (folder.getRaptorTabItemAt(i).raptorItem instanceof ChatConsoleWindowItem) {
-					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder
-							.getRaptorTabItemAt(i).raptorItem;
+					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder.getRaptorTabItemAt(i).raptorItem;
 					if (item.getController().getConnector() == connector
 							&& item.getController() instanceof BughousePartnerController) {
 						result = true;
@@ -838,14 +798,11 @@ public class RaptorWindow extends ApplicationWindow {
 		for (RaptorTabFolder folder : folders) {
 			for (int i = 0; i < folder.getItemCount(); i++) {
 				if (folder.getRaptorTabItemAt(i).raptorItem instanceof ChatConsoleWindowItem) {
-					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder
-							.getRaptorTabItemAt(i).raptorItem;
+					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder.getRaptorTabItemAt(i).raptorItem;
 					if (item.getController().getConnector() == connector
 							&& item.getController() instanceof PersonController) {
-						PersonController controller = (PersonController) item
-								.getController();
-						if (StringUtils.equalsIgnoreCase(
-								controller.getPerson(), person)) {
+						PersonController controller = (PersonController) item.getController();
+						if (StringUtils.equalsIgnoreCase(controller.getPerson(), person)) {
 							result = true;
 							break;
 						}
@@ -865,14 +822,11 @@ public class RaptorWindow extends ApplicationWindow {
 		for (RaptorTabFolder folder : folders) {
 			for (int i = 0; i < folder.getItemCount(); i++) {
 				if (folder.getRaptorTabItemAt(i).raptorItem instanceof ChatConsoleWindowItem) {
-					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder
-							.getRaptorTabItemAt(i).raptorItem;
+					ChatConsoleWindowItem item = (ChatConsoleWindowItem) folder.getRaptorTabItemAt(i).raptorItem;
 					if (item.getController().getConnector() == connector
 							&& item.getController() instanceof RegExController) {
-						RegExController controller = (RegExController) item
-								.getController();
-						if (StringUtils
-								.equals(controller.getPattern(), pattern)) {
+						RegExController controller = (RegExController) item.getController();
+						if (StringUtils.equals(controller.getPattern(), pattern)) {
 							result = true;
 							break;
 						}
@@ -887,8 +841,7 @@ public class RaptorWindow extends ApplicationWindow {
 	 * Returns true if at least one window item of the specified type is being
 	 * managed.
 	 */
-	public boolean containsWindowItems(
-			Class<? extends RaptorWindowItem> windowItemClass) {
+	public boolean containsWindowItems(Class<? extends RaptorWindowItem> windowItemClass) {
 		boolean result = false;
 		synchronized (itemsManaged) {
 			for (RaptorTabItem currentTabItem : itemsManaged) {
@@ -973,8 +926,7 @@ public class RaptorWindow extends ApplicationWindow {
 				synchronized (itemsManaged) {
 					for (RaptorTabItem currentTabItem : itemsManaged) {
 						if (currentTabItem.raptorItem == windowItem) {
-							currentTabItem.raptorParent
-									.setSelection(currentTabItem);
+							currentTabItem.raptorParent.setSelection(currentTabItem);
 							if (currentTabItem.raptorParent.getMinimized()) {
 								currentTabItem.raptorParent.setMinimized(false);
 								restoreFolders();
@@ -991,8 +943,7 @@ public class RaptorWindow extends ApplicationWindow {
 				if (!wasRestored) {
 					boolean isFolderMaximized = false;
 					for (RaptorTabFolder folder : folders) {
-						if (folder.getMaximized()
-								&& !folder.contains(windowItem)) {
+						if (folder.getMaximized() && !folder.contains(windowItem)) {
 							isFolderMaximized = true;
 							break;
 						}
@@ -1047,11 +998,9 @@ public class RaptorWindow extends ApplicationWindow {
 		for (RaptorTabFolder folder : folders) {
 			for (int i = 0; i < folder.getItemCount(); i++) {
 				if (folder.getRaptorTabItemAt(i).raptorItem instanceof ChessBoardWindowItem) {
-					ChessBoardWindowItem item = (ChessBoardWindowItem) folder
-							.getRaptorTabItemAt(i).raptorItem;
+					ChessBoardWindowItem item = (ChessBoardWindowItem) folder.getRaptorTabItemAt(i).raptorItem;
 					if (!(item.getController() instanceof InactiveController)
-							&& item.getController().getGame().getId()
-									.equals(gameId)) {
+							&& item.getController().getGame().getId().equals(gameId)) {
 						result = item;
 						break;
 					}
@@ -1070,8 +1019,7 @@ public class RaptorWindow extends ApplicationWindow {
 	 *            The quadrant to search in.
 	 * @return null if not found, otherwise the ChessBoardWindowItem.
 	 */
-	public ChessBoardWindowItem getChessBoardWindowItemToTakeOver(
-			Quadrant quadrant) {
+	public ChessBoardWindowItem getChessBoardWindowItemToTakeOver(Quadrant quadrant) {
 		ChessBoardWindowItem result = null;
 
 		synchronized (itemsManaged) {
@@ -1123,15 +1071,12 @@ public class RaptorWindow extends ApplicationWindow {
 	 *            The window item class.
 	 * @return The result.
 	 */
-	public RaptorWindowItem[] getSelectedWindowItems(
-			Class<? extends RaptorWindowItem> windowItemClass) {
+	public RaptorWindowItem[] getSelectedWindowItems(Class<? extends RaptorWindowItem> windowItemClass) {
 		List<RaptorWindowItem> result = new ArrayList<RaptorWindowItem>(10);
 		synchronized (itemsManaged) {
 			for (RaptorTabItem currentTabItem : itemsManaged) {
-				if (windowItemClass.isInstance(currentTabItem.raptorItem)
-						&& !currentTabItem.raptorParent.getMinimized()
-						&& currentTabItem.raptorParent
-								.getRaptorTabItemSelection() == currentTabItem) {
+				if (windowItemClass.isInstance(currentTabItem.raptorItem) && !currentTabItem.raptorParent.getMinimized()
+						&& currentTabItem.raptorParent.getRaptorTabItemSelection() == currentTabItem) {
 					result.add(currentTabItem.raptorItem);
 				}
 			}
@@ -1171,8 +1116,7 @@ public class RaptorWindow extends ApplicationWindow {
 	 *            The window item class.
 	 * @return The result.
 	 */
-	public RaptorWindowItem[] getWindowItems(
-			Class<? extends RaptorWindowItem> windowItemClass) {
+	public RaptorWindowItem[] getWindowItems(Class<? extends RaptorWindowItem> windowItemClass) {
 		List<RaptorWindowItem> result = new ArrayList<RaptorWindowItem>(10);
 
 		synchronized (itemsManaged) {
@@ -1195,8 +1139,7 @@ public class RaptorWindow extends ApplicationWindow {
 	 * @return The result.
 	 */
 	public RaptorConnectorWindowItem[] getWindowItems(Connector connector) {
-		List<RaptorConnectorWindowItem> result = new ArrayList<RaptorConnectorWindowItem>(
-				10);
+		List<RaptorConnectorWindowItem> result = new ArrayList<RaptorConnectorWindowItem>(10);
 		synchronized (itemsManaged) {
 			for (RaptorTabItem currentTabItem : itemsManaged) {
 				if (currentTabItem.raptorItem instanceof RaptorConnectorWindowItem) {
@@ -1252,23 +1195,20 @@ public class RaptorWindow extends ApplicationWindow {
 	 * -1 the label will disappear.
 	 */
 	public void setPingTime(final Connector connectorToSet, final long pingTime) {
-		if (Raptor.getInstance().isShutdown()
-				|| Raptor.getInstance().isDisposed() || zoomCombo == null
+		if (Raptor.getInstance().isShutdown() || Raptor.getInstance().isDisposed() || zoomCombo == null
 				|| statusBar == null) {
 			return;
 		}
 
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("setPingTime " + connectorToSet.getShortName() + " "
-					+ pingTime);
+			LOG.debug("setPingTime " + connectorToSet.getShortName() + " " + pingTime);
 		}
 
 		Raptor.getInstance().getDisplay().syncExec(new RaptorRunnable() {
 			@Override
 			public void execute() {
 				if (pingLabelsMap != null && connectorToSet != null) {
-					Label label = pingLabelsMap.get(connectorToSet
-							.getShortName());
+					Label label = pingLabelsMap.get(connectorToSet.getShortName());
 					if (label == null) {
 						zoomCombo.dispose();
 						label = new Label(statusBar, SWT.NONE);
@@ -1279,11 +1219,10 @@ public class RaptorWindow extends ApplicationWindow {
 						gridData.verticalAlignment = SWT.CENTER;
 						label.setLayoutData(gridData);
 						pingLabelsMap.put(connectorToSet.getShortName(), label);
-						label.setFont(Raptor.getInstance().getPreferences()
-								.getFont(PreferenceKeys.APP_PING_FONT, false));
-						label.setForeground(Raptor.getInstance()
-								.getPreferences()
-								.getColor(PreferenceKeys.APP_PING_COLOR));
+						label.setFont(
+								Raptor.getInstance().getPreferences().getFont(PreferenceKeys.APP_PING_FONT, false));
+						label.setForeground(
+								Raptor.getInstance().getPreferences().getColor(PreferenceKeys.APP_PING_COLOR));
 						label.setToolTipText("An estimate of ping time.");
 						createZoomCombo();
 						statusBar.layout(true, true);
@@ -1294,8 +1233,7 @@ public class RaptorWindow extends ApplicationWindow {
 						pingLabelsMap.remove(connectorToSet.getShortName());
 						statusBar.layout(true, true);
 					} else {
-						label.setText(" " + connectorToSet.getShortName()
-								+ " (" + pingTime + "ms) ");
+						label.setText(" " + connectorToSet.getShortName() + " (" + pingTime + "ms) ");
 						label.setVisible(true);
 						statusBar.layout(true, true);
 						label.redraw();
@@ -1313,8 +1251,7 @@ public class RaptorWindow extends ApplicationWindow {
 			LOG.debug("setStatusMessage " + newStatusMessage);
 		}
 
-		if (getShell() == null || getShell().getDisplay() == null
-				|| getShell().getDisplay().isDisposed()) {
+		if (getShell() == null || getShell().getDisplay() == null || getShell().getDisplay().isDisposed()) {
 			return;
 		}
 
@@ -1337,8 +1274,7 @@ public class RaptorWindow extends ApplicationWindow {
 		Raptor.getInstance().getDisplay().syncExec(new Runnable() {
 			public void run() {
 
-				getPreferences().setValue(PreferenceKeys.APP_WINDOW_BOUNDS,
-						getShell().getBounds());
+				getPreferences().setValue(PreferenceKeys.APP_WINDOW_BOUNDS, getShell().getBounds());
 				storeAllSashWeights();
 			}
 		});
@@ -1364,8 +1300,7 @@ public class RaptorWindow extends ApplicationWindow {
 
 			if (leftCoolbar.getItemCount() > 0) {
 				foldersMinimiziedCoolItem = leftCoolbar.getItem(0);
-				foldersMinimizedToolbar = (ToolBar) foldersMinimiziedCoolItem
-						.getControl();
+				foldersMinimizedToolbar = (ToolBar) foldersMinimiziedCoolItem.getControl();
 
 				ToolItem[] items = foldersMinimizedToolbar.getItems();
 				for (ToolItem item : items) {
@@ -1373,18 +1308,15 @@ public class RaptorWindow extends ApplicationWindow {
 				}
 			} else {
 				foldersMinimiziedCoolItem = new CoolItem(leftCoolbar, SWT.NONE);
-				foldersMinimizedToolbar = new ToolBar(leftCoolbar, SWT.FLAT
-						| SWT.VERTICAL);
+				foldersMinimizedToolbar = new ToolBar(leftCoolbar, SWT.FLAT | SWT.VERTICAL);
 				foldersMinimiziedCoolItem.setControl(foldersMinimizedToolbar);
 				foldersMinimiziedCoolItem
-						.setPreferredSize(foldersMinimizedToolbar.computeSize(
-								SWT.DEFAULT, SWT.DEFAULT));
+						.setPreferredSize(foldersMinimizedToolbar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 
 			for (Quadrant quadrant : Quadrant.values()) {
 				if (getRaptorTabFolder(quadrant).getMinimized()) {
-					ToolItem item = new ToolItem(foldersMinimizedToolbar,
-							SWT.PUSH);
+					ToolItem item = new ToolItem(foldersMinimizedToolbar, SWT.PUSH);
 					item.setText(quadrant.name());
 					item.setToolTipText("Restore quadrant " + quadrant.name());
 					final Quadrant finalQuad = quadrant;
@@ -1399,13 +1331,11 @@ public class RaptorWindow extends ApplicationWindow {
 			}
 
 			foldersMinimizedToolbar.pack();
-			foldersMinimiziedCoolItem.setPreferredSize(foldersMinimizedToolbar
-					.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			foldersMinimiziedCoolItem.setPreferredSize(foldersMinimizedToolbar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		} else {
 			if (leftCoolbar.getItemCount() > 0) {
 				CoolItem foldersMinimiziedCoolItem = leftCoolbar.getItem(0);
-				ToolBar foldersMinimizedToolbar = (ToolBar) foldersMinimiziedCoolItem
-						.getControl();
+				ToolBar foldersMinimizedToolbar = (ToolBar) foldersMinimiziedCoolItem.getControl();
 
 				ToolItem[] items = foldersMinimizedToolbar.getItems();
 				for (ToolItem item : items) {
@@ -1425,20 +1355,14 @@ public class RaptorWindow extends ApplicationWindow {
 	 */
 	@Override
 	protected Control createContents(Composite parent) {
-		getShell().setText(
-				Raptor.getInstance().getPreferences()
-						.getString(PreferenceKeys.APP_NAME));
-		getShell().setImage(
-				Raptor.getInstance().getImage(
-						Raptor.RESOURCES_DIR + "images/raptorIcon.gif"));
+		getShell().setText(Raptor.getInstance().getPreferences().getString(PreferenceKeys.APP_NAME));
+		getShell().setImage(Raptor.getInstance().getImage(Raptor.RESOURCES_DIR + "images/raptorIcon.gif"));
 
 		parent.setLayout(SWTUtils.createMarginlessGridLayout(1, true));
 
 		windowComposite = new Composite(parent, SWT.NONE);
-		windowComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true));
-		windowComposite
-				.setLayout(SWTUtils.createMarginlessGridLayout(2, false));
+		windowComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		windowComposite.setLayout(SWTUtils.createMarginlessGridLayout(2, false));
 
 		createLeftCoolbar();
 		createFolderAndSashControls();
@@ -1473,8 +1397,7 @@ public class RaptorWindow extends ApplicationWindow {
 
 	protected void createLeftCoolbar() {
 		leftCoolbar = new CoolBar(windowComposite, SWT.FLAT | SWT.VERTICAL);
-		leftCoolbar.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true,
-				1, 1));
+		leftCoolbar.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1));
 		leftCoolbar.setVisible(false);
 	}
 
@@ -1482,8 +1405,7 @@ public class RaptorWindow extends ApplicationWindow {
 		fileMenu.add(new Action(local.getString("rapWinL2")) {
 			@Override
 			public void run() {
-				String lastFile = getPreferences().getString(
-						PreferenceKeys.BOARD_LAST_OPEN_PGN);
+				String lastFile = getPreferences().getString(PreferenceKeys.BOARD_LAST_OPEN_PGN);
 
 				FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
 				if (StringUtils.isNotBlank(lastFile)) {
@@ -1496,10 +1418,8 @@ public class RaptorWindow extends ApplicationWindow {
 				fd.setFilterExtensions(filterExt);
 				final String selected = fd.open();
 				if (!StringUtils.isBlank(selected)) {
-					getPreferences().setValue(
-							PreferenceKeys.BOARD_LAST_OPEN_PGN, selected);
-					PgnProcessingDialog dialog = new PgnProcessingDialog(
-							getShell(), selected);
+					getPreferences().setValue(PreferenceKeys.BOARD_LAST_OPEN_PGN, selected);
+					PgnProcessingDialog dialog = new PgnProcessingDialog(getShell(), selected);
 					dialog.open();
 				}
 			}
@@ -1507,15 +1427,11 @@ public class RaptorWindow extends ApplicationWindow {
 		fileMenu.add(new Action(local.getString("rapWinL4")) {
 			@Override
 			public void run() {
-				File file = new File(getPreferences().getString(
-						PreferenceKeys.APP_PGN_FILE));
+				File file = new File(getPreferences().getString(PreferenceKeys.APP_PGN_FILE));
 				if (!file.exists()) {
-					Raptor.getInstance().alert(
-							local.getString("rapWinL5")
-									+ file.getAbsolutePath());
+					Raptor.getInstance().alert(local.getString("rapWinL5") + file.getAbsolutePath());
 				} else {
-					PgnProcessingDialog dialog = new PgnProcessingDialog(
-							getShell(), file.getAbsolutePath());
+					PgnProcessingDialog dialog = new PgnProcessingDialog(getShell(), file.getAbsolutePath());
 					dialog.open();
 				}
 			}
@@ -1533,24 +1449,19 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void run() {
 				if (OSUtils.isLikelyWindows()) {
-					BrowserUtils.openExternalUrl("file://"
-							+ Raptor.USER_RAPTOR_HOME_PATH
-							+ "\\logs\\console\\");
+					BrowserUtils.openExternalUrl("file://" + Raptor.USER_RAPTOR_HOME_PATH + "\\logs\\console\\");
 				} else {
-					BrowserUtils.openExternalUrl("file://"
-							+ Raptor.USER_RAPTOR_HOME_PATH + "/logs/console/");
+					BrowserUtils.openExternalUrl("file://" + Raptor.USER_RAPTOR_HOME_PATH + "/logs/console/");
 				}
 			}
 		});
 		fileMenu.add(new Action(local.getString("rapWinL8")) {
 			@Override
 			public void run() {
-				String html = FileUtils
-						.fileAsString(Raptor.USER_RAPTOR_HOME_PATH
-								+ "/logs/error.log");
+				String html = FileUtils.fileAsString(Raptor.USER_RAPTOR_HOME_PATH + "/logs/error.log");
 				if (html != null) {
-					html = "<html>\n<head>\n<title></title>\n</head>\n<body>\n<h1>RAPTOR ERROR LOG</h1>\n<pre>\n"
-							+ html + "</pre>\n</body>\n</html>\n";
+					html = "<html>\n<head>\n<title></title>\n</head>\n<body>\n<h1>RAPTOR ERROR LOG</h1>\n<pre>\n" + html
+							+ "</pre>\n</body>\n</html>\n";
 					BrowserUtils.openHtml(html);
 				}
 			}
@@ -1605,21 +1516,17 @@ public class RaptorWindow extends ApplicationWindow {
 	}
 
 	protected void buildWindowMenu(MenuManager windowMenu) {
-		final MenuManager layoutsMenu = new MenuManager(
-				local.getString("rapWinL14"));
+		final MenuManager layoutsMenu = new MenuManager(local.getString("rapWinL14"));
 		layoutsMenu.add(new Action(local.getString("rapWinL15")) {
 			@Override
 			public void run() {
-				String layoutName = Raptor.getInstance().promptForText(
-						local.getString("rapWinL16"));
+				String layoutName = Raptor.getInstance().promptForText(local.getString("rapWinL16"));
 				if (StringUtils.isNotBlank(layoutName)) {
-					final Layout newLayout = LayoutService.getInstance()
-							.saveCurrentAsCustomLayout(layoutName);
+					final Layout newLayout = LayoutService.getInstance().saveCurrentAsCustomLayout(layoutName);
 
 					layoutsMenu.add(new Action(newLayout.getName(), null) {
 						public void run() {
-							if (Raptor.getInstance().confirm(
-									local.getString("rapWinL63"))) {
+							if (Raptor.getInstance().confirm(local.getString("rapWinL63"))) {
 								newLayout.apply();
 							}
 						}
@@ -1637,14 +1544,10 @@ public class RaptorWindow extends ApplicationWindow {
 				final String directory = fd.open();
 
 				if (!StringUtils.isBlank(directory)) {
-					final String layoutName = Raptor.getInstance()
-							.promptForText(local.getString("rapWinL19"));
+					final String layoutName = Raptor.getInstance().promptForText(local.getString("rapWinL19"));
 					if (StringUtils.isNotBlank(layoutName)) {
-						LayoutService.getInstance().exportCurrentLayout(
-								layoutName, directory);
-						Raptor.getInstance().alert(
-								"Exported " + directory + "/" + layoutName
-										+ ".properties");
+						LayoutService.getInstance().exportCurrentLayout(layoutName, directory);
+						Raptor.getInstance().alert("Exported " + directory + "/" + layoutName + ".properties");
 
 					}
 				}
@@ -1662,34 +1565,28 @@ public class RaptorWindow extends ApplicationWindow {
 				final String selected = fd.open();
 
 				if (!StringUtils.isBlank(selected)) {
-					final Layout layout = LayoutService.getInstance()
-							.importLayout(selected);
+					final Layout layout = LayoutService.getInstance().importLayout(selected);
 					layoutsMenu.add(new Action(layout.getName()) {
 						@Override
 						public void run() {
-							if (Raptor.getInstance().confirm(
-									local.getString("rapWinL63"))) {
+							if (Raptor.getInstance().confirm(local.getString("rapWinL63"))) {
 								layout.apply();
 							}
 						}
 					});
-					Raptor.getInstance().alert(
-							local.getString("rapWinL22") + layout.getName());
+					Raptor.getInstance().alert(local.getString("rapWinL22") + layout.getName());
 				}
 
 			}
 		});
 		layoutsMenu.add(new Separator());
 
-		MenuManager bughouseLayoutsMenu = new MenuManager(
-				local.getString("rapWinL23"));
-		Layout[] bughouseLayouts = LayoutService.getInstance()
-				.getBughouoseSystemLayouts();
+		MenuManager bughouseLayoutsMenu = new MenuManager(local.getString("rapWinL23"));
+		Layout[] bughouseLayouts = LayoutService.getInstance().getBughouoseSystemLayouts();
 		for (final Layout bugLayout : bughouseLayouts) {
 			bughouseLayoutsMenu.add(new Action(bugLayout.getName(), null) {
 				public void run() {
-					if (Raptor.getInstance().confirm(
-							local.getString("rapWinL63"))) {
+					if (Raptor.getInstance().confirm(local.getString("rapWinL63"))) {
 						bugLayout.apply();
 					}
 				}
@@ -1697,13 +1594,11 @@ public class RaptorWindow extends ApplicationWindow {
 		}
 		layoutsMenu.add(bughouseLayoutsMenu);
 
-		Layout[] layouts = LayoutService.getInstance()
-				.getNonBughouseSystemLayouts();
+		Layout[] layouts = LayoutService.getInstance().getNonBughouseSystemLayouts();
 		for (final Layout layout : layouts) {
 			layoutsMenu.add(new Action(layout.getName(), null) {
 				public void run() {
-					if (Raptor.getInstance().confirm(
-							local.getString("rapWinL63"))) {
+					if (Raptor.getInstance().confirm(local.getString("rapWinL63"))) {
 						layout.apply();
 					}
 				}
@@ -1715,8 +1610,7 @@ public class RaptorWindow extends ApplicationWindow {
 		for (final Layout layout : customLayouts) {
 			layoutsMenu.add(new Action(layout.getName(), null) {
 				public void run() {
-					if (Raptor.getInstance().confirm(
-							local.getString("rapWinL63"))) {
+					if (Raptor.getInstance().confirm(local.getString("rapWinL63"))) {
 						layout.apply();
 					}
 				}
@@ -1724,22 +1618,18 @@ public class RaptorWindow extends ApplicationWindow {
 		}
 		windowMenu.add(layoutsMenu);
 
-		final MenuManager themesMenu = new MenuManager(
-				local.getString("rapWinL24"));
+		final MenuManager themesMenu = new MenuManager(local.getString("rapWinL24"));
 		windowMenu.add(themesMenu);
 		themesMenu.add(new Action(local.getString("rapWinL25")) {
 			@Override
 			public void run() {
-				String themeName = Raptor.getInstance().promptForText(
-						local.getString("rapWinL26"));
+				String themeName = Raptor.getInstance().promptForText(local.getString("rapWinL26"));
 				if (StringUtils.isNotBlank(themeName)) {
-					final Theme newTheme = ThemeService.getInstance()
-							.saveCurrentAsTheme(themeName);
+					final Theme newTheme = ThemeService.getInstance().saveCurrentAsTheme(themeName);
 					themesMenu.add(new Action(newTheme.getName()) {
 						@Override
 						public void run() {
-							if (Raptor.getInstance().confirm(
-									local.getString("rapWinL62"))) {
+							if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
 								ThemeService.getInstance().applyTheme(newTheme);
 							}
 						}
@@ -1757,14 +1647,10 @@ public class RaptorWindow extends ApplicationWindow {
 				final String directory = fd.open();
 
 				if (!StringUtils.isBlank(directory)) {
-					final String themeName = Raptor.getInstance()
-							.promptForText(local.getString("rapWinL28"));
+					final String themeName = Raptor.getInstance().promptForText(local.getString("rapWinL28"));
 					if (StringUtils.isNotBlank(themeName)) {
-						ThemeService.getInstance().exportCurrentTheme(
-								themeName, directory);
-						Raptor.getInstance().alert(
-								"Exported " + directory + "/" + themeName
-										+ ".properties");
+						ThemeService.getInstance().exportCurrentTheme(themeName, directory);
+						Raptor.getInstance().alert("Exported " + directory + "/" + themeName + ".properties");
 
 					}
 				}
@@ -1782,19 +1668,16 @@ public class RaptorWindow extends ApplicationWindow {
 				final String selected = fd.open();
 
 				if (!StringUtils.isBlank(selected)) {
-					final Theme theme = ThemeService.getInstance().importTheme(
-							selected);
+					final Theme theme = ThemeService.getInstance().importTheme(selected);
 					themesMenu.add(new Action(theme.getName()) {
 						@Override
 						public void run() {
-							if (Raptor.getInstance().confirm(
-									local.getString("rapWinL62"))) {
+							if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
 								ThemeService.getInstance().applyTheme(theme);
 							}
 						}
 					});
-					Raptor.getInstance()
-							.alert("Added theme " + theme.getName());
+					Raptor.getInstance().alert("Added theme " + theme.getName());
 				}
 
 			}
@@ -1809,8 +1692,7 @@ public class RaptorWindow extends ApplicationWindow {
 			themesMenu.add(new Action(theme.getName()) {
 				@Override
 				public void run() {
-					if (Raptor.getInstance().confirm(
-							local.getString("rapWinL62"))) {
+					if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
 						ThemeService.getInstance().applyTheme(theme);
 					}
 				}
@@ -1821,21 +1703,17 @@ public class RaptorWindow extends ApplicationWindow {
 	public void buildHelpMenu(MenuManager helpMenu) {
 
 		if (!OSUtils.isLikelyOSXCocoa()) {
-			helpMenu.add(new Action(getPreferences().getString(
-					PreferenceKeys.APP_NAME)) {
+			helpMenu.add(new Action(getPreferences().getString(PreferenceKeys.APP_NAME)) {
 				@Override
 				public void run() {
-					SoundService.getInstance()
-							.play(Raptor.RESOURCES_DIR
-									+ "sounds/misc/raptorRoar.wav");
+					SoundService.getInstance().play(Raptor.RESOURCES_DIR + "sounds/misc/raptorRoar.wav");
 				}
 			});
 
 			helpMenu.add(new Action(local.getString("rapWinL30")) {
 				@Override
 				public void run() {
-					BrowserUtils
-							.openUrl("https://github.com/Raptor-Fics-Interface/Raptor");
+					BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor");
 				}
 			});
 		}
@@ -1851,15 +1729,13 @@ public class RaptorWindow extends ApplicationWindow {
 		helpMenu.add(new Action(local.getString("rapWinL32")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Thanks");
+				BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Thanks");
 			}
 		});
 		helpMenu.add(new Action(local.getString("rapWinL33")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Third-Party-Content");
+				BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Third-Party-Content");
 
 			}
 		});
@@ -1869,15 +1745,13 @@ public class RaptorWindow extends ApplicationWindow {
 		raptorHelp.add(new Action(local.getString("rapWinL35")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/New-to-Fics");
+				BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/New-to-Fics");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL36")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openHtml(AliasService.getInstance().getAliasHtml());
+				BrowserUtils.openHtml(AliasService.getInstance().getAliasHtml());
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL39")) {
@@ -1889,15 +1763,13 @@ public class RaptorWindow extends ApplicationWindow {
 		raptorHelp.add(new Action(local.getString("rapWinL40")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Scripting");
+				BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Scripting");
 			}
 		});
 		raptorHelp.add(new Action(local.getString("rapWinL41")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Useful-Tips");
+				BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/Useful-Tips");
 
 			}
 		});
@@ -1907,31 +1779,27 @@ public class RaptorWindow extends ApplicationWindow {
 		ficsHelp.add(new Action(local.getString("rapWinL43")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/New-to-Fics");
+				BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/wiki/New-to-Fics");
 			}
 		});
 		ficsHelp.add(new Action(local.getString("rapWinL44")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("http://www.freechess.org/Help/AllFiles.html");
+				BrowserUtils.openUrl("http://www.freechess.org/Help/AllFiles.html");
 
 			}
 		});
 		ficsHelp.add(new Action(local.getString("rapWinL45")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("http://www.freechess.org/Help/ficsfaq.html");
+				BrowserUtils.openUrl("http://www.freechess.org/Help/ficsfaq.html");
 
 			}
 		});
 		ficsHelp.add(new Action(local.getString("rapWinL46")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("http://www.freechess.org/Help/index.html");
+				BrowserUtils.openUrl("http://www.freechess.org/Help/index.html");
 			}
 		});
 		helpMenu.add(ficsHelp);
@@ -1948,8 +1816,7 @@ public class RaptorWindow extends ApplicationWindow {
 		helpMenu.add(new Action(local.getString("rapWinL48")) {
 			@Override
 			public void run() {
-				BrowserUtils
-						.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/issues");
+				BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor/issues");
 			}
 		});
 	}
@@ -1983,25 +1850,22 @@ public class RaptorWindow extends ApplicationWindow {
 
 		if (OSUtils.isLikelyOSXCocoa()) {
 			try {
-				CocoaUIEnhancer enhancer = new CocoaUIEnhancer(getPreferences()
-						.getString(PreferenceKeys.APP_NAME));
-				enhancer.hookApplicationMenu(Raptor.getInstance().getDisplay(),
-						new Listener() {
-							public void handleEvent(Event event) {
-								Raptor.getInstance().shutdown();
-							}
-						}, new org.eclipse.jface.action.Action() {
-							@Override
-							public void run() {
-								BrowserUtils
-										.openUrl("https://github.com/Raptor-Fics-Interface/Raptor");
-							}
-						}, new org.eclipse.jface.action.Action() {
-							@Override
-							public void run() {
-								PreferenceUtils.launchPreferenceDialog();
-							}
-						});
+				CocoaUIEnhancer enhancer = new CocoaUIEnhancer(getPreferences().getString(PreferenceKeys.APP_NAME));
+				enhancer.hookApplicationMenu(Raptor.getInstance().getDisplay(), new Listener() {
+					public void handleEvent(Event event) {
+						Raptor.getInstance().shutdown();
+					}
+				}, new org.eclipse.jface.action.Action() {
+					@Override
+					public void run() {
+						BrowserUtils.openUrl("https://github.com/Raptor-Fics-Interface/Raptor");
+					}
+				}, new org.eclipse.jface.action.Action() {
+					@Override
+					public void run() {
+						PreferenceUtils.launchPreferenceDialog();
+					}
+				});
 			} catch (Throwable t) {
 				// Just eat it for now.
 			}
@@ -2016,77 +1880,61 @@ public class RaptorWindow extends ApplicationWindow {
 	 */
 	protected void createQuad1Quad234567QuadControls() {
 
-		quad9quad12345678 = new RaptorWindowSashForm(windowComposite,
-				SWT.HORIZONTAL,
+		quad9quad12345678 = new RaptorWindowSashForm(windowComposite, SWT.HORIZONTAL,
 				PreferenceKeys.APP_QUAD9_QUAD12345678_SASH_WEIGHTS);
 
-		quad9quad12345678.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 1));
+		quad9quad12345678.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		folders[Quadrant.IX.ordinal()] = new RaptorTabFolder(quad9quad12345678,
-				SWT.BORDER, Quadrant.IX);
+		folders[Quadrant.IX.ordinal()] = new RaptorTabFolder(quad9quad12345678, SWT.BORDER, Quadrant.IX);
 
-		quad1quad2345678 = new RaptorWindowSashForm(quad9quad12345678,
-				SWT.VERTICAL, PreferenceKeys.APP_QUAD1_QUAD2345678_SASH_WEIGHTS);
+		quad1quad2345678 = new RaptorWindowSashForm(quad9quad12345678, SWT.VERTICAL,
+				PreferenceKeys.APP_QUAD1_QUAD2345678_SASH_WEIGHTS);
 
-		folders[Quadrant.I.ordinal()] = new RaptorTabFolder(quad1quad2345678,
-				SWT.BORDER, Quadrant.I);
+		folders[Quadrant.I.ordinal()] = new RaptorTabFolder(quad1quad2345678, SWT.BORDER, Quadrant.I);
 
-		quad2345quad678Sash = new RaptorWindowSashForm(quad1quad2345678,
-				SWT.VERTICAL, PreferenceKeys.APP_QUAD2345_QUAD678_SASH_WEIGHTS);
+		quad2345quad678Sash = new RaptorWindowSashForm(quad1quad2345678, SWT.VERTICAL,
+				PreferenceKeys.APP_QUAD2345_QUAD678_SASH_WEIGHTS);
 
-		quad2quad3quad4quad5Sash = new RaptorWindowSashForm(
-				quad2345quad678Sash, SWT.HORIZONTAL,
+		quad2quad3quad4quad5Sash = new RaptorWindowSashForm(quad2345quad678Sash, SWT.HORIZONTAL,
 				PreferenceKeys.APP_QUAD2_QUAD3_QUAD4_QUAD5_SASH_WEIGHTS);
 
-		quad67quad8Sash = new RaptorWindowSashForm(quad2345quad678Sash,
-				SWT.HORIZONTAL, PreferenceKeys.APP_QUAD67_QUAD8_SASH_WEIGHTS);
+		quad67quad8Sash = new RaptorWindowSashForm(quad2345quad678Sash, SWT.HORIZONTAL,
+				PreferenceKeys.APP_QUAD67_QUAD8_SASH_WEIGHTS);
 
-		folders[Quadrant.II.ordinal()] = new RaptorTabFolder(
-				quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.II);
+		folders[Quadrant.II.ordinal()] = new RaptorTabFolder(quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.II);
 
-		folders[Quadrant.III.ordinal()] = new RaptorTabFolder(
-				quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.III);
+		folders[Quadrant.III.ordinal()] = new RaptorTabFolder(quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.III);
 
-		folders[Quadrant.IV.ordinal()] = new RaptorTabFolder(
-				quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.IV);
+		folders[Quadrant.IV.ordinal()] = new RaptorTabFolder(quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.IV);
 
-		folders[Quadrant.V.ordinal()] = new RaptorTabFolder(
-				quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.V);
+		folders[Quadrant.V.ordinal()] = new RaptorTabFolder(quad2quad3quad4quad5Sash, SWT.BORDER, Quadrant.V);
 
-		quad6quad7Sash = new RaptorWindowSashForm(quad67quad8Sash,
-				SWT.VERTICAL, PreferenceKeys.APP_QUAD6_QUAD7_SASH_WEIGHTS);
+		quad6quad7Sash = new RaptorWindowSashForm(quad67quad8Sash, SWT.VERTICAL,
+				PreferenceKeys.APP_QUAD6_QUAD7_SASH_WEIGHTS);
 
-		folders[Quadrant.VI.ordinal()] = new RaptorTabFolder(quad6quad7Sash,
-				SWT.BORDER, Quadrant.VI);
+		folders[Quadrant.VI.ordinal()] = new RaptorTabFolder(quad6quad7Sash, SWT.BORDER, Quadrant.VI);
 
-		folders[Quadrant.VII.ordinal()] = new RaptorTabFolder(quad6quad7Sash,
-				SWT.BORDER, Quadrant.VII);
+		folders[Quadrant.VII.ordinal()] = new RaptorTabFolder(quad6quad7Sash, SWT.BORDER, Quadrant.VII);
 
-		folders[Quadrant.VIII.ordinal()] = new RaptorTabFolder(quad67quad8Sash,
-				SWT.BORDER, Quadrant.VIII);
+		folders[Quadrant.VIII.ordinal()] = new RaptorTabFolder(quad67quad8Sash, SWT.BORDER, Quadrant.VIII);
 	}
 
 	/**
 	 * Creates the status bar controls.
 	 */
 	protected void createStatusBarControls() {
-		if (Raptor.getInstance().getPreferences()
-				.getBoolean(PreferenceKeys.APP_SHOW_STATUS_BAR)) {
+		if (Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.APP_SHOW_STATUS_BAR)) {
 			statusBar = new Composite(windowComposite, SWT.NONE);
-			statusBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-					false, 2, 1));
-			GridLayout statusBarLayout = SWTUtils.createMarginlessGridLayout(
-					20, false);
+			statusBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+			GridLayout statusBarLayout = SWTUtils.createMarginlessGridLayout(20, false);
 			statusBar.setLayout(statusBarLayout);
 
 			statusLabel = new Label(statusBar, SWT.NONE);
-			statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-					false));
-			statusLabel.setFont(Raptor.getInstance().getPreferences()
-					.getFont(PreferenceKeys.APP_STATUS_BAR_FONT, false));
-			statusLabel.setForeground(Raptor.getInstance().getPreferences()
-					.getColor(PreferenceKeys.APP_STATUS_BAR_COLOR));
+			statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			statusLabel
+					.setFont(Raptor.getInstance().getPreferences().getFont(PreferenceKeys.APP_STATUS_BAR_FONT, false));
+			statusLabel
+					.setForeground(Raptor.getInstance().getPreferences().getColor(PreferenceKeys.APP_STATUS_BAR_COLOR));
 
 			createZoomCombo();
 		}
@@ -2094,8 +1942,7 @@ public class RaptorWindow extends ApplicationWindow {
 
 	protected void createZoomCombo() {
 		zoomCombo = new Combo(statusBar, SWT.READ_ONLY | SWT.BORDER);
-		zoomCombo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
+		zoomCombo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		zoomCombo.add("25%");
 		zoomCombo.add("50%");
 		zoomCombo.add("70%");
@@ -2113,8 +1960,8 @@ public class RaptorWindow extends ApplicationWindow {
 
 		int selection = -1;
 
-		int resizePercentage = (int) (Raptor.getInstance().getPreferences()
-				.getDouble(PreferenceKeys.APP_ZOOM_FACTOR) * 100);
+		int resizePercentage = (int) (Raptor.getInstance().getPreferences().getDouble(PreferenceKeys.APP_ZOOM_FACTOR)
+				* 100);
 		String resizeValue = resizePercentage + "%";
 		for (int i = 0; i < zoomCombo.getItemCount(); i++) {
 			if (resizeValue.equals(zoomCombo.getItem(i))) {
@@ -2131,21 +1978,18 @@ public class RaptorWindow extends ApplicationWindow {
 				if (StringUtils.isNotBlank(selection)) {
 					selection = selection.substring(0, selection.length() - 1);
 					double resize = Integer.parseInt(selection) / 100.0;
-					Raptor.getInstance().getPreferences()
-							.setValue(PreferenceKeys.APP_ZOOM_FACTOR, resize);
+					Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, resize);
 				}
 
 			}
 		});
-		zoomCombo.setFont(Raptor.getInstance().getPreferences()
-				.getFont(PreferenceKeys.APP_STATUS_BAR_FONT, false));
+		zoomCombo.setFont(Raptor.getInstance().getPreferences().getFont(PreferenceKeys.APP_STATUS_BAR_FONT, false));
 	}
 
 	protected RaptorTabFolder getFolderContainingCursor() {
 		Control control = getShell().getDisplay().getCursorControl();
 
-		while (control != null && !(control instanceof RaptorTabFolder)
-				&& !(control instanceof Shell)) {
+		while (control != null && !(control instanceof RaptorTabFolder) && !(control instanceof Shell)) {
 			control = control.getParent();
 		}
 
@@ -2166,12 +2010,10 @@ public class RaptorWindow extends ApplicationWindow {
 	@Override
 	protected void handleShellCloseEvent() {
 
-		for (RaptorConnectorWindowItem item : getWindowItems(ConnectorService
-				.getInstance().getConnector("fics"))) {
+		for (RaptorConnectorWindowItem item : getWindowItems(ConnectorService.getInstance().getConnector("fics"))) {
 			if (item instanceof ChessBoardWindowItem)
 				if (((ChessBoardWindowItem) item).getController() instanceof PlayingController) {
-					if (!Raptor.getInstance().confirm(
-							local.getString("rapWinL54")))
+					if (!Raptor.getInstance().confirm(local.getString("rapWinL54")))
 						return;
 				}
 		}
@@ -2200,8 +2042,7 @@ public class RaptorWindow extends ApplicationWindow {
 
 		}
 
-		LOG.info("Reset layout in " + (System.currentTimeMillis() - time)
-				+ "ms");
+		LOG.info("Reset layout in " + (System.currentTimeMillis() - time) + "ms");
 	}
 
 	/**
@@ -2217,8 +2058,7 @@ public class RaptorWindow extends ApplicationWindow {
 			public void widgetSelected(SelectionEvent e) {
 				RaptorTabItem selection = folder.getRaptorTabItemSelection();
 				folder.passivateActiveateItems();
-				folder.setTopRight(selection.raptorItem.getToolbar(folder),
-						SWT.RIGHT);
+				folder.setTopRight(selection.raptorItem.getToolbar(folder), SWT.RIGHT);
 			}
 		});
 
@@ -2258,8 +2098,7 @@ public class RaptorWindow extends ApplicationWindow {
 
 				folder.getDisplay().timerExec(100, new Runnable() {
 					public void run() {
-						folder.getRaptorTabItemSelection().raptorItem
-								.onActivate();
+						folder.getRaptorTabItemSelection().raptorItem.onActivate();
 					}
 				});
 			}
@@ -2280,8 +2119,7 @@ public class RaptorWindow extends ApplicationWindow {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				if (SWTUtils.isRightClick(e)) {
-					final RaptorTabItem raptorTabItem = (RaptorTabItem) folder
-							.getItem(new Point(e.x, e.y));
+					final RaptorTabItem raptorTabItem = (RaptorTabItem) folder.getItem(new Point(e.x, e.y));
 					if (raptorTabItem == null) {
 						return;
 					}
@@ -2299,8 +2137,7 @@ public class RaptorWindow extends ApplicationWindow {
 										if (folder.getItemCount() == 0) {
 											restoreFolders();
 										} else {
-											folder.setSelection(folder
-													.getSelectionIndex());
+											folder.setSelection(folder.getSelectionIndex());
 										}
 									}
 								}
@@ -2312,14 +2149,11 @@ public class RaptorWindow extends ApplicationWindow {
 						item.setText(local.getString("rapWinL55"));
 						item.addListener(SWT.Selection, new Listener() {
 							public void handleEvent(Event e) {
-								List<RaptorTabItem> itemsToClose = new ArrayList<RaptorTabItem>(
-										folder.getItemCount());
+								List<RaptorTabItem> itemsToClose = new ArrayList<RaptorTabItem>(folder.getItemCount());
 								for (int i = 0; i < folder.getItemCount(); i++) {
 									if (folder.getItem(i) != raptorTabItem
-											&& folder.getRaptorTabItemAt(i).raptorItem
-													.confirmClose()) {
-										itemsToClose.add(folder
-												.getRaptorTabItemAt(i));
+											&& folder.getRaptorTabItemAt(i).raptorItem.confirmClose()) {
+										itemsToClose.add(folder.getRaptorTabItemAt(i));
 									}
 								}
 								for (RaptorTabItem item : itemsToClose) {
@@ -2334,13 +2168,10 @@ public class RaptorWindow extends ApplicationWindow {
 						item.setText(local.getString("rapWinL56"));
 						item.addListener(SWT.Selection, new Listener() {
 							public void handleEvent(Event e) {
-								List<RaptorTabItem> itemsToClose = new ArrayList<RaptorTabItem>(
-										folder.getItemCount());
+								List<RaptorTabItem> itemsToClose = new ArrayList<RaptorTabItem>(folder.getItemCount());
 								for (int i = 0; i < folder.getItemCount(); i++) {
-									if (folder.getRaptorTabItemAt(i).raptorItem
-											.confirmClose()) {
-										itemsToClose.add(folder
-												.getRaptorTabItemAt(i));
+									if (folder.getRaptorTabItemAt(i).raptorItem.confirmClose()) {
+										itemsToClose.add(folder.getRaptorTabItemAt(i));
 									}
 								}
 								for (RaptorTabItem item : itemsToClose) {
@@ -2350,8 +2181,7 @@ public class RaptorWindow extends ApplicationWindow {
 								if (folder.getItemCount() == 0) {
 									restoreFolders();
 								} else {
-									folder.setSelection(folder
-											.getSelectionIndex());
+									folder.setSelection(folder.getSelectionIndex());
 								}
 							}
 						});
@@ -2366,8 +2196,7 @@ public class RaptorWindow extends ApplicationWindow {
 
 					final int finalItemIndex = itemIndex;
 
-					if (itemIndex != -1 && itemIndex > 0
-							|| itemIndex < folder.getItemCount() - 1) {
+					if (itemIndex != -1 && itemIndex > 0 || itemIndex < folder.getItemCount() - 1) {
 						new MenuItem(menu, SWT.SEPARATOR);
 					}
 
@@ -2376,35 +2205,28 @@ public class RaptorWindow extends ApplicationWindow {
 						moveLeft.setText(local.getString("rapWinL57"));
 						moveLeft.addListener(SWT.Selection, new Listener() {
 							public void handleEvent(Event e) {
-								raptorTabItem.onMoveTo(folder,
-										finalItemIndex - 2 < 0 ? 0
-												: finalItemIndex - 2);
+								raptorTabItem.onMoveTo(folder, finalItemIndex - 2 < 0 ? 0 : finalItemIndex - 2);
 							}
 						});
 					}
-					if (itemIndex != -1
-							&& itemIndex < folder.getItemCount() - 1) {
+					if (itemIndex != -1 && itemIndex < folder.getItemCount() - 1) {
 						MenuItem moveLeft = new MenuItem(menu, SWT.PUSH);
 						moveLeft.setText(local.getString("rapWinL58"));
 						moveLeft.addListener(SWT.Selection, new Listener() {
 							public void handleEvent(Event e) {
-								raptorTabItem.onMoveTo(folder,
-										finalItemIndex + 2);
+								raptorTabItem.onMoveTo(folder, finalItemIndex + 2);
 							}
 						});
 					}
 
-					Quadrant[] availableQuadrants = folder
-							.getRaptorTabItemSelection().raptorItem
-							.getMoveToQuadrants();
+					Quadrant[] availableQuadrants = folder.getRaptorTabItemSelection().raptorItem.getMoveToQuadrants();
 
 					if (availableQuadrants.length > 0) {
 						new MenuItem(menu, SWT.SEPARATOR);
 					}
 
 					if (OSUtils.isLikelyWindows()) {
-						MenuItem defaultMenuItem = new MenuItem(menu,
-								SWT.CASCADE);
+						MenuItem defaultMenuItem = new MenuItem(menu, SWT.CASCADE);
 						defaultMenuItem.setText(local.getString("rapWinL59"));
 
 						Menu moveToMenu = new Menu(defaultMenuItem);
@@ -2413,29 +2235,17 @@ public class RaptorWindow extends ApplicationWindow {
 						for (int i = 0; i < availableQuadrants.length; i++) {
 							if (availableQuadrants[i] != folder.quad) {
 								final Quadrant currentQuadrant = availableQuadrants[i];
-								MenuItem moveToItem = new MenuItem(moveToMenu,
-										SWT.PUSH);
-								moveToItem.setText("Quad "
-										+ currentQuadrant.toString());
-								moveToItem.addListener(SWT.Selection,
-										new Listener() {
-											public void handleEvent(Event e) {
-												{
-													raptorTabItem
-															.onMoveTo(folders[currentQuadrant
-																	.ordinal()]);
-												}
-											}
-										});
-								moveToItem
-										.setImage(Raptor
-												.getInstance()
-												.getImage(
-														Raptor.RESOURCES_DIR
-																+ "images/quadrantsSmall"
-																+ currentQuadrant
-																		.toString()
-																+ ".png"));
+								MenuItem moveToItem = new MenuItem(moveToMenu, SWT.PUSH);
+								moveToItem.setText("Quad " + currentQuadrant.toString());
+								moveToItem.addListener(SWT.Selection, new Listener() {
+									public void handleEvent(Event e) {
+										{
+											raptorTabItem.onMoveTo(folders[currentQuadrant.ordinal()]);
+										}
+									}
+								});
+								moveToItem.setImage(Raptor.getInstance().getImage(Raptor.RESOURCES_DIR
+										+ "images/quadrantsSmall" + currentQuadrant.toString() + ".png"));
 								new MenuItem(moveToMenu, SWT.SEPARATOR);
 							}
 						}
@@ -2443,28 +2253,22 @@ public class RaptorWindow extends ApplicationWindow {
 						for (int i = 0; i < availableQuadrants.length; i++) {
 							final Quadrant currentQuadrant = availableQuadrants[i];
 							if (currentQuadrant != folder.quad) {
-								MenuItem moveToItem = new MenuItem(menu,
-										SWT.PUSH);
-								moveToItem.setText("Move to "
-										+ currentQuadrant.name());
+								MenuItem moveToItem = new MenuItem(menu, SWT.PUSH);
+								moveToItem.setText("Move to " + currentQuadrant.name());
 
-								moveToItem.addListener(SWT.Selection,
-										new Listener() {
-											public void handleEvent(Event e) {
-												raptorTabItem
-														.onMoveTo(folders[currentQuadrant
-																.ordinal()]);
+								moveToItem.addListener(SWT.Selection, new Listener() {
+									public void handleEvent(Event e) {
+										raptorTabItem.onMoveTo(folders[currentQuadrant.ordinal()]);
 
-											}
-										});
+									}
+								});
 							}
 						}
 					}
 
 					final MenuItem imageMenuItem = new MenuItem(menu, SWT.NONE);
 					imageMenuItem.setImage(Raptor.getInstance().getImage(
-							Raptor.RESOURCES_DIR + "images/quadrantsSmall"
-									+ folder.quad.toString() + ".png"));
+							Raptor.RESOURCES_DIR + "images/quadrantsSmall" + folder.quad.toString() + ".png"));
 
 					menu.setLocation(folder.toDisplay(e.x, e.y));
 					menu.setVisible(true);
@@ -2482,8 +2286,7 @@ public class RaptorWindow extends ApplicationWindow {
 			public void handleEvent(Event e) {
 				switch (e.type) {
 				case SWT.DragDetect: {
-					Point p = folder.toControl(getShell().getDisplay()
-							.getCursorLocation());
+					Point p = folder.toControl(getShell().getDisplay().getCursorLocation());
 					CTabItem item = folder.getItem(p);
 					if (item == null) {
 						return;
@@ -2491,9 +2294,7 @@ public class RaptorWindow extends ApplicationWindow {
 					isInDrag = true;
 					isExitDrag = false;
 					dragStartItem = (RaptorTabItem) item;
-					getShell().setCursor(
-							getShell().getDisplay().getSystemCursor(
-									SWT.CURSOR_HAND));
+					getShell().setCursor(getShell().getDisplay().getSystemCursor(SWT.CURSOR_HAND));
 					break;
 				}
 
@@ -2501,18 +2302,14 @@ public class RaptorWindow extends ApplicationWindow {
 					if (!isInDrag) {
 						return;
 					}
-					getShell().setCursor(
-							Raptor.getInstance().getCursorRegistry()
-									.getDefaultCursor());
+					getShell().setCursor(Raptor.getInstance().getCursorRegistry().getDefaultCursor());
 
 					RaptorTabFolder dropFolder = getFolderContainingCursor();
-					if (dropFolder != null
-							&& dropFolder != dragStartItem.raptorParent) {
+					if (dropFolder != null && dropFolder != dragStartItem.raptorParent) {
 						// Handles dragging and dropping into different folders.
 
 						boolean canMove = false;
-						for (int i = 0; i < dragStartItem.raptorItem
-								.getMoveToQuadrants().length; i++) {
+						for (int i = 0; i < dragStartItem.raptorItem.getMoveToQuadrants().length; i++) {
 							if (dragStartItem.raptorItem.getMoveToQuadrants()[i] == dropFolder.quad) {
 								canMove = true;
 								break;
@@ -2523,32 +2320,22 @@ public class RaptorWindow extends ApplicationWindow {
 							dragStartItem.onMoveTo(dropFolder);
 						} else {
 							Raptor.getInstance()
-									.alert(local.getString("rapWinL60")
-											+ dropFolder.quad
-											+ local.getString("rapWinL61")
-											+ Arrays.toString(dragStartItem.raptorItem
-													.getMoveToQuadrants()));
+									.alert(local.getString("rapWinL60") + dropFolder.quad + local.getString("rapWinL61")
+											+ Arrays.toString(dragStartItem.raptorItem.getMoveToQuadrants()));
 						}
-					} else if (dropFolder != null
-							&& dropFolder == dragStartItem.raptorParent) {
+					} else if (dropFolder != null && dropFolder == dragStartItem.raptorParent) {
 						// Handles dragging and dropping within the same folder.
 
-						RaptorTabItem itemAtCursor = (RaptorTabItem) dropFolder
-								.getItem(dragStartItem.raptorParent
-										.toControl(Raptor.getInstance()
-												.getDisplay()
-												.getCursorLocation()));
-						if (itemAtCursor != null
-								&& itemAtCursor != dragStartItem) {
+						RaptorTabItem itemAtCursor = (RaptorTabItem) dropFolder.getItem(dragStartItem.raptorParent
+								.toControl(Raptor.getInstance().getDisplay().getCursorLocation()));
+						if (itemAtCursor != null && itemAtCursor != dragStartItem) {
 							int index = folder.indexOf(itemAtCursor);
 							int oldIndex = folder.indexOf(dragStartItem);
 
-							System.err.println("new index=" + index
-									+ " oldIndex=" + oldIndex);
+							System.err.println("new index=" + index + " oldIndex=" + oldIndex);
 
 							if (oldIndex != -1 && index != -1) {
-								int newIndex = oldIndex < index ? index + 1
-										: index;
+								int newIndex = oldIndex < index ? index + 1 : index;
 								dragStartItem.onMoveTo(folder, newIndex);
 							}
 						}
@@ -2570,12 +2357,10 @@ public class RaptorWindow extends ApplicationWindow {
 	 */
 	@Override
 	protected void initializeBounds() {
-		Rectangle screenBounds = getPreferences().getRectangle(
-				PreferenceKeys.APP_WINDOW_BOUNDS);
+		Rectangle screenBounds = getPreferences().getRectangle(PreferenceKeys.APP_WINDOW_BOUNDS);
 
 		if (screenBounds.width == -1 || screenBounds.height == -1) {
-			Rectangle fullViewBounds = Display.getCurrent().getPrimaryMonitor()
-					.getBounds();
+			Rectangle fullViewBounds = Display.getCurrent().getPrimaryMonitor().getBounds();
 			screenBounds.width = fullViewBounds.width;
 			screenBounds.height = fullViewBounds.height;
 		}
@@ -2613,8 +2398,7 @@ public class RaptorWindow extends ApplicationWindow {
 		adjustToFoldersItemsMinimizied();
 
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Leaving restoreFolders execution in "
-					+ (System.currentTimeMillis() - startTime) + "ms");
+			LOG.debug("Leaving restoreFolders execution in " + (System.currentTimeMillis() - startTime) + "ms");
 		}
 	}
 }

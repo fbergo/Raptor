@@ -1793,6 +1793,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	protected boolean isBlockedByExtendedCensor(ChatEvent event) {
 		boolean result = false;
 		switch (event.getType()) {

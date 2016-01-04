@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Menu;
 
 import raptor.Raptor;
 import raptor.chess.GameConstants;
-import raptor.chess.Variant;
 import raptor.chess.util.GameUtils;
 import raptor.pref.PreferenceKeys;
 import raptor.pref.RaptorPreferenceStore;

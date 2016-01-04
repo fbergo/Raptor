@@ -554,6 +554,7 @@ public class SeekTableWindowItem implements RaptorConnectorWindowItem {
 		return result.toArray(new Seek[0]);
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	protected boolean passesFilterCriteria(Seek seek) {
 		boolean result = true;
 		int minFilterRating = Integer.parseInt(minRatingsFilter.getText());

@@ -18,10 +18,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
+import junit.framework.Assert;
 import raptor.chess.Game;
 import raptor.chess.MoveList;
 import raptor.chess.Result;
@@ -388,6 +387,7 @@ public class TestPgnParsing {
 
 	private String pgnFileAsString(String fileName) throws Exception {
 		StringBuilder builder = new StringBuilder();
+		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(
 				"projectFiles/test/" + fileName));
 

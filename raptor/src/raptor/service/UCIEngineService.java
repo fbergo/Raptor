@@ -20,6 +20,7 @@ import raptor.util.OSUtils;
 import raptor.util.RaptorLogger;
 
 public class UCIEngineService {
+	@SuppressWarnings("unused")
 	private static final RaptorLogger LOG = RaptorLogger
 			.getLog(UCIEngineService.class);
 	public static boolean serviceCreated = false;
