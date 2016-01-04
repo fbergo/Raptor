@@ -1,5 +1,6 @@
 #FICS WORDS
 #Order doesn't matter.
+brb
 btw
 crazyhouse
 bughouse
