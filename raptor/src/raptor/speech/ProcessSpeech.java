@@ -16,10 +16,16 @@ package raptor.speech;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.commons.lang.StringUtils;
+
 import raptor.Raptor;
 import raptor.service.ThreadService;
+import raptor.swt.ChessSetInstallDialog;
+import raptor.util.RaptorLogger;
 
 public class ProcessSpeech implements Speech {
+	private static final RaptorLogger LOG = RaptorLogger
+			.getLog(ProcessSpeech.class);
 	
 	protected Queue<String> speakQueue;
 
@@ -37,6 +43,9 @@ public class ProcessSpeech implements Speech {
 	}
 
 	public void speak(final String text) {
+		if (StringUtils.isBlank(text))
+			return;
+		
 		speakQueue.add(text);
 		ThreadService.getInstance().run(new Runnable() {
 			public void run() {
