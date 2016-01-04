@@ -3,9 +3,9 @@ Raptor is a multiplatform chess interface for [freechess.org](freechess.org) (ak
 
 
 Downloads: (Requires Java JRE 6+ 64 bit)
- * [Raptor 1.0 beta Mac OSX (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_OS_X_Cocoa_x86_64.dmg)
- * [Raptor 1.0 beta Linux (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
- * [Raptor 1.0 beta Windows (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
+ * [Raptor 1.0 rc1 Mac OSX (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/1.0rc1/Raptor_v1.0rc1_OS_X_Cocoa_x86_64.dmg)
+ * [Raptor 1.0 rc1 Linux (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/1.0rc1/Raptor_v1.0rc1_Linux_x86_64_GTK2.zip)
+ * [Raptor 1.0 rc1 Windows (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/1.0rc1/Raptor_v1.0rc1_Windows64.zip)
 
 ## Move to github
 Raptor has recently moved from [google code](https://code.google.com/p/raptor-chess-interface/) to github.
@@ -19,13 +19,14 @@ Raptor is in need of some contributors in the following areas. If you would like
 * Linux package created.
 * Windows installer created.
 
-## Release 1.0 beta
+## Release 1.0 rc1
 Currently I am working on release 1.0. Features include:
 * Bundled stockfish 6.
 * Lots of bug fixes. (including the elusive timeseal bug).
 * Removal of features that nobody ever used. 
 * Tweaks that I have been meaning to do for the last few years.
 * Inclusion of all chess sets in the expansion pack.
+* Makeover of the Bughouse tabs.
 * Timeseal 2
 
 ##Videos
