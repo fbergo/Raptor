@@ -67,9 +67,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 	public static final String PREFERENCE_PROPERTIES_FILE = "raptor.properties";
 	public static final File RAPTOR_PROPERTIES = new File(
 			Raptor.USER_RAPTOR_DIR, "raptor.properties");
-	// When changing this field, don't forget to update the values in
-	// raptor.updater.UpdateManager and the buildfile either
-	public static final int[] APP_VERSION = { 0, 99, 0, 1 };
 	protected String defaultMonospacedFontName;
 	protected String defaultFontName;
 	protected int defaultLargeFontSize;
@@ -420,8 +417,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(ACTION_SEPARATOR_SEQUENCE, 400);
 
 		// App settings.
-		setDefault(APP_NAME, "Raptor 1.0 beta");
-		putValue("app-version", "1.0 beta");
+		setDefault(APP_NAME, "Raptor 1.0 rc1");
+		putValue("app-version", "1.0 rc1");
 		putValue("app-update", "true");
 
 		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS,
