@@ -247,7 +247,7 @@ public class PlayingStatisticsService {
 
 		if (game instanceof BughouseGame) {
 			// average opponents rating.
-			BughouseGame otherGame = (BughouseGame) game;
+			BughouseGame otherGame = ((BughouseGame) game).getOtherBoard();
 			int intOppRating2 = getRating(isUserWhite, otherGame);
 
 			opponentRating = (opponentRating + intOppRating2) / 2;
