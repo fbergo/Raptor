@@ -85,8 +85,8 @@ public class PreferenceUtils {
 		PreferenceManager mgr = new PreferenceManager('/');
 
 		mgr.addToRoot(new PreferenceNode("general", new GeneralPage()));
-		mgr.addTo("general", new PreferenceNode("layout1",
-				new RaptorWindowQuadrantsPage("1")));
+//		mgr.addTo("general", new PreferenceNode("layout1",
+//				new RaptorWindowQuadrantsPage("1")));
 		mgr.addTo("general", new PreferenceNode("window",
 				new RaptorWindowPage()));
 		mgr.addToRoot(new PreferenceNode("bughouse", new BughousePage()));

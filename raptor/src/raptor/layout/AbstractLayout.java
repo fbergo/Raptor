@@ -40,24 +40,12 @@ public abstract class AbstractLayout implements Layout {
 	}
 
 	protected void addAdjusmentsToClearConnectorLayoutInfo() {
-		preferenceAdjustments.put("fics-"
-				+ "Primary" + "-"
-				+ PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
-		preferenceAdjustments.put("fics-"
-				+ "Secondary" + "-"
-				+ PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
-		preferenceAdjustments.put("fics-"
-				+ "Tertiary" + "-"
-				+ PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
-		preferenceAdjustments.put("bics-"
-				+ "Primary" + "-"
-				+ PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
-		preferenceAdjustments.put("bics-"
-				+ "Secondary" + "-"
-				+ PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
-		preferenceAdjustments.put("bics-"
-				+ "Tertiary" + "-"
-				+ PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
+		preferenceAdjustments.put("fics-" + "Primary" + "-" + PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
+		preferenceAdjustments.put("fics-" + "Secondary" + "-" + PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
+		preferenceAdjustments.put("fics-" + "Tertiary" + "-" + PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
+		preferenceAdjustments.put("bics-" + "Primary" + "-" + PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
+		preferenceAdjustments.put("bics-" + "Secondary" + "-" + PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
+		preferenceAdjustments.put("bics-" + "Tertiary" + "-" + PreferenceKeys.CHANNEL_REGEX_TAB_INFO, null);
 	}
 
 	public String getPathToImage() {
@@ -89,12 +77,9 @@ public abstract class AbstractLayout implements Layout {
 		return preferenceAdjustments;
 	}
 
-	public void setPreferenceAdjustments(
-			Map<String, String> preferenceAdjustments) {
+	public void setPreferenceAdjustments(Map<String, String> preferenceAdjustments) {
 		this.preferenceAdjustments = preferenceAdjustments;
 	}
-	
-
 
 	public void apply() {
 		for (String key : preferenceAdjustments.keySet()) {
@@ -102,10 +87,10 @@ public abstract class AbstractLayout implements Layout {
 			if (value == null) {
 				Raptor.getInstance().getPreferences().setToDefault(key);
 			} else {
-				Raptor.getInstance().getPreferences().setValue(key,
-						preferenceAdjustments.get(key));
+				Raptor.getInstance().getPreferences().setValue(key, preferenceAdjustments.get(key));
 			}
 		}
-		Raptor.getInstance().getWindow().resetLayout();
+		
+		Raptor.getInstance().shutdown(false);		
 	}
 }
