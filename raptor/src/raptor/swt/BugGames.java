@@ -191,14 +191,14 @@ public class BugGames extends Composite {
 							rowData[index][0] = bugGames[i].getGame1Id();
 							rowData[index][1] = bugGames[i].getTimeControl()
 									+ " " + (bugGames[i].isRated() ? "r" : "u");
-							rowData[index][2] = bugGames[i].getGame1White().getRating() + " " + bugGames[i].getGame1White();
+							rowData[index][2] = bugGames[i].getGame1White().getRating() + " " + bugGames[i].getGame1White().getName();
 							rowData[index][3] = bugGames[i].getGame1Black().getRating() + " " + bugGames[i].getGame1Black()
 									.getName();
 
 							rowData[index + 1][0] = bugGames[i].getGame2Id();
 							rowData[index + 1][1] = "";
-							rowData[index + 1][2] = bugGames[i].getGame2White().getRating() + " " + bugGames[i].getGame2White();
-							rowData[index + 1][3] = bugGames[i].getGame2Black().getRating() + " " + bugGames[i].getGame2Black();
+							rowData[index + 1][2] = bugGames[i].getGame2White().getRating() + " " + bugGames[i].getGame2White().getName();
+							rowData[index + 1][3] = bugGames[i].getGame2Black().getRating() + " " + bugGames[i].getGame2Black().getName();
 
 							if (i < (bugGames.length - 1)) {
 								rowData[index + 2][0] = "";
