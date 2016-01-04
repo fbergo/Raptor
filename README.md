@@ -2,7 +2,7 @@
 Raptor is a multiplatform chess interface for [freechess.org](freechess.org) (aka FICS).
 
 
-Downloads: (Requires Java JRE 7+ 64 bit)
+Downloads: (Requires Java JRE 6+ 64 bit)
  * [Raptor 1.0 beta Mac OSX (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_OS_X_Cocoa_x86_64.dmg)
  * [Raptor 1.0 beta Linux (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
  * [Raptor 1.0 beta Windows (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0beta/Raptor_v1.0beta_Linux_x86_64_GTK2.zip)
@@ -22,7 +22,6 @@ Raptor is in need of some contributors in the following areas. If you would like
 ## Release 1.0 beta
 Currently I am working on release 1.0. Features include:
 * Bundled stockfish 6.
-* Java 7 JRE is required.
 * Lots of bug fixes. (including the elusive timeseal bug).
 * Removal of features that nobody ever used. 
 * Tweaks that I have been meaning to do for the last few years.
