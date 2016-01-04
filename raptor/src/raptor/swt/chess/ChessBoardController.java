@@ -238,13 +238,13 @@ public abstract class ChessBoardController implements BoardConstants,
 
 				if (teamOneWhite > teamTwoWhite) {
                     board.getWhiteLagLabel().setImage(
-							Raptor.getInstance().getIcon("up"));
+							Raptor.getInstance().getIcon("up","tiny"));
 				} else {
                     board.getWhiteLagLabel().setImage(null);
 				}
 				if (teamOneBlack > teamTwoBlack) {
                     board.getBlackLagLabel().setImage(
-							Raptor.getInstance().getIcon("up"));
+							Raptor.getInstance().getIcon("up","tiny"));
 				} else {
                     board.getBlackLagLabel().setImage(null);
 				}

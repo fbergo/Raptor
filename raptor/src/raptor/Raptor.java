@@ -359,6 +359,17 @@ public class Raptor implements PreferenceKeys {
 				+ nameOfFileInIconsWithoutPng + ".png";
 		return getImage(fileName);
 	}
+	
+	/**
+	 * The name of the file in the resources/icons directory to load. Do not
+	 * append the suffix. All files in this directory end in .png and this
+	 * method handles that for you.
+	 */
+	public Image getIcon(String nameOfFileInIconsWithoutPng,String iconSize) {
+		String fileName = ICONS_DIR + "/" + iconSize + "/"
+				+ nameOfFileInIconsWithoutPng + ".png";
+		return getImage(fileName);
+	}
 
 	/**
 	 * Returns the image with the specified relative path.
