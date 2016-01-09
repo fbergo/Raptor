@@ -46,7 +46,7 @@ public class ActionScriptService {
 	}
 
 	private static final RaptorLogger LOG = RaptorLogger.getLog(ActionScriptService.class);
-	
+
 	public static boolean serviceCreated = false;
 
 	private static ActionScriptService singletonInstance;
@@ -80,8 +80,7 @@ public class ActionScriptService {
 	public boolean deleteAction(String actionName) {
 		nameToActionMap.remove(actionName);
 		fireActionsChanged();
-		return new File(Raptor.USER_RAPTOR_HOME_PATH + "/scripts/action/"
-				+ actionName + ".properties").delete();
+		return new File(Raptor.USER_RAPTOR_HOME_PATH + "/scripts/action/" + actionName + ".properties").delete();
 	}
 
 	public void dispose() {
@@ -92,8 +91,7 @@ public class ActionScriptService {
 	public RaptorAction getAction(int modifierKey, int keyCode) {
 		RaptorAction result = null;
 		for (RaptorAction action : nameToActionMap.values()) {
-			if (action.getKeyCode() == keyCode
-					&& action.getModifierKey() == modifierKey) {
+			if (action.getKeyCode() == keyCode && action.getModifierKey() == modifierKey) {
 				result = action;
 				break;
 			}
@@ -126,13 +124,14 @@ public class ActionScriptService {
 	 * Returns all actions in the specified container.
 	 */
 	public RaptorAction[] getActions(RaptorActionContainer container) {
-		ArrayList<RaptorAction> actions = new ArrayList<RaptorAction>(20);		
-		
-//		// currently hardcoded to allow speak whispers and tells
-//		if (container == RaptorAction.RaptorActionContainer.GameChatConsole) {			
-//			actions.add(nameToActionMap.get("Speak Whispers and Kibs"));
-//		}
-		
+		ArrayList<RaptorAction> actions = new ArrayList<RaptorAction>(20);
+
+		// // currently hardcoded to allow speak whispers and tells
+		// if (container == RaptorAction.RaptorActionContainer.GameChatConsole)
+		// {
+		// actions.add(nameToActionMap.get("Speak Whispers and Kibs"));
+		// }
+
 		for (RaptorAction action : nameToActionMap.values()) {
 			if (action.isIn(container)) {
 				actions.add(action);
@@ -146,8 +145,7 @@ public class ActionScriptService {
 	 * Returns all chat scripts sorted by name.
 	 */
 	public RaptorAction[] getAllActions() {
-		ArrayList<RaptorAction> actions = new ArrayList<RaptorAction>(
-				nameToActionMap.values());
+		ArrayList<RaptorAction> actions = new ArrayList<RaptorAction>(nameToActionMap.values());
 
 		for (int i = 0; i < actions.size(); i++) {
 			if (actions.get(i) instanceof SeparatorAction) {
@@ -165,8 +163,7 @@ public class ActionScriptService {
 	 * Returns all scripted actions.
 	 */
 	public ScriptedAction[] getAllScriptedActions() {
-		ArrayList<ScriptedAction> actions = new ArrayList<ScriptedAction>(
-				nameToActionMap.size());
+		ArrayList<ScriptedAction> actions = new ArrayList<ScriptedAction>(nameToActionMap.size());
 
 		for (RaptorAction action : nameToActionMap.values()) {
 			if (action instanceof ScriptedAction) {
@@ -197,16 +194,13 @@ public class ActionScriptService {
 	 * touched.
 	 */
 	public void saveAction(RaptorAction action) {
-		String fileName = Raptor.USER_RAPTOR_HOME_PATH + "/scripts/action/"
-				+ action.getName() + ".properties";
+		String fileName = Raptor.USER_RAPTOR_HOME_PATH + "/scripts/action/" + action.getName() + ".properties";
 		FileOutputStream fileOut = null;
 		try {
-			RaptorActionFactory.save(action).store(
-					fileOut = new FileOutputStream(fileName),
+			RaptorActionFactory.save(action).store(fileOut = new FileOutputStream(fileName),
 					"Saved in Raptor by ActionScriptService.");
 		} catch (IOException ioe) {
-			Raptor.getInstance().onError(
-					"Error saving action: " + action.getName(), ioe);
+			Raptor.getInstance().onError("Error saving action: " + action.getName(), ioe);
 		} finally {
 			try {
 				fileOut.flush();
@@ -231,43 +225,40 @@ public class ActionScriptService {
 		long startTime = System.currentTimeMillis();
 
 		File systemScripts = new File(Raptor.RESOURCES_DIR + "scripts/action");
-                File[] files = systemScripts.listFiles(new FilenameFilter() {
+		File[] files = systemScripts.listFiles(new FilenameFilter() {
 
-                        public boolean accept(File arg0, String arg1) {
-                                return arg1.endsWith(".properties");
-                        }
-                });
+			public boolean accept(File arg0, String arg1) {
+				return arg1.endsWith(".properties");
+			}
+		});
 
-                if (files != null) {
-                        for (File file : files) {
-                                FileInputStream fileIn = null;
-                                try {
-                                        Properties properties = new Properties();
-                                        properties.load(fileIn = new FileInputStream(file));
-                                        RaptorAction action = RaptorActionFactory.load(properties);
-                                        nameToActionMap.put(action.getName(), action);
-                                        action.setSystemAction(true);
-                                        count++;
-                                } catch (IOException ioe) {
-                                        Raptor.getInstance().onError(
-                                                        "Error loading action " + file.getName() + ",ioe");
-                                } finally {
-                                        try {
-                                                fileIn.close();
-                                        } catch (Throwable t) {
-                                        }
-                                }
-                        }
-                }
+		if (files != null) {
+			for (File file : files) {
+				FileInputStream fileIn = null;
+				try {
+					Properties properties = new Properties();
+					properties.load(fileIn = new FileInputStream(file));
+					RaptorAction action = RaptorActionFactory.load(properties);
+					nameToActionMap.put(action.getName(), action);
+					action.setSystemAction(true);
+					count++;
+				} catch (IOException ioe) {
+					Raptor.getInstance().onError("Error loading action " + file.getName() + ",ioe");
+				} finally {
+					try {
+						fileIn.close();
+					} catch (Throwable t) {
+					}
+				}
+			}
+		}
 
-
-
-		File userActions = new File(Raptor.USER_RAPTOR_HOME_PATH
-				+ "/scripts/action");
+		File userActions = new File(Raptor.USER_RAPTOR_HOME_PATH + "/scripts/action");
 		File[] userFiles = userActions.listFiles(new FilenameFilter() {
 			public boolean accept(File arg0, String arg1) {
-				return arg1.endsWith(".properties")
-						&& !arg1.endsWith(" minute.properties"); // mistakenly duplicated files
+				return arg1.endsWith(".properties") && !arg1.endsWith(" minute.properties"); // mistakenly
+																								// duplicated
+																								// files
 			}
 		});
 
@@ -277,32 +268,42 @@ public class ActionScriptService {
 				try {
 					Properties properties = new Properties();
 					properties.load(fileIn = new FileInputStream(file));
-					RaptorAction action = RaptorActionFactory.load(properties);	
-						
+					RaptorAction action = RaptorActionFactory.load(properties);
+
 					// automatic error fixing code
-					if (!file.getName().equals(action.getName()+".properties")) {
-						file.renameTo(new File(action.getName()+".properties"));				
+					if (!file.getName().equals(action.getName() + ".properties")) {
+						file.renameTo(new File(action.getName() + ".properties"));
 					}
-					
+
 					nameToActionMap.put(action.getName(), action);
 					action.setSystemAction(false);
 					count++;
-				} catch (IOException ioe) {
-					Raptor.getInstance().onError(
-							"Error loading action " + file.getName() + ",ioe");
+				} catch (Throwable t) {
+					LOG.error(
+							"Error loading action from file: " + file.getAbsolutePath()
+									+ " assuming this is because of removed functionality and deleting the action so it won't happen again.",
+							t);
+					try {
+						fileIn.close();
+					} catch (Throwable t2) {
+						LOG.error("Error closing fileIn",t2);
+					}
+					try {
+						file.delete();
+					} catch (Throwable t3) {
+						LOG.error("Error deleting file",t3);
+					}
 				} finally {
 					try {
 						fileIn.close();
 					} catch (Throwable t) {
 					}
 				}
-
 			}
 		}
 
 		if (LOG.isInfoEnabled()) {
-			LOG.info("Loaded " + count + " actions in "
-					+ (System.currentTimeMillis() - startTime) + "ms");
+			LOG.info("Loaded " + count + " actions in " + (System.currentTimeMillis() - startTime) + "ms");
 		}
 	}
 }
