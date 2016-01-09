@@ -349,8 +349,8 @@ public class ChessBoardUtils implements BoardConstants {
 				// If the image is smaller than the width/height needed then
 				// just
 				// scale it and ignore the effect.
-				if (moldImage.getImageData().width < width
-						|| moldImage.getImageData().height < height) {
+				if (moldImage.getImageData().width < (width + 20)
+						|| moldImage.getImageData().height < (height + 20)) {
 					effect = SquareBackgroundImageEffect.Scale;
 				}
 
