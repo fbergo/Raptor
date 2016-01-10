@@ -121,7 +121,6 @@ public class GeneralPage extends FieldEditorPreferencePage {
 				PreferenceKeys.APP_PGN_FILE, local.getString("genP9"),
 				getFieldEditorParent()));
 
-
 		addField(new BooleanFieldEditor(
 				PreferenceKeys.APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS,
 				local.getString("genP10"),

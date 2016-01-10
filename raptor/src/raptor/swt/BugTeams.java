@@ -505,7 +505,6 @@ public class BugTeams extends Composite {
 			service.getConnector().matchBughouse(isTable1 ? player1Name : player2Name, isRated.getSelection(), time,
 					inc);
 		}
-
 	}
 
 	private int getPlayerRating(int row, boolean isPlayer1Table) {
@@ -600,7 +599,7 @@ public class BugTeams extends Composite {
 					player2Table.refreshTable(player2Data);
 				}
 
-				if (autoMatch2_0.getSelection()) {
+				if (autoMatch2_0.getSelection() && !connector.isLoggedInUserPlayingAGame()) {
 					matchAll(2, 0);
 				}
 			}

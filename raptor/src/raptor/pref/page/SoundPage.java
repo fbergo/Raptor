@@ -33,7 +33,7 @@ public class SoundPage extends FieldEditorPreferencePage {
 
 	public SoundPage() {
 		super(FLAT);
-		setTitle(local.getString("sound"));
+		setTitle(local.getString("soundProcessConfig"));
 		setPreferenceStore(Raptor.getInstance().getPreferences());
 	}
 

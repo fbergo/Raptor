@@ -16,6 +16,7 @@ package raptor.service;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import raptor.Raptor;
@@ -37,7 +38,7 @@ public class SoundService {
 	/**
 	 * Returns the singleton instance.
 	 */
-	public static synchronized SoundService getInstance() {		
+	public static synchronized SoundService getInstance() {
 		if (singletonInstance != null)
 			return singletonInstance;
 
@@ -45,7 +46,8 @@ public class SoundService {
 		return singletonInstance;
 	}
 
-	protected String[] bughouseSounds;
+	protected String[] soundKeys;
+	protected String[] bughouseSoundKeys;
 	protected SoundPlayer soundPlayer;
 
 	protected Speech speech = null;
@@ -66,7 +68,11 @@ public class SoundService {
 	}
 
 	public String[] getBughouseSoundKeys() {
-		return bughouseSounds;
+		return bughouseSoundKeys;
+	}
+
+	public String[] getSoundKeys() {
+		return soundKeys;
 	}
 
 	public void initSoundPlayer() {
@@ -102,9 +108,7 @@ public class SoundService {
 	}
 
 	public boolean isSpeechSetup() {
-		return Raptor.getInstance().getPreferences().getBoolean(
-				PreferenceKeys.APP_SOUND_ENABLED)
-				&& speech != null;
+		return Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.APP_SOUND_ENABLED) && speech != null;
 	}
 
 	/**
@@ -114,9 +118,7 @@ public class SoundService {
 	 *            The fully qualified path to the sound.
 	 */
 	public void play(final String pathToSound) {
-		if (Raptor.getInstance().getPreferences().getBoolean(
-				PreferenceKeys.APP_SOUND_ENABLED)
-				&& soundPlayer != null) {
+		if (Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.APP_SOUND_ENABLED) && soundPlayer != null) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
 					soundPlayer.play(pathToSound);
@@ -130,9 +132,7 @@ public class SoundService {
 	 * to play the sound i.e. "+".
 	 */
 	public void playBughouseSound(final String sound) {
-		if (Raptor.getInstance().getPreferences().getBoolean(
-				PreferenceKeys.APP_SOUND_ENABLED)
-				&& soundPlayer != null) {
+		if (Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.APP_SOUND_ENABLED) && soundPlayer != null) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
 					soundPlayer.playBughouseSound(sound);
@@ -146,9 +146,7 @@ public class SoundService {
 	 * play the sound i.e. "alert".
 	 */
 	public void playSound(final String sound) {
-		if (Raptor.getInstance().getPreferences().getBoolean(
-				PreferenceKeys.APP_SOUND_ENABLED)
-				&& soundPlayer != null) {
+		if (Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.APP_SOUND_ENABLED) && soundPlayer != null) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
 					soundPlayer.playSound(sound);
@@ -163,11 +161,8 @@ public class SoundService {
 	 */
 	public boolean textToSpeech(String text) {
 		boolean result = false;
-		if (Raptor.getInstance().getPreferences().getBoolean(
-				PreferenceKeys.APP_SOUND_ENABLED)) {
-			if (speech == null
-					&& Raptor.getInstance().getPreferences().contains(
-							PreferenceKeys.SPEECH_PROCESS_NAME)) {
+		if (Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.APP_SOUND_ENABLED)) {
+			if (speech == null && Raptor.getInstance().getPreferences().contains(PreferenceKeys.SPEECH_PROCESS_NAME)) {
 				initSpeech();
 			}
 			if (speech != null) {
@@ -188,9 +183,22 @@ public class SoundService {
 	protected void init() {
 		LOG.info("Initializing sound service.");
 		long startTime = System.currentTimeMillis();
+
+		bughouseSoundKeys = getSoundsKeys("sounds/bughouse");
+		soundKeys = getSoundsKeys("sounds");
+
+		initSoundPlayer();
+		initSpeech();
+
+		LOG.info("Initializing sound service complete: " + (System.currentTimeMillis() - startTime) + "ms");
+	}
+
+	protected String[] getSoundsKeys(String baseDir) {
+		String[] result = null;
+
 		try {
-			List<String> bughouseSoundsList = new ArrayList<String>(20);
-			File file = new File(Raptor.RESOURCES_DIR + "sounds/bughouse");
+			List<String> soundKeyList = new ArrayList<String>(20);
+			File file = new File(Raptor.RESOURCES_DIR + baseDir);
 			File[] files = file.listFiles(new FilenameFilter() {
 				public boolean accept(File dir, String name) {
 					return name.endsWith(".wav");
@@ -201,17 +209,13 @@ public class SoundService {
 				String key = currentFile.getName();
 				int dotIndex = key.indexOf('.');
 				key = key.substring(0, dotIndex);
-				bughouseSoundsList.add(key);
+				soundKeyList.add(key);
 			}
-			bughouseSounds = bughouseSoundsList.toArray(new String[0]);
+			Collections.sort(soundKeyList);
+			result = soundKeyList.toArray(new String[0]);
 		} catch (Throwable t) {
-			LOG.error("Error loading sounds", t);
+			LOG.error("Error loading sound keys " + baseDir, t);
 		}
-
-		initSoundPlayer();
-		initSpeech();
-
-		LOG.info("Initializing sound service complete: "
-				+ (System.currentTimeMillis() - startTime) + "ms");
+		return result;
 	}
 }

@@ -902,7 +902,7 @@ public class PlayingController extends ChessBoardController {
 		if (action == null) {
 			Raptor.getInstance().onError(
 					"PlayingMouseAction was null. This should never happn. "
-							+ button.toString() + " " + square);
+							+ button + " " + square);
 			return;
 		}
 

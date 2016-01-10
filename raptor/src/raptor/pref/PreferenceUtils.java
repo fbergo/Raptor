@@ -47,10 +47,10 @@ import raptor.pref.page.InactiveMouseActionsPage;
 import raptor.pref.page.ObservingMouseActionsPage;
 import raptor.pref.page.PlayingMouseActionsPage;
 import raptor.pref.page.RaptorWindowPage;
-import raptor.pref.page.RaptorWindowQuadrantsPage;
 import raptor.pref.page.ScriptsPage;
 import raptor.pref.page.SeekPage;
 import raptor.pref.page.SoundPage;
+import raptor.pref.page.SoundsPage;
 import raptor.pref.page.SpeechPage;
 import raptor.service.ConnectorService;
 
@@ -85,123 +85,72 @@ public class PreferenceUtils {
 		PreferenceManager mgr = new PreferenceManager('/');
 
 		mgr.addToRoot(new PreferenceNode("general", new GeneralPage()));
-//		mgr.addTo("general", new PreferenceNode("layout1",
-//				new RaptorWindowQuadrantsPage("1")));
-		mgr.addTo("general", new PreferenceNode("window",
-				new RaptorWindowPage()));
+		// mgr.addTo("general", new PreferenceNode("layout1",
+		// new RaptorWindowQuadrantsPage("1")));
+		mgr.addTo("general", new PreferenceNode("window", new RaptorWindowPage()));
 		mgr.addToRoot(new PreferenceNode("bughouse", new BughousePage()));
-		mgr.addTo(
-				"bughouse",
-				new PreferenceNode("buttons", new ActionContainerPage(local
-						.getString("prefUtil1"), local.getString("prefUtil2"),
-						RaptorActionContainer.BugButtons)));
+		mgr.addTo("bughouse", new PreferenceNode("buttons", new ActionContainerPage(local.getString("prefUtil1"),
+				local.getString("prefUtil2"), RaptorActionContainer.BugButtons)));
 		mgr.addToRoot(new PreferenceNode("chessBoard", new ChessBoardPage()));
-		mgr.addTo("chessBoard", new PreferenceNode("arrows",
-				new ChessBoardArrowsPage()));
-		mgr.addTo("chessBoard", new PreferenceNode("behavior",
-				new ChessBoardBehaviorPage()));
-		mgr.addTo("chessBoard", new PreferenceNode("colors",
-				new ChessBoardColorsPage()));
-		mgr.addTo("chessBoard", new PreferenceNode("fonts",
-				new ChessBoardFontsPage()));
-		mgr.addTo("chessBoard", new PreferenceNode("highlights",
-				new ChessBoardHighlightsPage()));
-		mgr.addTo("chessBoard", new PreferenceNode("mouseActions",
-				new ChessBoardMouseActions()));
-		mgr.addTo("chessBoard/mouseActions", new PreferenceNode("inactive",
-				new InactiveMouseActionsPage()));
-		mgr.addTo("chessBoard/mouseActions", new PreferenceNode("playing",
-				new PlayingMouseActionsPage()));
-		mgr.addTo("chessBoard/mouseActions", new PreferenceNode("observing",
-				new ObservingMouseActionsPage()));
-		mgr.addTo("chessBoard", new PreferenceNode("toolbar",
-				new ChessBoardToolbarsPage()));
-		mgr.addTo(
-				"chessBoard/toolbar",
-				new PreferenceNode("bugSuggest", new ActionContainerPage(local
-						.getString("prefUtil3"), local.getString("prefUtil4"),
-						RaptorActionContainer.BughouseSuggestChessBoard)));
-		mgr.addTo(
-				"chessBoard/toolbar",
-				new PreferenceNode("examining", new ActionContainerPage(local
-						.getString("prefUtil5"), local.getString("prefUtil6"),
-						RaptorActionContainer.ExaminingChessBoard)));
-		mgr.addTo(
-				"chessBoard/toolbar",
-				new PreferenceNode("inactive", new ActionContainerPage(local
-						.getString("prefUtil7"), local.getString("prefUtil8"),
-						RaptorActionContainer.InactiveChessBoard)));
-		mgr.addTo(
-				"chessBoard/toolbar",
-				new PreferenceNode("observing", new ActionContainerPage(local
-						.getString("prefUtil9"), local.getString("prefUtil10"),
-						RaptorActionContainer.ObservingChessBoard)));
-		mgr.addTo(
-				"chessBoard/toolbar",
-				new PreferenceNode("playing", new ActionContainerPage(local
-						.getString("prefUtil11"),
-						local.getString("prefUtil12"),
-						RaptorActionContainer.PlayingChessBoard)));
-		mgr.addTo(
-				"chessBoard/toolbar",
-				new PreferenceNode("setup", new ActionContainerPage(local
-						.getString("prefUtil13"),
-						local.getString("prefUtil14"),
-						RaptorActionContainer.SetupChessBoard)));
-		mgr.addTo("chessBoard", new PreferenceNode("results",
-				new ChessBoardResultsPage()));
+		mgr.addTo("chessBoard", new PreferenceNode("arrows", new ChessBoardArrowsPage()));
+		mgr.addTo("chessBoard", new PreferenceNode("behavior", new ChessBoardBehaviorPage()));
+		mgr.addTo("chessBoard", new PreferenceNode("colors", new ChessBoardColorsPage()));
+		mgr.addTo("chessBoard", new PreferenceNode("fonts", new ChessBoardFontsPage()));
+		mgr.addTo("chessBoard", new PreferenceNode("highlights", new ChessBoardHighlightsPage()));
+		mgr.addTo("chessBoard", new PreferenceNode("mouseActions", new ChessBoardMouseActions()));
+		mgr.addTo("chessBoard/mouseActions", new PreferenceNode("inactive", new InactiveMouseActionsPage()));
+		mgr.addTo("chessBoard/mouseActions", new PreferenceNode("playing", new PlayingMouseActionsPage()));
+		mgr.addTo("chessBoard/mouseActions", new PreferenceNode("observing", new ObservingMouseActionsPage()));
+		mgr.addTo("chessBoard", new PreferenceNode("toolbar", new ChessBoardToolbarsPage()));
+		mgr.addTo("chessBoard/toolbar",
+				new PreferenceNode("bugSuggest", new ActionContainerPage(local.getString("prefUtil3"),
+						local.getString("prefUtil4"), RaptorActionContainer.BughouseSuggestChessBoard)));
+		mgr.addTo("chessBoard/toolbar",
+				new PreferenceNode("examining", new ActionContainerPage(local.getString("prefUtil5"),
+						local.getString("prefUtil6"), RaptorActionContainer.ExaminingChessBoard)));
+		mgr.addTo("chessBoard/toolbar",
+				new PreferenceNode("inactive", new ActionContainerPage(local.getString("prefUtil7"),
+						local.getString("prefUtil8"), RaptorActionContainer.InactiveChessBoard)));
+		mgr.addTo("chessBoard/toolbar",
+				new PreferenceNode("observing", new ActionContainerPage(local.getString("prefUtil9"),
+						local.getString("prefUtil10"), RaptorActionContainer.ObservingChessBoard)));
+		mgr.addTo("chessBoard/toolbar",
+				new PreferenceNode("playing", new ActionContainerPage(local.getString("prefUtil11"),
+						local.getString("prefUtil12"), RaptorActionContainer.PlayingChessBoard)));
+		mgr.addTo("chessBoard/toolbar",
+				new PreferenceNode("setup", new ActionContainerPage(local.getString("prefUtil13"),
+						local.getString("prefUtil14"), RaptorActionContainer.SetupChessBoard)));
+		mgr.addTo("chessBoard", new PreferenceNode("results", new ChessBoardResultsPage()));
 		mgr.addToRoot(new PreferenceNode("chatConsole", new ChatConsolePage()));
 		// Currently unused but keeping it around in case more options are
 		// added.
-		mgr.addTo("chatConsole", new PreferenceNode("behavior",
-				new ChatConsoleBehaviorPage()));
-		mgr.addTo("chatConsole", new PreferenceNode("channelColors",
-				new ChatConsoleChannelColorsPage()));
-		mgr.addTo("chatConsole", new PreferenceNode("messageColors",
-				new ChatConsoleMessageColorsPage()));
-		mgr.addTo("chatConsole", new PreferenceNode("toolbar",
-				new ChatConsoleToolbarsPage()));
-		mgr.addTo(
-				"chatConsole/toolbar",
-				new PreferenceNode("channel", new ActionContainerPage(local
-						.getString("prefUtil15"),
-						local.getString("prefUtil16"),
-						RaptorActionContainer.ChannelChatConsole)));
-		mgr.addTo(
-				"chatConsole/toolbar",
-				new PreferenceNode("main", new ActionContainerPage(local
-						.getString("prefUtil17"),
-						local.getString("prefUtil18"),
-						RaptorActionContainer.MainChatConsole)));
-		mgr.addTo(
-				"chatConsole/toolbar",
-				new PreferenceNode("partner", new ActionContainerPage(local
-						.getString("prefUtil19"),
-						local.getString("prefUtil20"),
-						RaptorActionContainer.BughousePartnerChatConsole)));
-		mgr.addTo(
-				"chatConsole/toolbar",
-				new PreferenceNode("person", new ActionContainerPage(local
-						.getString("prefUtil21"),
-						local.getString("prefUtil22"),
-						RaptorActionContainer.PersonChatConsole)));
-		mgr.addTo(
-				"chatConsole/toolbar",
-				new PreferenceNode("regex", new ActionContainerPage(local
-						.getString("prefUtil23"),
-						local.getString("prefUtil24"),
-						RaptorActionContainer.RegExChatConsole)));
+		mgr.addTo("chatConsole", new PreferenceNode("behavior", new ChatConsoleBehaviorPage()));
+		mgr.addTo("chatConsole", new PreferenceNode("channelColors", new ChatConsoleChannelColorsPage()));
+		mgr.addTo("chatConsole", new PreferenceNode("messageColors", new ChatConsoleMessageColorsPage()));
+		mgr.addTo("chatConsole", new PreferenceNode("toolbar", new ChatConsoleToolbarsPage()));
+		mgr.addTo("chatConsole/toolbar",
+				new PreferenceNode("channel", new ActionContainerPage(local.getString("prefUtil15"),
+						local.getString("prefUtil16"), RaptorActionContainer.ChannelChatConsole)));
+		mgr.addTo("chatConsole/toolbar",
+				new PreferenceNode("main", new ActionContainerPage(local.getString("prefUtil17"),
+						local.getString("prefUtil18"), RaptorActionContainer.MainChatConsole)));
+		mgr.addTo("chatConsole/toolbar",
+				new PreferenceNode("partner", new ActionContainerPage(local.getString("prefUtil19"),
+						local.getString("prefUtil20"), RaptorActionContainer.BughousePartnerChatConsole)));
+		mgr.addTo("chatConsole/toolbar",
+				new PreferenceNode("person", new ActionContainerPage(local.getString("prefUtil21"),
+						local.getString("prefUtil22"), RaptorActionContainer.PersonChatConsole)));
+		mgr.addTo("chatConsole/toolbar",
+				new PreferenceNode("regex", new ActionContainerPage(local.getString("prefUtil23"),
+						local.getString("prefUtil24"), RaptorActionContainer.RegExChatConsole)));
 		mgr.addToRoot(new PreferenceNode("scripts", new ScriptsPage()));
-		mgr.addTo("scripts", new PreferenceNode("actionScripts",
-				new ActionScriptsPage()));
-		mgr.addTo("scripts", new PreferenceNode("actionScriptKeys",
-				new ActionKeyBindingsPage()));
-		mgr.addTo("scripts",
-				new PreferenceNode("regex", new ChatEventScripts()));
-		mgr.addTo("scripts", new PreferenceNode("rightClickScripts",
-				new ChatConsoleRightClickScripts()));
+		mgr.addTo("scripts", new PreferenceNode("actionScripts", new ActionScriptsPage()));
+		mgr.addTo("scripts", new PreferenceNode("actionScriptKeys", new ActionKeyBindingsPage()));
+		mgr.addTo("scripts", new PreferenceNode("regex", new ChatEventScripts()));
+		mgr.addTo("scripts", new PreferenceNode("rightClickScripts", new ChatConsoleRightClickScripts()));
 		mgr.addToRoot(new PreferenceNode("seeks", new SeekPage()));
-		mgr.addToRoot(new PreferenceNode("sound", new SoundPage()));
+		mgr.addToRoot(new PreferenceNode("sounds", new SoundsPage()));
+		mgr.addToRoot(new PreferenceNode("sound process config", new SoundPage()));
 		mgr.addToRoot(new PreferenceNode("speech", new SpeechPage()));
 
 		// Add the connector preference nodes.
@@ -211,8 +160,7 @@ public class PreferenceUtils {
 			PreferencePage root = connector.getRootPreferencePage();
 			if (root != null) {
 				mgr.addToRoot(new PreferenceNode(connector.getShortName(), root));
-				PreferenceNode[] secondaries = connector
-						.getSecondaryPreferenceNodes();
+				PreferenceNode[] secondaries = connector.getSecondaryPreferenceNodes();
 				if (secondaries != null && secondaries.length > 0) {
 					for (PreferenceNode node : secondaries) {
 						mgr.addTo(connector.getShortName(), node);
@@ -222,7 +170,6 @@ public class PreferenceUtils {
 		}
 
 		// Create the preferences dialog
-		dlg = new PreferenceDialog(Raptor.getInstance().getWindow().getShell(),
-				mgr);
+		dlg = new PreferenceDialog(Raptor.getInstance().getWindow().getShell(), mgr);
 	}
 }

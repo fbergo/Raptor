@@ -699,7 +699,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(CHAT_UNDERLINE_QUOTED_TEXT, true);
 		setDefault(CHAT_UNDERLINE_SINGLE_QUOTES, false);
 		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_ARRIVALS, true);
-		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_DEPARTURES, false);
+		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_DEPARTURES, true);
 		setDefault(CHAT_UNDERLINE_COMMANDS, true);
 
 		setDefault(CHAT_COMMAND_LINE_SPELL_CHECK, !OSUtils.isLikelyLinux());
