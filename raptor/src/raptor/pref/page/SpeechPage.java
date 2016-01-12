@@ -65,7 +65,7 @@ public class SpeechPage extends FieldEditorPreferencePage {
 		addField(labelButtonFieldEditor);
 		
 		final IntegerFieldEditor processMaxTime = new IntegerFieldEditor(
-				PreferenceKeys.PROCESS_SPEECH_MAX_TIME, local.getString("speechProcessMaxTime"),
+				PreferenceKeys.PROCESS_SPEECH_MAX_TIME_SECONDS, local.getString("speechProcessMaxTime"),
 				getFieldEditorParent());
 		addField(processMaxTime);
 	}

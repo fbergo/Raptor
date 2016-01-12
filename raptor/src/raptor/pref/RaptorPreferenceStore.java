@@ -701,7 +701,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_ARRIVALS, true);
 		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_DEPARTURES, true);
 		setDefault(CHAT_UNDERLINE_COMMANDS, true);
-		setDefault(PROCESS_SPEECH_MAX_TIME,15000);
+		setDefault(PROCESS_SPEECH_MAX_TIME_SECONDS,15);
 
 		setDefault(CHAT_COMMAND_LINE_SPELL_CHECK, !OSUtils.isLikelyLinux());
 

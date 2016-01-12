@@ -51,7 +51,7 @@ public class ProcessSpeech implements Speech {
 						Process process = Runtime.getRuntime().exec(new String[] { command, speakQueue.poll() });
 
 						while (System.currentTimeMillis() - startTime < Raptor.getInstance().getPreferences()
-								.getInt(PreferenceKeys.PROCESS_SPEECH_MAX_TIME)) {
+								.getInt(PreferenceKeys.PROCESS_SPEECH_MAX_TIME_SECONDS)*1000) {
 							try {
 								process.exitValue();
 								break;
