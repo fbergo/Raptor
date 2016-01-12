@@ -16,45 +16,14 @@ package raptor.speech;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.commons.lang.StringUtils;
-
-import raptor.Raptor;
-import raptor.service.ThreadService;
-
-public class OSXSpeech implements Speech {
+public class OSXSpeech extends ProcessSpeech {
 	protected Queue<String> speakQueue = new ConcurrentLinkedQueue<String>();
 
-	public static void main(String args[]) {
-		OSXSpeech speech = new OSXSpeech();
-		speech.speak("Hello, This is a test.");
-	}
-
-	public void dispose() {
+	public OSXSpeech() {
+		super("say");
 	}
 
 	public String getDescription() {
 		return "OSX native speech.";
-	}
-
-	public void init() {
-	}
-
-	public void speak(final String text) {
-		if (StringUtils.isBlank(text))
-			return;
-
-		speakQueue.add(text);
-		ThreadService.getInstance().run(new Runnable() {
-			public void run() {
-				synchronized (OSXSpeech.this) {
-					try {
-						Process process = Runtime.getRuntime().exec(new String[] { "say", speakQueue.poll() });
-						process.waitFor();
-					} catch (Exception e) {
-						Raptor.getInstance().onError("Error occured speaking text: " + text, e);
-					}
-				}
-			}
-		});
 	}
 }

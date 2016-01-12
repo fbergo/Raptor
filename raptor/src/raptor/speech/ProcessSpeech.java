@@ -23,6 +23,7 @@ import raptor.service.ThreadService;
 
 public class ProcessSpeech implements Speech {
 	protected Queue<String> speakQueue;
+	private static final long PROCESS_SPEECH_MAX_TIME = 15000;
 
 	protected String command;
 
@@ -46,8 +47,30 @@ public class ProcessSpeech implements Speech {
 			public void run() {
 				synchronized (ProcessSpeech.this) {
 					try {
+						long startTime = System.currentTimeMillis();
 						Process process = Runtime.getRuntime().exec(new String[] { command, speakQueue.poll() });
-						process.waitFor();
+
+						while (System.currentTimeMillis() - startTime < PROCESS_SPEECH_MAX_TIME) {
+							try {
+								process.exitValue();
+								break;
+							} catch (IllegalThreadStateException ie) {
+								try {
+									Thread.sleep(250);
+								} catch (InterruptedException ie2) {									
+								}
+							}
+						}
+
+						// if process is still alive destroy it.
+						try {
+							process.exitValue();
+						} catch (IllegalThreadStateException ie) {
+							try {
+								process.destroy();
+							} catch (Throwable t) {
+							}
+						}
 					} catch (Exception e) {
 						Raptor.getInstance().onError("Error occured speaking text: " + text, e);
 					}
