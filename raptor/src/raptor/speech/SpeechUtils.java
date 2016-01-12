@@ -15,6 +15,7 @@ package raptor.speech;
 
 import raptor.Raptor;
 import raptor.pref.PreferenceKeys;
+import raptor.util.OSUtils;
 
 public class SpeechUtils {
 	public static Speech getSpeech() {
@@ -23,8 +24,7 @@ public class SpeechUtils {
 			return new ProcessSpeech(Raptor.getInstance().getPreferences()
 					.getString(PreferenceKeys.SPEECH_PROCESS_NAME));
 		} else {
-			String osName = System.getProperty("os.name");
-			if (osName.startsWith("Mac OS")) {
+			if (OSUtils.isLikelyOSX()) {
 				return new OSXSpeech();
 			} else {
 				return null;
