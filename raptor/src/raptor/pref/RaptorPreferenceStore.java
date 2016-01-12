@@ -417,8 +417,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(ACTION_SEPARATOR_SEQUENCE, 400);
 
 		// App settings.
-		setDefault(APP_NAME, "Raptor 1.0 rc2");
-		putValue("app-version", "1.0 rc2");
+		setDefault(APP_NAME, "Raptor 1.0 rc3");
+		putValue("app-version", "1.0 rc3");
 		putValue("app-update", "true");
 
 		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS,
@@ -701,6 +701,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_ARRIVALS, true);
 		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_DEPARTURES, true);
 		setDefault(CHAT_UNDERLINE_COMMANDS, true);
+		setDefault(PROCESS_SPEECH_MAX_TIME,15000);
 
 		setDefault(CHAT_COMMAND_LINE_SPELL_CHECK, !OSUtils.isLikelyLinux());
 

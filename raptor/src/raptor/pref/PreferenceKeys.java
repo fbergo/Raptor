@@ -148,6 +148,8 @@ public interface PreferenceKeys {
 	public static final String BUGHOUSE_IS_PLAYING_PARTNERSHIP_OFFERED_SOUND = "bughouse-play-partnership-offered-sound";
 
 	public static final String BUG_BUTTONS_FONT = "bugbuttons-font";
+	
+	public static final String PROCESS_SPEECH_MAX_TIME = "process-speech-max-time";
 
 	public static final String BOARD_SHOW_PLAYING_GAME_STATS_ON_GAME_END = "board-show-playing-game-stats-on-game-end";
 	public static final String BOARD_ALLOW_MOUSE_WHEEL_NAVIGATION_WHEEL_PLAYING = "board-allow-mouse-wheel-navigation-when-playing";

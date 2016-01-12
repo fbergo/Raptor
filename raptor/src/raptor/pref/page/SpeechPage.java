@@ -15,6 +15,7 @@ package raptor.pref.page;
 
 import org.apache.commons.lang.WordUtils;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -62,5 +63,10 @@ public class SpeechPage extends FieldEditorPreferencePage {
 					}
 				});
 		addField(labelButtonFieldEditor);
+		
+		final IntegerFieldEditor processMaxTime = new IntegerFieldEditor(
+				PreferenceKeys.PROCESS_SPEECH_MAX_TIME, local.getString("speechProcessMaxTime"),
+				getFieldEditorParent());
+		addField(processMaxTime);
 	}
 }

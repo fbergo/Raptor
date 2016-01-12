@@ -19,11 +19,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.commons.lang.StringUtils;
 
 import raptor.Raptor;
+import raptor.pref.PreferenceKeys;
 import raptor.service.ThreadService;
 
 public class ProcessSpeech implements Speech {
 	protected Queue<String> speakQueue;
-	private static final long PROCESS_SPEECH_MAX_TIME = 15000;
 
 	protected String command;
 
@@ -50,14 +50,15 @@ public class ProcessSpeech implements Speech {
 						long startTime = System.currentTimeMillis();
 						Process process = Runtime.getRuntime().exec(new String[] { command, speakQueue.poll() });
 
-						while (System.currentTimeMillis() - startTime < PROCESS_SPEECH_MAX_TIME) {
+						while (System.currentTimeMillis() - startTime < Raptor.getInstance().getPreferences()
+								.getInt(PreferenceKeys.PROCESS_SPEECH_MAX_TIME)) {
 							try {
 								process.exitValue();
 								break;
 							} catch (IllegalThreadStateException ie) {
 								try {
 									Thread.sleep(250);
-								} catch (InterruptedException ie2) {									
+								} catch (InterruptedException ie2) {
 								}
 							}
 						}
