@@ -2021,7 +2021,7 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 				showWordsThatStartWithAction.setText(local.getString("chatConsCont25") + finalWord);
 				showWordsThatStartWithAction.addListener(SWT.Selection, new Listener() {
 					public void handleEvent(Event e) {
-						BrowserUtils.openUrl("http://www.google.com/search?q=" + finalWord);
+						BrowserUtils.openUrl("https://duckduckgo.com/q=" + finalWord);
 					}
 				});
 			}

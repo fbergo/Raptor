@@ -22,7 +22,7 @@ import raptor.util.RaptorStringTokenizer;
 public class OpenUrlAlias extends RaptorAlias {
 	public OpenUrlAlias() {
 		super("openurl", "Opens the specified url.", "'openurl [url]'. "
-				+ "Example: 'openurl http://google.com'");
+				+ "Example: 'openurl http://duckduckgo.com'");
 	}
 
 	@Override
