@@ -307,7 +307,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 				item.addListener(SWT.Selection, new Listener() {
 					public void handleEvent(Event e) {
 						Clipboard clipboard = new Clipboard(composite.getDisplay());
-						String text = GameUtils.removeUnicodePieces(rowData[4]);
+						String text = GameUtils.removeUnicodePieces(rowData[1]);
 						TextTransfer textTransfer = TextTransfer.getInstance();
 						Transfer[] transfers = new Transfer[] { textTransfer };
 						Object[] data = new Object[] { text };

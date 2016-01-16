@@ -14,14 +14,14 @@
 package raptor.swt.chat;
 
 import org.apache.commons.lang.StringUtils;
-import raptor.util.RaptorLogger;
- 
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -39,6 +39,8 @@ import raptor.international.L10n;
 import raptor.pref.PreferenceKeys;
 import raptor.pref.RaptorPreferenceStore;
 import raptor.swt.RaptorStyledText;
+import raptor.swt.SWTUtils;
+import raptor.util.RaptorLogger;
 
 /**
  * The ChatConsole GUI control. All ChatConsoles have a controller that manages
