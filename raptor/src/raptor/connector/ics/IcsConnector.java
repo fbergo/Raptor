@@ -455,6 +455,15 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	public void disconnect() {
 		if (isConnected()) {
 			try {
+				if (messageProducer != null) {
+					try {
+						messageProducer.close();
+					} catch (Throwable t) {
+					} finally {
+						messageProducer = null;
+					}
+				}
+				
 				try {
 					if (isLoggedIn) {
 						storeTabStates();
@@ -480,12 +489,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 					LOG.error("Error disconencting from ICSConnector.", t);
 				}
 
-				if (messageProducer != null) {
-					try {
-						messageProducer.close();
-					} catch (Throwable t) {
-					}
-				}
 				if (keepAlive != null) {
 					keepAlive.kill();
 				}
