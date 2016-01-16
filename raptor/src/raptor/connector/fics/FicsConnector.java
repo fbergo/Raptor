@@ -156,24 +156,21 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys, GameC
 
 	@Override
 	public void disconnect() {
-
-		synchronized (this) {
-			if (!isDisconnecting) {
-				isDisconnecting = true;
-				try {
-					if (isConnected()) {
-						super.disconnect();
-					}
-					connectAction.setEnabled(true);
-					if (autoConnectAction != null) {
-						autoConnectAction.setEnabled(true);
-					}
-					for (Action action : onlyEnabledOnConnectActions) {
-						action.setEnabled(false);
-					}
-				} finally {
-					isDisconnecting = false;
+		if (!isDisconnecting) {
+			isDisconnecting = true;
+			try {
+				if (isConnected()) {
+					super.disconnect();
 				}
+				connectAction.setEnabled(true);
+				if (autoConnectAction != null) {
+					autoConnectAction.setEnabled(true);
+				}
+				for (Action action : onlyEnabledOnConnectActions) {
+					action.setEnabled(false);
+				}
+			} finally {
+				isDisconnecting = false;
 			}
 		}
 	}
