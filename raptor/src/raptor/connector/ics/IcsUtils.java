@@ -823,7 +823,6 @@ public class IcsUtils implements GameConstants {
 						}
 					}
 				}
-
 			}
 		}
 		return result;
