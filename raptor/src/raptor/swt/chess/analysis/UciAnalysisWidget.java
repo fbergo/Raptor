@@ -287,7 +287,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		nodesLabel.setText(local.getString("uciAnalNodes") + "               ");
 
 		timeLabel = new Label(topLine, SWT.LEFT);
-		timeLabel.setText(local.getString("uciAnalTime") + "         ");
+		timeLabel.setText(local.getString("uciAnalTime") + "     ");
 
 		bestMoveLabel = new Label(topLine, SWT.LEFT);
 		bestMoveLabel.setText(local.getString("uciAnalBestMove") + "                ");

@@ -17,8 +17,7 @@ import raptor.connector.MessageCallback;
 
 /**
  * This interface contains the core Raptor features you have access to in
- * scripting. If you would like new ones added you can make enhancement requests
- * on the request page or post in the Google groups page.
+ * scripting.
  */
 public interface ScriptContext {
 
