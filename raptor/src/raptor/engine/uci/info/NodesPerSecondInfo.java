@@ -16,13 +16,13 @@ package raptor.engine.uci.info;
 import raptor.engine.uci.UCIInfo;
 
 public class NodesPerSecondInfo extends UCIInfo {
-	protected int nodesPerSecond;
+	protected long nodesPerSecond;
 
-	public int getNodesPerSecond() {
+	public long getNodesPerSecond() {
 		return nodesPerSecond;
 	}
 
-	public void setNodesPerSecond(int nodesPerSecond) {
+	public void setNodesPerSecond(long nodesPerSecond) {
 		this.nodesPerSecond = nodesPerSecond;
 	}
 }

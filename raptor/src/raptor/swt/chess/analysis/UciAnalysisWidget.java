@@ -14,8 +14,7 @@
 package raptor.swt.chess.analysis;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DecimalFormat;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
@@ -35,6 +34,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -51,7 +51,8 @@ import raptor.engine.uci.UCIInfoListener;
 import raptor.engine.uci.UCIMove;
 import raptor.engine.uci.info.BestLineFoundInfo;
 import raptor.engine.uci.info.DepthInfo;
-import raptor.engine.uci.info.NodesSearchedInfo;
+import raptor.engine.uci.info.MultiPV;
+import raptor.engine.uci.info.NodesPerSecondInfo;
 import raptor.engine.uci.info.ScoreInfo;
 import raptor.engine.uci.info.TimeInfo;
 import raptor.engine.uci.options.UCICheck;
@@ -65,14 +66,18 @@ import raptor.swt.chess.ChessBoardController;
 import raptor.swt.chess.EngineAnalysisWidget;
 import raptor.util.RaptorLogger;
 import raptor.util.RaptorRunnable;
-import raptor.util.RaptorStringUtils;
 
 public class UciAnalysisWidget implements EngineAnalysisWidget {
 	private static final RaptorLogger LOG = RaptorLogger.getLog(UciAnalysisWidget.class);
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###,###,###,###,###,###,###,###");
 
 	protected ChessBoardController controller;
 	protected Composite composite, topLine;
 	protected UCIEngine engine;
+	protected Label depthLabel;
+	protected Label timeLabel;
+	protected Label nodesLabel;
+	protected Label bestMoveLabel;
 	protected Combo engineCombo;
 	protected RaptorTable bestMoves;
 	protected Button startStopButton;
@@ -85,11 +90,13 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 			Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
 				@Override
 				public void execute() {
+					int multiPv = -1;
 					String score = null;
 					String time = null;
 					String depth = null;
-					String nodes = null;
-					List<String> pvs = new ArrayList<String>(3);
+					String nps = null;
+					String pv = null;
+					String bestMove = null;
 
 					for (UCIInfo info : infos) {
 						if (info instanceof ScoreInfo) {
@@ -97,9 +104,9 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 							if (((ScoreInfo) info).getMateInMoves() != 0) {
 								score = "Mate in " + scoreInfo.getMateInMoves();
 							} else if (scoreInfo.isLowerBoundScore()) {
-								score = "-inf";
+								score = "Calibrating";
 							} else if (scoreInfo.isUpperBoundScore()) {
-								score = "+inf";
+								score = "Calibrating";
 							} else {
 								double scoreAsDouble = controller.getGame().isWhitesMove()
 										|| !engine.isMultiplyBlackScoreByMinus1()
@@ -111,10 +118,10 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 							}
 						} else if (info instanceof DepthInfo) {
 							DepthInfo depthInfo = (DepthInfo) info;
-							depth = depthInfo.getSearchDepthPlies() + " plies";
-						} else if (info instanceof NodesSearchedInfo) {
-							NodesSearchedInfo nodesSearchedInfo = (NodesSearchedInfo) info;
-							nodes = RaptorStringUtils.formatAsNumber("" + nodesSearchedInfo.getNodesSearched() / 1000);
+							depth = "" + depthInfo.getSearchDepthPlies();
+						} else if (info instanceof NodesPerSecondInfo) {
+							NodesPerSecondInfo nodesPerSecInfo = (NodesPerSecondInfo) info;
+							nps = DECIMAL_FORMAT.format(nodesPerSecInfo.getNodesPerSecond());
 						} else if (info instanceof TimeInfo) {
 							TimeInfo timeInfo = (TimeInfo) info;
 							time = new BigDecimal(timeInfo.getTimeMillis() / 1000.0)
@@ -147,6 +154,10 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 									line.append((line.equals("") ? "" : " ") + moveNumber + san
 											+ (gameClone.isInCheck() ? "+" : "")
 											+ (gameClone.isCheckmate() ? "#" : ""));
+									if (isFirstMove) {
+										bestMove = moveNumber + san + (gameClone.isInCheck() ? "+" : "")
+												+ (gameClone.isCheckmate() ? "#" : "");
+									}
 									isFirstMove = false;
 								} catch (Throwable t) {
 									if (LOG.isInfoEnabled()) {
@@ -156,16 +167,21 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 									break;
 								}
 							}
-							pvs.add(line.toString());
+							pv = line.toString();
+						} else if (info instanceof MultiPV) {
+							MultiPV multiPvInfo = (MultiPV) info;
+							multiPv = multiPvInfo.getId();
 						}
 					}
 
-					if (score != null && (!score.startsWith("+inf") && !score.startsWith("-inf"))) {
+					if (score != null && multiPv != -1) {
 						final String finalScore = score;
 						final String finalTime = time;
 						final String finalDepth = depth;
-						final String finalNodes = nodes;
-						final List<String> finalPVs = pvs;
+						final String finalNodes = nps;
+						final String finalPV = pv;
+						final String finalBestMove = bestMove;
+						final int finalMultiPv = multiPv;
 
 						Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
 							@Override
@@ -173,38 +189,34 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 								if (composite.isDisposed()) {
 									return;
 								}
-								if (!finalPVs.isEmpty()) {
-									String[][] data = new String[bestMoves.getRowCount() + finalPVs.size()][5];
 
-									for (int i = 0; i < finalPVs.size(); i++) {
-										data[0][0] = StringUtils.defaultString(finalScore);
-										data[0][1] = StringUtils.defaultString(finalDepth);
-										data[0][2] = StringUtils.defaultString(finalTime);
-										data[0][3] = StringUtils.defaultString(finalNodes);
-										data[0][4] = StringUtils.defaultString(finalPVs.get(i));
-									}
-
-									for (int i = 0; i < bestMoves.getRowCount(); i++) {
-										for (int j = 0; j < bestMoves.getColumnCount(); j++) {
-											data[i + finalPVs.size()][j] = bestMoves.getText(i, j);
-										}
-									}
-
+								if (bestMoves.getRowCount() == 0) {
+									String[][] data = new String[UCIEngine.MULTI_PLY][6];
+									for (int i = 0; i < data.length; i++)
+										for (int j = 0; j < data[i].length; j++)
+											data[i][j] = "";
 									bestMoves.refreshTable(data);
-								} else if (bestMoves.getRowCount() > 0) {
-									if (StringUtils.isNotBlank(finalScore)) {
-										bestMoves.setText(0, 0, finalScore);
-									}
-									if (StringUtils.isNotBlank(finalDepth)) {
-										bestMoves.setText(0, 1, finalDepth);
-									}
-									if (StringUtils.isNotBlank(finalTime)) {
-										bestMoves.setText(0, 2, finalTime);
-									}
+								}
 
-									if (StringUtils.isNotBlank(finalNodes)) {
-										bestMoves.setText(0, 3, finalNodes);
-									}
+								int row = finalMultiPv - 1;
+
+								if (StringUtils.isNotBlank(finalScore)) {
+									bestMoves.setText(row, 0, finalScore);
+								}
+								if (StringUtils.isNotBlank(finalPV)) {
+									bestMoves.setText(row, 1, finalPV);
+								}
+								if (StringUtils.isNotBlank(finalDepth)) {
+									depthLabel.setText("   " + local.getString("uciAnalDepth") + " " + finalDepth);
+								}
+								if (StringUtils.isNotBlank(finalTime)) {
+									timeLabel.setText(local.getString("uciAnalTime") + " " + finalTime);
+								}
+								if (StringUtils.isNotBlank(finalNodes)) {
+									nodesLabel.setText(local.getString("uciAnalNodes") + " " + finalNodes);
+								}
+								if (row == 0 && StringUtils.isNotBlank(finalBestMove)) {
+									bestMoveLabel.setText(local.getString("uciAnalBestMove") + " " + finalBestMove);
 								}
 							}
 						});
@@ -246,9 +258,6 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		rowLayout.marginWidth = 2;
 		rowLayout.spacing = 0;
 		topLine.setLayout(rowLayout);
-		//
-		// ?????
-		// topLine.setLayout(new RowLayout());
 
 		engineCombo = new Combo(topLine, SWT.DROP_DOWN | SWT.READ_ONLY);
 		engineCombo.addSelectionListener(new SelectionAdapter() {
@@ -271,14 +280,22 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 				}
 			}
 		});
+		depthLabel = new Label(topLine, SWT.LEFT);
+		depthLabel.setText("   " + local.getString("uciAnalDepth") + "     ");
+
+		nodesLabel = new Label(topLine, SWT.LEFT);
+		nodesLabel.setText(local.getString("uciAnalNodes") + "               ");
+
+		timeLabel = new Label(topLine, SWT.LEFT);
+		timeLabel.setText(local.getString("uciAnalTime") + "         ");
+
+		bestMoveLabel = new Label(topLine, SWT.LEFT);
+		bestMoveLabel.setText(local.getString("uciAnalBestMove") + "                ");
 
 		bestMoves = new RaptorTable(composite, SWT.BORDER | SWT.FULL_SELECTION, false, true);
 		bestMoves.setToolTipText(local.getString("uciAnalW_37"));
 		bestMoves.addColumn(local.getString("uciAnalW_38"), SWT.LEFT, 10, false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_39"), SWT.LEFT, 10, false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_40"), SWT.LEFT, 10, false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_41"), SWT.LEFT, 10, false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_42"), SWT.LEFT, 60, false, null);
+		bestMoves.addColumn(local.getString("uciAnalW_42"), SWT.LEFT, 90, false, null);
 		bestMoves.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		bestMoves.addRaptorTableListener(new RaptorTableAdapter() {
@@ -403,8 +420,10 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 						Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
 							@Override
 							public void execute() {
-								startStopButton.setText(local.getString("uciAnalW_54"));
-								bestMoves.clearTable();
+								if (composite.isVisible()) {
+									startStopButton.setText(local.getString("uciAnalW_54"));
+									bestMoves.clearTable();
+								}
 							}
 						});
 

@@ -30,6 +30,7 @@ import raptor.engine.uci.info.BestLineFoundInfo;
 import raptor.engine.uci.info.CPULoadInfo;
 import raptor.engine.uci.info.CurrentMoveInfo;
 import raptor.engine.uci.info.DepthInfo;
+import raptor.engine.uci.info.MultiPV;
 import raptor.engine.uci.info.NodesPerSecondInfo;
 import raptor.engine.uci.info.NodesSearchedInfo;
 import raptor.engine.uci.info.ScoreInfo;
@@ -55,11 +56,10 @@ import raptor.util.RaptorStringTokenizer;
  */
 public class UCIEngine {
 	private static final RaptorLogger LOG = RaptorLogger.getLog(UCIEngine.class);
-	protected static final String[] SUPPORTED_INFO_TYPES = { "depth",
-			"seldepth", "time", "nodes", "pv", "multipv", "score", "currmove",
-			"currentmovenumber", "hashfull", "nps", "tbhits", "cpuload",
-			"string" };
+	protected static final String[] SUPPORTED_INFO_TYPES = { "depth", "seldepth", "time", "nodes", "pv", "multipv",
+			"score", "currmove", "currentmovenumber", "hashfull", "nps", "tbhits", "cpuload", "string" };
 	protected static final long CONNECTION_TIMEOUT = 5000;
+	public static final int MULTI_PLY = 5;
 
 	protected Process process;
 	protected boolean isUsingThreadService = true;
@@ -67,7 +67,6 @@ public class UCIEngine {
 	protected PrintWriter out;
 	protected boolean isConnected;
 	protected Map<String, UCIOption> nameToOptions = new HashMap<String, UCIOption>();
-	protected Map<String, String> overrideOptions = new HashMap<String, String>();
 	protected String processPath;
 	protected String engineName;
 	protected String engineAuthor;
@@ -95,8 +94,8 @@ public class UCIEngine {
 		}
 
 		resetConnectionState();
-		Future<?> connectionTimeoutFuture = ThreadService.getInstance()
-				.scheduleOneShot(CONNECTION_TIMEOUT, new Runnable() {
+		Future<?> connectionTimeoutFuture = ThreadService.getInstance().scheduleOneShot(CONNECTION_TIMEOUT,
+				new Runnable() {
 					public void run() {
 						disconnect();
 					}
@@ -106,23 +105,23 @@ public class UCIEngine {
 			long startTime = System.currentTimeMillis();
 
 			if (parameters == null || parameters.length == 0) {
-				process = new ProcessBuilder(processPath).directory(
-						new File(new File(processPath).getParent())).start();
+				process = new ProcessBuilder(processPath).directory(new File(new File(processPath).getParent()))
+						.start();
 			} else {
 				String[] args = new String[parameters.length + 1];
 				args[0] = processPath;
-                System.arraycopy(parameters, 0, args, 1, parameters.length);
+				System.arraycopy(parameters, 0, args, 1, parameters.length);
 				process = new ProcessBuilder(args).start();
 			}
-			in = new BufferedReader(new InputStreamReader(process
-					.getInputStream()), 10000);
+			in = new BufferedReader(new InputStreamReader(process.getInputStream()), 10000);
 			out = new PrintWriter(process.getOutputStream());
 
 			send("uci");
 
 			String currentLine = null;
 			while ((currentLine = readLine()) != null) {
-				LOG.debug(currentLine);
+				if (LOG.isDebugEnabled())
+					LOG.debug(currentLine);
 				if (currentLine.startsWith("id")) {
 					parseIdLine(currentLine);
 				} else if (currentLine.startsWith("option ")) {
@@ -131,20 +130,20 @@ public class UCIEngine {
 					break;
 				} else {
 					if (LOG.isDebugEnabled()) {
-						LOG.debug("Unknown response to uci ignoring: "
-								+ currentLine);
+						LOG.debug("Unknown response to uci ignoring: " + currentLine);
 					}
 				}
 			}
 
-			sendAllNonDefaultOptions();
+			UCIOption multiPv = new UCISpinner();
+			multiPv.setName("MultiPV");
+			multiPv.setValue("" + MULTI_PLY);
+			setOption(multiPv);
 			isReady();
 
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("engineName=" + engineName + " engineAuthor="
-						+ engineAuthor + "UCI_Chess960="
-						+ supportsFischerRandom + " Options:\n"
-						+ nameToOptions.values() + " initialized in "
+				LOG.debug("engineName=" + engineName + " engineAuthor=" + engineAuthor + "UCI_Chess960="
+						+ supportsFischerRandom + " Options:\n" + nameToOptions.values() + " initialized in "
 						+ (System.currentTimeMillis() - startTime));
 			}
 
@@ -164,7 +163,6 @@ public class UCIEngine {
 		result.setUserName(userName);
 		result.setGoAnalysisParameters(goAnalysisParameters);
 		result.nameToOptions = nameToOptions;
-		result.overrideOptions = overrideOptions;
 		result.isDefault = isDefault;
 		return result;
 	}
@@ -187,7 +185,7 @@ public class UCIEngine {
 	public UCIOption getOption(String name) {
 		return nameToOptions.get(name);
 	}
-	
+
 	/**
 	 * Returns true if the engine has the specified option, false otherwise.
 	 */
@@ -200,14 +198,6 @@ public class UCIEngine {
 	 */
 	public String[] getOptionNames() {
 		return nameToOptions.keySet().toArray(new String[0]);
-	}
-
-	public String getOverrideOption(String name) {
-		return overrideOptions.get(name);
-	}
-
-	public String[] getOverrideOptionNames() {
-		return overrideOptions.keySet().toArray(new String[0]);
 	}
 
 	public String[] getParameters() {
@@ -291,6 +281,7 @@ public class UCIEngine {
 				public void run() {
 					try {
 						String line = readLine();
+
 						while (!cancelGo && line != null) {
 							if (line.startsWith("info")) {
 								parseInfoLine(line, listener);
@@ -421,8 +412,7 @@ public class UCIEngine {
 	 * search.
 	 */
 	public void ponderHit(Move move) {
-		throw new UnsupportedOperationException(
-				"ponderHit is not yet implemented");
+		throw new UnsupportedOperationException("ponderHit is not yet implemented");
 	}
 
 	/**
@@ -503,10 +493,6 @@ public class UCIEngine {
 		}
 
 		try {
-			if (!option.isDefaultValue()) {
-				overrideOptions.put(option.getName(), option.getValue());
-			}
-
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Entering setOption(" + option + ")");
 			}
@@ -514,8 +500,7 @@ public class UCIEngine {
 			if (option instanceof UCIButton) {
 				send("setoption name " + option.getName());
 			} else {
-				send("setoption name " + option.getName() + " value "
-						+ option.getValue());
+				send("setoption name " + option.getName() + " value " + option.getValue());
 			}
 
 			if (LOG.isDebugEnabled()) {
@@ -525,10 +510,6 @@ public class UCIEngine {
 			LOG.warn("Error occured setting option: " + option, t);
 			disconnect();
 		}
-	}
-
-	public void setOverrideOption(String name, String value) {
-		overrideOptions.put(name, value);
 	}
 
 	public void setParameters(String[] parameters) {
@@ -564,7 +545,7 @@ public class UCIEngine {
 		} else {
 			StringBuffer movesString = new StringBuffer();
 			for (UCIMove move : moves) {
-                movesString.append(StringUtils.isBlank(movesString.toString()) ? "" : " ").append(move.getValue());
+				movesString.append(StringUtils.isBlank(movesString.toString()) ? "" : " ").append(move.getValue());
 			}
 			send("position fen " + fen + " " + movesString);
 		}
@@ -611,7 +592,7 @@ public class UCIEngine {
 		} else {
 			StringBuffer movesString = new StringBuffer();
 			for (UCIMove move : moves) {
-                movesString.append(movesString.toString().isEmpty() ? "" : " ").append(move.getValue());
+				movesString.append(movesString.toString().isEmpty() ? "" : " ").append(move.getValue());
 			}
 			send("position startpos " + movesString);
 		}
@@ -718,12 +699,11 @@ public class UCIEngine {
 	}
 
 	protected UCIBestMove parseBestMove(String bestMove) {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("parseBestMove(" + bestMove + ")");
-		}
 
-		RaptorStringTokenizer tok = new RaptorStringTokenizer(bestMove, " ",
-				true);
+		if (LOG.isDebugEnabled())
+			LOG.debug("parseBestMove(" + bestMove + ")");
+
+		RaptorStringTokenizer tok = new RaptorStringTokenizer(bestMove, " ", true);
 
 		UCIBestMove result = new UCIBestMove();
 		result.setBestMove(parseUCIMove(tok.nextToken()));
@@ -739,9 +719,9 @@ public class UCIEngine {
 	}
 
 	protected void parseIdLine(String idLine) {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Parsing id line: " + idLine);
-		}
+
+		if (LOG.isDebugEnabled())
+			LOG.debug("parseIdLine(" + idLine + ")");
 
 		RaptorStringTokenizer tok = new RaptorStringTokenizer(idLine, " ", true);
 		tok.nextToken();
@@ -754,8 +734,7 @@ public class UCIEngine {
 			engineAuthor = varValue;
 		} else {
 			if (LOG.isInfoEnabled()) {
-				LOG.info("Unknown id variable name. " + varName + "="
-						+ varValue);
+				LOG.info("Unknown id variable name. " + varName + "=" + varValue);
 			}
 		}
 	}
@@ -842,10 +821,10 @@ public class UCIEngine {
 	protected void parseInfoLine(String info, UCIInfoListener listener) {
 		if (!isProcessingGo() || Thread.holdsLock(stopSynch))
 			return;
-		
-		if (LOG.isDebugEnabled()) {
+
+		if (LOG.isDebugEnabled())
 			LOG.debug("Entering parseInfoLine(" + info + ",...)");
-		}
+
 		RaptorStringTokenizer tok = new RaptorStringTokenizer(info, " ", true);
 		tok.nextToken();
 
@@ -873,8 +852,7 @@ public class UCIEngine {
 
 			if (type.equalsIgnoreCase("depth")) {
 				DepthInfo depthInfo = new DepthInfo();
-				depthInfo
-						.setSearchDepthPlies(Integer.parseInt(tok.nextToken()));
+				depthInfo.setSearchDepthPlies(Integer.parseInt(tok.nextToken()));
 				infos.add(depthInfo);
 			} else if (type.equalsIgnoreCase("seldepth")) {
 				SelectiveSearchDepthInfo ssDepthInfo = new SelectiveSearchDepthInfo();
@@ -886,8 +864,7 @@ public class UCIEngine {
 				infos.add(timeInfo);
 			} else if (type.equalsIgnoreCase("nodes")) {
 				NodesSearchedInfo nodesSearched = new NodesSearchedInfo();
-				nodesSearched.setNodesSearched(Integer
-						.parseInt(tok.nextToken()));
+				nodesSearched.setNodesSearched(Long.parseLong(tok.nextToken()));
 				infos.add(nodesSearched);
 			} else if (type.equalsIgnoreCase("pv")) {
 				BestLineFoundInfo bestLineFoundInfo = new BestLineFoundInfo();
@@ -908,18 +885,16 @@ public class UCIEngine {
 				bestLineFoundInfo.setMoves(currentLine.toArray(new UCIMove[0]));
 				infos.add(bestLineFoundInfo);
 			} else if (type.equalsIgnoreCase("multipv")) {
-				tok.nextToken();
+				infos.add(new MultiPV(tok.nextToken()));
 			} else if (type.equalsIgnoreCase("score")) {
 				ScoreInfo scoreInfo = new ScoreInfo();
 				String nextToken = tok.nextToken();
-				
+
 				while (true) {
 					if (nextToken.equalsIgnoreCase("cp")) {
-						scoreInfo.setValueInCentipawns(Integer.parseInt(tok
-								.nextToken()));
+						scoreInfo.setValueInCentipawns(Integer.parseInt(tok.nextToken()));
 					} else if (nextToken.equalsIgnoreCase("mate")) {
-						scoreInfo.setMateInMoves(Integer.parseInt(tok
-								.nextToken()));
+						scoreInfo.setMateInMoves(Integer.parseInt(tok.nextToken()));
 					} else if (nextToken.equalsIgnoreCase("lowerbound")) {
 						scoreInfo.setLowerBoundScore(true);
 					} else if (nextToken.equalsIgnoreCase("upperbound")) {
@@ -946,8 +921,7 @@ public class UCIEngine {
 				tok.nextToken();
 			} else if (type.equalsIgnoreCase("nps")) {
 				NodesPerSecondInfo nodesPerSecInfo = new NodesPerSecondInfo();
-				nodesPerSecInfo.setNodesPerSecond(Integer.parseInt(tok
-						.nextToken()));
+				nodesPerSecInfo.setNodesPerSecond(Long.parseLong(tok.nextToken()));
 				infos.add(nodesPerSecInfo);
 			} else if (type.equalsIgnoreCase("tbhits")) {
 				TableBaseHitsInfo tbInfo = new TableBaseHitsInfo();
@@ -970,12 +944,10 @@ public class UCIEngine {
 
 	protected void parseOptionLine(String optionLine) {
 
-		if (LOG.isDebugEnabled()) {
+		if (LOG.isDebugEnabled())
 			LOG.debug("Parsing option line: " + optionLine);
-		}
 
-		RaptorStringTokenizer tok = new RaptorStringTokenizer(optionLine, " ",
-				true);
+		RaptorStringTokenizer tok = new RaptorStringTokenizer(optionLine, " ", true);
 		tok.nextToken();
 		tok.nextToken();
 		String name = parseUntil("type", tok);
@@ -999,17 +971,11 @@ public class UCIEngine {
 			}
 
 			if (defaultValue == null) {
-				LOG
-						.warn("Spinner type encountered without a default. Ignoring option. "
-								+ optionLine);
+				LOG.warn("Spinner type encountered without a default. Ignoring option. " + optionLine);
 			} else if (minValue == -1) {
-				LOG
-						.warn("Spinner type encountered without a min. Ignoring option. "
-								+ optionLine);
+				LOG.warn("Spinner type encountered without a min. Ignoring option. " + optionLine);
 			} else if (maxValue == -1) {
-				LOG
-						.warn("Spinner type encountered without a max. Ignoring option. "
-								+ optionLine);
+				LOG.warn("Spinner type encountered without a max. Ignoring option. " + optionLine);
 			}
 
 			UCISpinner spinner = new UCISpinner();
@@ -1043,9 +1009,7 @@ public class UCIEngine {
 			}
 			UCICheck check = new UCICheck();
 			check.setName(name);
-			check
-					.setDefaultValue(defaultValue == null ? "false"
-							: defaultValue);
+			check.setDefaultValue(defaultValue == null ? "false" : defaultValue);
 			option = check;
 		} else if (type.equalsIgnoreCase("combo")) {
 			String nextToken = tok.nextToken();
@@ -1069,8 +1033,8 @@ public class UCIEngine {
 			button.setName(name);
 			option = button;
 		} else {
-			LOG
-					.warn("Unknown option type encountered in line (Please post this on the Raptor site as an issue so it can be added). "
+			LOG.warn(
+					"Unknown option type encountered in line (Please post this on the Raptor site as an issue so it can be added). "
 							+ optionLine);
 		}
 
@@ -1093,7 +1057,7 @@ public class UCIEngine {
 		}
 
 		if (!token.equalsIgnoreCase(untilKeyword)) {
-            result.append(result.toString().equals("") ? "" : " ").append(token);
+			result.append(result.toString().equals("") ? "" : " ").append(token);
 			result.append(token);
 		}
 		return result.toString();
@@ -1128,29 +1092,12 @@ public class UCIEngine {
 			out.print(command + "\n");
 			out.flush();
 		} catch (Throwable t) {
-			LOG.error("Error sending " + command + " to UCI Engine "
-					+ toString(), t);
+			LOG.error("Error sending " + command + " to UCI Engine " + toString(), t);
 			disconnect();
 		}
 	}
 
-	/**
-	 * Sends all of the options that do not have default values to the engine.
-	 */
-	protected void sendAllNonDefaultOptions() {
-		for (Map.Entry<String, String> stringStringEntry : overrideOptions.entrySet()) {
-			UCIOption option = getOption(stringStringEntry.getKey());
-			if (option != null) {
-				option.setValue(stringStringEntry.getValue());
-				setOption(option);
-			} else {
-				LOG.warn("Could not set default value for property "
-						+ stringStringEntry.getKey());
-			}
-		}
-	}
-
-	public boolean supportsFischerRandom() {		
+	public boolean supportsFischerRandom() {
 		return supportsFischerRandom;
 	}
 

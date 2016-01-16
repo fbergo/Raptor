@@ -15,4 +15,12 @@ package raptor.engine.uci;
 
 public abstract class UCIInfo {
 	protected String infoString;
+
+	public String getInfoString() {
+		return infoString;
+	}
+
+	public void setInfoString(String infoString) {
+		this.infoString = infoString;
+	}
 }

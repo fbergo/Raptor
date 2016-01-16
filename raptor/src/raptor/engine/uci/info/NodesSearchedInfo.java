@@ -16,13 +16,13 @@ package raptor.engine.uci.info;
 import raptor.engine.uci.UCIInfo;
 
 public class NodesSearchedInfo extends UCIInfo {
-	protected int nodesSearched;
+	protected long nodesSearched;
 
-	public int getNodesSearched() {
+	public long getNodesSearched() {
 		return nodesSearched;
 	}
 
-	public void setNodesSearched(int nodesSearched) {
+	public void setNodesSearched(long nodesSearched) {
 		this.nodesSearched = nodesSearched;
 	}
 
