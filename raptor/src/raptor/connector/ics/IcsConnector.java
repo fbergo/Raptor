@@ -64,7 +64,6 @@ import raptor.script.ScriptContext;
 import raptor.service.BughouseService;
 import raptor.service.ChatService;
 import raptor.service.GameService;
-import raptor.service.GameService.GameServiceAdapter;
 import raptor.service.GameService.GameServiceListener;
 import raptor.service.GameService.Offer;
 import raptor.service.GameService.Offer.OfferType;
@@ -113,6 +112,35 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	private static final RaptorLogger LOG = RaptorLogger.getLog(IcsConnector.class);
 	public static final String LOGIN_CHARACTERS_TO_FILTER = "\uefbf\ubdef\ubfbd\uefbf\ubdef\ubfbd\ud89e\u0001";
 
+	protected class KeepAlive implements Runnable {
+		private boolean kill = false;
+
+		public void kill() {
+			kill = true;
+		}
+
+		public void run() {
+			if (!kill || (isConnected() && getPreferences().getBoolean(context.getShortName() + "-keep-alive"))) {
+				if (System.currentTimeMillis() - lastSendTime > 1000 * 60 * 50) {
+					String command = getPreferences()
+							.getString(context.getPreferencePrefix() + PreferenceKeys.KEEP_ALIVE_COMMAND);
+
+					if (StringUtils.isBlank(command)) {
+						command = "date";
+					}
+					sendMessage(command, true);
+					publishEvent(new ChatEvent("", ChatType.INTERNAL,
+							"The messsage: \"" + command + "\" was just sent as a keep alive."));
+				}
+				ThreadService.getInstance().scheduleOneShot(1000 * 60 * 5, this);
+			}
+		}
+
+		public String toString() {
+			return "IcsConnector.KeepAlive Runnable";
+		}
+	};
+
 	protected BughouseService bughouseService;
 
 	protected ChatService chatService;
@@ -138,7 +166,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	/**
 	 * Adds the game windows to the RaptorAppWindow.
 	 */
-	protected GameServiceListener gameServiceListener = new GameServiceAdapter() {
+	protected GameServiceListener gameServiceListener = new GameService.GameServiceAdapter() {
 		@Override
 		public void gameCreated(Game game) {
 			if (game instanceof BughouseGame) {
@@ -188,28 +216,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	protected long lagNotifyCounter = 0;
 
 	protected String simulBugPartnerName;
-	protected Runnable keepAlive = new Runnable() {
-		public void run() {
-			if (isConnected() && getPreferences().getBoolean(context.getShortName() + "-keep-alive")) {
-				if (System.currentTimeMillis() - lastSendTime > 1000 * 60 * 50) {
-					String command = getPreferences()
-							.getString(context.getPreferencePrefix() + PreferenceKeys.KEEP_ALIVE_COMMAND);
-
-					if (StringUtils.isBlank(command)) {
-						command = "date";
-					}
-					sendMessage(command, true);
-					publishEvent(new ChatEvent("", ChatType.INTERNAL,
-							"The messsage: \"" + command + "\" was just sent as a keep alive."));
-				}
-				ThreadService.getInstance().scheduleOneShot(1000 * 60 * 5, this);
-			}
-		}
-
-		public String toString() {
-			return "IcsConnector.KeepAlive Runnable";
-		}
-	};
+	protected KeepAlive keepAlive = new KeepAlive();
 
 	protected long lastPingTime;
 	protected long lastSendTime;
@@ -256,25 +263,21 @@ public abstract class IcsConnector implements Connector, MessageListener {
 
 	@Override
 	public MenuManager getMenuManager() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public PreferencePage getRootPreferencePage() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public PreferenceNode[] getSecondaryPreferenceNodes() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isLoggedInUserPlayingAGame() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -484,12 +487,13 @@ public abstract class IcsConnector implements Connector, MessageListener {
 					}
 				}
 				if (keepAlive != null) {
-					ThreadService.getInstance().getExecutor().remove(keepAlive);
+					keepAlive.kill();
 				}
 			} catch (Throwable t) {
 				LOG.error("Error disconencting from ICSConnector.", t);
 			} finally {
 				messageProducer = null;
+				keepAlive = null;
 				isSimulBugConnector = false;
 				simulBugPartnerName = null;
 				peopleToSpeakTellsFrom.clear();
