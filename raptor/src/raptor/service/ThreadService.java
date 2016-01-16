@@ -44,11 +44,16 @@ public class ThreadService {
 		}
 
 		public void run() {
-			try {
-				runnable.run();
-			} catch (Throwable t) {
-				Raptor.getInstance().onError(
-						"Error in ThreadService Runnable.", t);
+			if (runnable != null) {
+				try {
+					runnable.run();
+				} catch (Throwable t) {
+					Raptor.getInstance().onError("Error in ThreadService Runnable.", t);
+				}
+			} else {
+				LOG.error(
+						"Attempted to create a RunnableExectionDecorator for a null Runnable! Please fix this its a programming error!",
+						new Throwable());
 			}
 		}
 
@@ -57,8 +62,8 @@ public class ThreadService {
 	private static final ThreadService instance = new ThreadService();
 	private static final RaptorLogger LOG = RaptorLogger.getLog(ThreadService.class);
 
-	public static final String THREAD_DUMP_FILE_PATH = Raptor.USER_RAPTOR_HOME_PATH
-			+ "/logs/threaddump_" + System.currentTimeMillis() + ".txt";
+	public static final String THREAD_DUMP_FILE_PATH = Raptor.USER_RAPTOR_HOME_PATH + "/logs/threaddump_"
+			+ System.currentTimeMillis() + ".txt";
 
 	public static ThreadService getInstance() {
 		return instance;
@@ -68,25 +73,19 @@ public class ThreadService {
 	 * Dumps stack traces of all threads to threaddump.txt.
 	 */
 	public static void threadDump() {
-		LOG
-				.error("All threads are in use. Logging the thread stack trace to threaddump.txt and exiting.");
+		LOG.error("All threads are in use. Logging the thread stack trace to threaddump.txt and exiting.");
 		final ThreadMXBean threads = ManagementFactory.getThreadMXBean();
 		long[] threadIds = threads.getAllThreadIds();
 		PrintWriter printWriter = null;
 		try {
-			printWriter = new PrintWriter(new FileWriter(THREAD_DUMP_FILE_PATH,
-					false));
-			printWriter.println("Raptor ThreadService initiated dump "
-					+ new Date());
+			printWriter = new PrintWriter(new FileWriter(THREAD_DUMP_FILE_PATH, false));
+			printWriter.println("Raptor ThreadService initiated dump " + new Date());
 			for (long threadId : threadIds) {
 				ThreadInfo threadInfo = threads.getThreadInfo(threadId, 10);
-				printWriter.println("Thread " + threadInfo.getThreadName()
-						+ " Block time:" + threadInfo.getBlockedTime()
-						+ " Block count:" + threadInfo.getBlockedCount()
-						+ " Lock name:" + threadInfo.getLockName()
-						+ " Waited Count:" + threadInfo.getWaitedCount()
-						+ " Waited Time:" + threadInfo.getWaitedTime()
-						+ " Is Suspended:" + threadInfo.isSuspended());
+				printWriter.println("Thread " + threadInfo.getThreadName() + " Block time:"
+						+ threadInfo.getBlockedTime() + " Block count:" + threadInfo.getBlockedCount() + " Lock name:"
+						+ threadInfo.getLockName() + " Waited Count:" + threadInfo.getWaitedCount() + " Waited Time:"
+						+ threadInfo.getWaitedTime() + " Is Suspended:" + threadInfo.isSuspended());
 				StackTraceElement[] stackTrace = threadInfo.getStackTrace();
 				for (StackTraceElement element : stackTrace) {
 					printWriter.println(element);
@@ -112,7 +111,7 @@ public class ThreadService {
 
 	private ThreadService() {
 		executor.setCorePoolSize(25);
-		//executor.setMaximumPoolSize(50);
+		// executor.setMaximumPoolSize(50);
 		executor.setKeepAliveTime(300, TimeUnit.SECONDS);
 		executor.prestartAllCoreThreads();
 	}
@@ -139,13 +138,12 @@ public class ThreadService {
 					LOG.error("Error executing runnable: ", rej);
 					threadDump();
 					Raptor.getInstance().onError(
-							"ThreadServie has no more threads. A thread dump can be found at "
-									+ THREAD_DUMP_FILE_PATH, rej);
+							"ThreadServie has no more threads. A thread dump can be found at " + THREAD_DUMP_FILE_PATH,
+							rej);
 				}
 			}
 		} else {
-			LOG.info("Vetoing runnable in ThreadService, raptor is disposed. "
-					+ runnable);
+			LOG.info("Vetoing runnable in ThreadService, raptor is disposed. " + runnable);
 		}
 	}
 
@@ -163,16 +161,13 @@ public class ThreadService {
 	public Future<?> scheduleOneShot(long delay, Runnable runnable) {
 		if (!Raptor.getInstance().isDisposed() && !isDisposed) {
 			try {
-				return executor.schedule(new RunnableExceptionDecorator(
-						runnable), delay, TimeUnit.MILLISECONDS);
+				return executor.schedule(new RunnableExceptionDecorator(runnable), delay, TimeUnit.MILLISECONDS);
 			} catch (RejectedExecutionException rej) {
 				if (!Raptor.getInstance().isDisposed()) {
-					LOG.error("Error executing runnable in scheduleOneShot: ",
-							rej);
+					LOG.error("Error executing runnable in scheduleOneShot: ", rej);
 					threadDump();
 					Raptor.getInstance().onError(
-							"ThreadServie has no more threads. A thread dump can be found at "
-									+ THREAD_DUMP_FILE_PATH);
+							"ThreadServie has no more threads. A thread dump can be found at " + THREAD_DUMP_FILE_PATH);
 				}
 				return null;
 			}
