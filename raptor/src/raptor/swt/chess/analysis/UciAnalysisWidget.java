@@ -27,6 +27,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -74,155 +76,167 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 	protected ChessBoardController controller;
 	protected Composite composite, topLine;
 	protected UCIEngine engine;
+	protected Label depthHeaderLabel;
 	protected Label depthLabel;
+	protected Label timeHeaderLabel;
 	protected Label timeLabel;
+	protected Label notesHeaderLabel;
 	protected Label nodesLabel;
+	protected Label bestMoveHeaderLabel;
 	protected Label bestMoveLabel;
 	protected Combo engineCombo;
 	protected RaptorTable bestMoves;
 	protected Button startStopButton;
 	protected static L10n local = L10n.getInstance();
+	protected Object engineLock = new Object();
+
 	protected UCIInfoListener listener = new UCIInfoListener() {
 		public void engineSentBestMove(UCIBestMove uciBestMove) {
 		}
 
 		public void engineSentInfo(final UCIInfo[] infos) {
-			Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
-				@Override
-				public void execute() {
-					int multiPv = -1;
-					String score = null;
-					String time = null;
-					String depth = null;
-					String nps = null;
-					String pv = null;
-					String bestMove = null;
+			if (engine.isConnected()) {
+				Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
+					@Override
+					public void execute() {
+						int multiPv = -1;
+						String score = null;
+						String time = null;
+						String depth = null;
+						String nps = null;
+						String pv = null;
+						String bestMove = null;
 
-					for (UCIInfo info : infos) {
-						if (info instanceof ScoreInfo) {
-							ScoreInfo scoreInfo = (ScoreInfo) info;
-							if (((ScoreInfo) info).getMateInMoves() != 0) {
-								score = "Mate in " + scoreInfo.getMateInMoves();
-							} else if (scoreInfo.isLowerBoundScore()) {
-								score = "Calibrating";
-							} else if (scoreInfo.isUpperBoundScore()) {
-								score = "Calibrating";
-							} else {
-								double scoreAsDouble = controller.getGame().isWhitesMove()
-										|| !engine.isMultiplyBlackScoreByMinus1()
-												? scoreInfo.getValueInCentipawns() / 100.0
-												: -scoreInfo.getValueInCentipawns() / 100.0;
+						for (UCIInfo info : infos) {
+							if (info instanceof ScoreInfo) {
+								ScoreInfo scoreInfo = (ScoreInfo) info;
+								if (((ScoreInfo) info).getMateInMoves() != 0) {
+									score = "Mate in " + scoreInfo.getMateInMoves();
+								} else if (scoreInfo.isLowerBoundScore()) {
+									score = "Calibrating";
+								} else if (scoreInfo.isUpperBoundScore()) {
+									score = "Calibrating";
+								} else {
+									double scoreAsDouble = controller.getGame().isWhitesMove()
+											|| !engine.isMultiplyBlackScoreByMinus1()
+													? scoreInfo.getValueInCentipawns() / 100.0
+													: -scoreInfo.getValueInCentipawns() / 100.0;
 
-								score = "" + new BigDecimal(scoreAsDouble).setScale(2, BigDecimal.ROUND_HALF_UP)
-										.toString();
-							}
-						} else if (info instanceof DepthInfo) {
-							DepthInfo depthInfo = (DepthInfo) info;
-							depth = "" + depthInfo.getSearchDepthPlies();
-						} else if (info instanceof NodesPerSecondInfo) {
-							NodesPerSecondInfo nodesPerSecInfo = (NodesPerSecondInfo) info;
-							nps = DECIMAL_FORMAT.format(nodesPerSecInfo.getNodesPerSecond());
-						} else if (info instanceof TimeInfo) {
-							TimeInfo timeInfo = (TimeInfo) info;
-							time = new BigDecimal(timeInfo.getTimeMillis() / 1000.0)
-									.setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-						} else if (info instanceof BestLineFoundInfo) {
-							BestLineFoundInfo bestLineFoundInfo = (BestLineFoundInfo) info;
-							StringBuilder line = new StringBuilder(100);
-							Game gameClone = controller.getGame().deepCopy(true);
-							gameClone.addState(Game.UPDATING_SAN_STATE);
-							gameClone.clearState(Game.UPDATING_ECO_HEADERS_STATE);
-
-							boolean isFirstMove = true;
-
-							for (UCIMove move : bestLineFoundInfo.getMoves()) {
-								try {
-									Move gameMove = null;
-
-									if (move.isPromotion()) {
-										gameMove = gameClone.makeMove(move.getStartSquare(), move.getEndSquare(),
-												move.getPromotedPiece());
-									} else {
-										gameMove = gameClone.makeMove(move.getStartSquare(), move.getEndSquare());
-									}
-
-									String san = GameUtils.convertSanToUseUnicode(gameMove.getSan(),
-											gameMove.isWhitesMove());
-									String moveNumber = isFirstMove && !gameMove.isWhitesMove()
-											? gameMove.getFullMoveCount() + ") ... "
-											: gameMove.isWhitesMove() ? gameMove.getFullMoveCount() + ") " : "";
-									line.append((line.equals("") ? "" : " ") + moveNumber + san
-											+ (gameClone.isInCheck() ? "+" : "")
-											+ (gameClone.isCheckmate() ? "#" : ""));
-									if (isFirstMove) {
-										bestMove = moveNumber + san + (gameClone.isInCheck() ? "+" : "")
-												+ (gameClone.isCheckmate() ? "#" : "");
-									}
-									isFirstMove = false;
-								} catch (Throwable t) {
-									if (LOG.isInfoEnabled()) {
-										LOG.info("Illegal line found skipping line (This can occur if the position was "
-												+ "changing when the analysis line was being calculated).", t);
-									}
-									break;
+									score = "" + new BigDecimal(scoreAsDouble).setScale(2, BigDecimal.ROUND_HALF_UP)
+											.toString();
 								}
+							} else if (info instanceof DepthInfo) {
+								DepthInfo depthInfo = (DepthInfo) info;
+								depth = "" + depthInfo.getSearchDepthPlies();
+							} else if (info instanceof NodesPerSecondInfo) {
+								NodesPerSecondInfo nodesPerSecInfo = (NodesPerSecondInfo) info;
+								nps = DECIMAL_FORMAT.format(nodesPerSecInfo.getNodesPerSecond());
+							} else if (info instanceof TimeInfo) {
+								TimeInfo timeInfo = (TimeInfo) info;
+								time = new BigDecimal(timeInfo.getTimeMillis() / 1000.0)
+										.setScale(1, BigDecimal.ROUND_HALF_UP).toString();
+							} else if (info instanceof BestLineFoundInfo) {
+								BestLineFoundInfo bestLineFoundInfo = (BestLineFoundInfo) info;
+								StringBuilder line = new StringBuilder(100);
+								Game gameClone = controller.getGame().deepCopy(true);
+								gameClone.addState(Game.UPDATING_SAN_STATE);
+								gameClone.clearState(Game.UPDATING_ECO_HEADERS_STATE);
+
+								boolean isFirstMove = true;
+
+								for (UCIMove move : bestLineFoundInfo.getMoves()) {
+									try {
+										Move gameMove = null;
+
+										if (move.isPromotion()) {
+											gameMove = gameClone.makeMove(move.getStartSquare(), move.getEndSquare(),
+													move.getPromotedPiece());
+										} else {
+											gameMove = gameClone.makeMove(move.getStartSquare(), move.getEndSquare());
+										}
+
+										String san = GameUtils.convertSanToUseUnicode(gameMove.getSan(),
+												gameMove.isWhitesMove());
+										String moveNumber = isFirstMove && !gameMove.isWhitesMove()
+												? gameMove.getFullMoveCount() + ") ... "
+												: gameMove.isWhitesMove() ? gameMove.getFullMoveCount() + ") " : "";
+										line.append((line.equals("") ? "" : " ") + moveNumber + san
+												+ (gameClone.isInCheck() ? "+" : "")
+												+ (gameClone.isCheckmate() ? "#" : ""));
+										if (isFirstMove) {
+											bestMove = moveNumber + san + (gameClone.isInCheck() ? "+" : "")
+													+ (gameClone.isCheckmate() ? "#" : "");
+										}
+										isFirstMove = false;
+									} catch (Throwable t) {
+										if (LOG.isInfoEnabled()) {
+											LOG.info(
+													"Illegal line found skipping line (This can occur if the position was "
+															+ "changing when the analysis line was being calculated).",
+													t);
+										}
+										break;
+									}
+								}
+								pv = line.toString();
+							} else if (info instanceof MultiPV) {
+								MultiPV multiPvInfo = (MultiPV) info;
+								multiPv = multiPvInfo.getId();
 							}
-							pv = line.toString();
-						} else if (info instanceof MultiPV) {
-							MultiPV multiPvInfo = (MultiPV) info;
-							multiPv = multiPvInfo.getId();
+						}
+
+						if (score != null && multiPv != -1) {
+							final String finalScore = score;
+							final String finalTime = time;
+							final String finalDepth = depth;
+							final String finalNodes = nps;
+							final String finalPV = pv;
+							final String finalBestMove = bestMove;
+							final int finalMultiPv = multiPv;
+
+							Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
+								@Override
+								public void execute() {
+									if (composite.isDisposed()) {
+										return;
+									}
+
+									if (bestMoves.getRowCount() == 0) {
+										String[][] data = new String[UCIEngine.MULTI_PLY][6];
+										for (int i = 0; i < data.length; i++)
+											for (int j = 0; j < data[i].length; j++)
+												data[i][j] = "";
+										bestMoves.refreshTable(data);
+									}
+
+									int row = finalMultiPv - 1;
+
+									if (StringUtils.isNotBlank(finalScore)) {
+										bestMoves.setText(row, 0, finalScore);
+									}
+									if (StringUtils.isNotBlank(finalPV)) {
+										bestMoves.setText(row, 1, finalPV);
+									}
+									if (StringUtils.isNotBlank(finalDepth)) {
+										depthLabel.setText(finalDepth);
+									}
+									if (StringUtils.isNotBlank(finalTime)) {
+										timeLabel.setText(finalTime);
+									}
+									if (StringUtils.isNotBlank(finalNodes)) {
+										nodesLabel.setText(finalNodes);
+									}
+									if (row == 0 && StringUtils.isNotBlank(finalBestMove)) {
+										bestMoveLabel.setText(finalBestMove);
+									}
+
+									topLine.layout();
+								}
+							});
 						}
 					}
-
-					if (score != null && multiPv != -1) {
-						final String finalScore = score;
-						final String finalTime = time;
-						final String finalDepth = depth;
-						final String finalNodes = nps;
-						final String finalPV = pv;
-						final String finalBestMove = bestMove;
-						final int finalMultiPv = multiPv;
-
-						Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
-							@Override
-							public void execute() {
-								if (composite.isDisposed()) {
-									return;
-								}
-
-								if (bestMoves.getRowCount() == 0) {
-									String[][] data = new String[UCIEngine.MULTI_PLY][6];
-									for (int i = 0; i < data.length; i++)
-										for (int j = 0; j < data[i].length; j++)
-											data[i][j] = "";
-									bestMoves.refreshTable(data);
-								}
-
-								int row = finalMultiPv - 1;
-
-								if (StringUtils.isNotBlank(finalScore)) {
-									bestMoves.setText(row, 0, finalScore);
-								}
-								if (StringUtils.isNotBlank(finalPV)) {
-									bestMoves.setText(row, 1, finalPV);
-								}
-								if (StringUtils.isNotBlank(finalDepth)) {
-									depthLabel.setText("   " + local.getString("uciAnalDepth") + " " + finalDepth);
-								}
-								if (StringUtils.isNotBlank(finalTime)) {
-									timeLabel.setText(local.getString("uciAnalTime") + " " + finalTime);
-								}
-								if (StringUtils.isNotBlank(finalNodes)) {
-									nodesLabel.setText(local.getString("uciAnalNodes") + " " + finalNodes);
-								}
-								if (row == 0 && StringUtils.isNotBlank(finalBestMove)) {
-									bestMoveLabel.setText(local.getString("uciAnalBestMove") + " " + finalBestMove);
-								}
-							}
-						});
-					}
-				}
-			});
+				});
+			}
 		}
 	};
 
@@ -280,17 +294,37 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 				}
 			}
 		});
-		depthLabel = new Label(topLine, SWT.LEFT);
-		depthLabel.setText("   " + local.getString("uciAnalDepth") + "     ");
 
-		nodesLabel = new Label(topLine, SWT.LEFT);
-		nodesLabel.setText(local.getString("uciAnalNodes") + "               ");
-
-		timeLabel = new Label(topLine, SWT.LEFT);
-		timeLabel.setText(local.getString("uciAnalTime") + "     ");
+		bestMoveHeaderLabel = new Label(topLine, SWT.LEFT);
+		bestMoveHeaderLabel.setText("   " + local.getString("uciAnalBestMove"));
 
 		bestMoveLabel = new Label(topLine, SWT.LEFT);
-		bestMoveLabel.setText(local.getString("uciAnalBestMove") + "                ");
+		bestMoveLabel.setText("");
+
+		depthHeaderLabel = new Label(topLine, SWT.LEFT);
+		depthHeaderLabel.setText("   " + local.getString("uciAnalDepth"));
+		depthLabel = new Label(topLine, SWT.LEFT);
+		depthLabel.setText("");
+
+		notesHeaderLabel = new Label(topLine, SWT.LEFT);
+		notesHeaderLabel.setText("   " + local.getString("uciAnalNodes"));
+
+		nodesLabel = new Label(topLine, SWT.LEFT);
+		nodesLabel.setText(local.getString("uciAnalNodes"));
+
+		timeHeaderLabel = new Label(topLine, SWT.LEFT);
+		timeHeaderLabel.setText("   " + local.getString("uciAnalTime"));
+
+		timeLabel = new Label(topLine, SWT.LEFT);
+		timeLabel.setText("");
+
+		FontData fontData = depthHeaderLabel.getFont().getFontData()[0];
+		Font headerFont = new Font(Raptor.getInstance().getDisplay(),
+				new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+		depthHeaderLabel.setFont(headerFont);
+		notesHeaderLabel.setFont(headerFont);
+		timeHeaderLabel.setFont(headerFont);
+		bestMoveHeaderLabel.setFont(headerFont);
 
 		bestMoves = new RaptorTable(composite, SWT.BORDER | SWT.FULL_SELECTION, false, true);
 		bestMoves.setToolTipText(local.getString("uciAnalW_37"));
@@ -371,7 +405,10 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		if (engine != null) {
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
-					engine.quit();
+					try {
+						engine.quit();
+					} catch (Throwable t) {
+					}
 					Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
 						@Override
 						public void execute() {
@@ -403,30 +440,36 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 						LOG.debug("In UciAnalysisWidget.start(" + engine.getUserName() + ")");
 					}
 					try {
-						if (!engine.isConnected()) {
-							engine.connect();
-						}
-
-						if (controller.getGame().getVariant() == Variant.fischerRandom
-								&& engine.hasOption("UCI_Chess960")) {
-							UCICheck opt = (UCICheck) engine.getOption("UCI_Chess960");
-							opt.setValue("true");
-						}
-
-						engine.newGame();
-						engine.setPosition(controller.getGame().toFen(), null);
-						engine.isReady();
-						engine.go(engine.getGoAnalysisParameters(), listener);
-						Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
-							@Override
-							public void execute() {
-								if (composite.isVisible()) {
-									startStopButton.setText(local.getString("uciAnalW_54"));
-									bestMoves.clearTable();
-								}
+						synchronized (engineLock) {
+							try {
+								engine.stop();
+							} catch (Throwable t) {
 							}
-						});
 
+							if (!engine.isConnected()) {
+								engine.connect();
+							}
+
+							if (controller.getGame().getVariant() == Variant.fischerRandom
+									&& engine.hasOption("UCI_Chess960")) {
+								UCICheck opt = (UCICheck) engine.getOption("UCI_Chess960");
+								opt.setValue("true");
+							}
+
+							engine.newGame();
+							engine.setPosition(controller.getGame().toFen(), null);
+							engine.isReady();
+							engine.go(engine.getGoAnalysisParameters(), listener);
+							Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
+								@Override
+								public void execute() {
+									if (composite.isVisible()) {
+										startStopButton.setText(local.getString("uciAnalW_54"));
+										bestMoves.clearTable();
+									}
+								}
+							});
+						}
 					} catch (Throwable t) {
 						LOG.error("Error starting engine", t);
 					} finally {
