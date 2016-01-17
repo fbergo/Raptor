@@ -33,7 +33,7 @@ public class ClearChannelsAlias extends RaptorAlias {
 			String command) {
 		if (command.equalsIgnoreCase("clear channels")) {
 			RaptorAliasResult result = new RaptorAliasResult("=chan", null);
-			controller.getConnector().invokeOnNextMatch(
+			controller.getConnector().invokeOnNextRegexMatch(
 					"\\-\\- channel list\\:.*", new MessageCallback() {
 
 						public boolean matchReceived(ChatEvent event) {

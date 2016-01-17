@@ -149,8 +149,7 @@ public interface Connector {
 	/**
 	 * Returns the ParameterScriptContext for the specified parameters.
 	 */
-	public ParameterScriptContext getParameterScriptContext(
-			Map<String, Object> parameterMap);
+	public ParameterScriptContext getParameterScriptContext(Map<String, Object> parameterMap);
 
 	/**
 	 * Returns the prefix to use for partner tells. On fics this would be 'ptell
@@ -173,7 +172,7 @@ public interface Connector {
 	 * This method should return a small list of commands.
 	 */
 	public String[][] getPersonCommandActions(String person);
-	
+
 	/**
 	 * Returns descriptions and messages to send to the connector.This is
 	 * intended to be used to generate pop-up menus. Returns a String[n][2]
@@ -182,7 +181,7 @@ public interface Connector {
 	 * This method should return a small list of commands.
 	 */
 	public String[][] getPersonMatchActions(String person);
-	
+
 	/**
 	 * Returns descriptions and messages to send to the connector.This is
 	 * intended to be used to generate pop-up menus. Returns a String[n][2]
@@ -191,10 +190,6 @@ public interface Connector {
 	 * This method should return a small list of commands.
 	 */
 	public String[][] getPersonListActions(String person);
-
-
-
-
 
 	/**
 	 * Returns the prefix to use for person tells. On fics this would be 'tell
@@ -272,8 +267,7 @@ public interface Connector {
 	 * @param callback
 	 *            The callback to invoke.
 	 */
-	public void invokeOnNextMatch(String regularExpression,
-			MessageCallback callback);
+	public void invokeOnNextRegexMatch(String regularExpression, MessageCallback callback);
 
 	/**
 	 * Returns true if the connector is connected.
@@ -350,8 +344,7 @@ public interface Connector {
 	 */
 	public void makeMove(Game game, Move move);
 
-	public void matchBughouse(String playerName, boolean isRated, int time,
-			int inc);
+	public void matchBughouse(String playerName, boolean isRated, int time, int inc);
 
 	public void matchWinner(Game game);
 
@@ -558,8 +551,7 @@ public interface Connector {
 	 * The next message the connector reads in that is of the specified type
 	 * should not be published to the ChatService.
 	 */
-	public void sendMessage(String message, boolean isHidingFromUser,
-			ChatType hideNextChatType);
+	public void sendMessage(String message, boolean isHidingFromUser, ChatType hideNextChatType);
 
 	/**
 	 * Sets the primary game if the user is observing more than one game.
@@ -580,7 +572,7 @@ public interface Connector {
 	 * Sets whether or not all person tells are being spoken.
 	 */
 	public void setSpeakingAllPersonTells(boolean isSpeakingAllPersonTells);
-	
+
 	/**
 	 * Toggles speaking whispers and kibitzes for the specified channel.
 	 */
@@ -589,17 +581,20 @@ public interface Connector {
 	/**
 	 * Toggles speaking channel tells for the specified channel.
 	 */
-	public void setSpeakingChannelTells(String channel,
-			boolean isSpeakingChannelTells);
+	public void setSpeakingChannelTells(String channel, boolean isSpeakingChannelTells);
 
 	/**
 	 * Toggles speaking person tells for the specified person.
 	 */
-	public void setSpeakingPersonTells(String person,
-			boolean isSpeakingPersonTells);
+	public void setSpeakingPersonTells(String person, boolean isSpeakingPersonTells);
 
 	/**
 	 * Whispers a message about the specified game.
 	 */
 	public void whisper(Game game, String whisper);
+
+	/**
+	 * Returns true if connected and timeseal2 is on.
+	 */
+	public boolean isTimesseal2On();
 }

@@ -33,7 +33,7 @@ public class ClearGNotifyAlias extends RaptorAlias {
 			String command) {
 		if (command.equalsIgnoreCase("clear gnotify")) {
 			RaptorAliasResult result = new RaptorAliasResult("=gnotify", null);
-			controller.getConnector().invokeOnNextMatch(
+			controller.getConnector().invokeOnNextRegexMatch(
 					"\\-\\- gnotify list\\:.*", new MessageCallback() {
 
 						public boolean matchReceived(ChatEvent event) {

@@ -32,7 +32,7 @@ public class ClearNotifyAlias extends RaptorAlias {
 			String command) {
 		if (command.equalsIgnoreCase("clear notify")) {
 			RaptorAliasResult result = new RaptorAliasResult("=notify", null);
-			controller.getConnector().invokeOnNextMatch(
+			controller.getConnector().invokeOnNextRegexMatch(
 					"\\-\\- notify list\\:.*", new MessageCallback() {
 
 						public boolean matchReceived(ChatEvent event) {

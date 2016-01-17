@@ -658,7 +658,6 @@ public class Raptor implements PreferenceKeys {
 		}
 
 		LOG.info("Shutdown Raptor");
-
 	}
 
 	/**

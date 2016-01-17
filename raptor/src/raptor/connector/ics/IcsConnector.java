@@ -255,6 +255,10 @@ public abstract class IcsConnector implements Connector, MessageListener {
 		prepopulateAutoCompleteList();
 	}
 
+	public boolean isTimesseal2On() {
+		return isConnected() && messageProducer.isTimeseal2On();
+	}
+
 	@Override
 	public void connectionClosed(StringBuilder buffer) {
 		parseMessage(drainInboundMessageBuffer(buffer));
@@ -463,7 +467,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 						messageProducer = null;
 					}
 				}
-				
+
 				try {
 					if (isLoggedIn) {
 						storeTabStates();
@@ -730,7 +734,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void invokeOnNextMatch(String regularExpression, MessageCallback callback) {
+	public void invokeOnNextRegexMatch(String regularExpression, MessageCallback callback) {
 		MessageCallbackEntry messageCallbackEntry = new MessageCallbackEntry();
 		messageCallbackEntry.regularExpression = RegExUtils.getPattern(regularExpression);
 		messageCallbackEntry.isOneShot = true;

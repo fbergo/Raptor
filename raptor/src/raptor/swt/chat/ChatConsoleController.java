@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -97,6 +99,7 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 	public static final int TEXT_CHUNK_SIZE = 1000;
 	public static int[] DONT_FORWARD_KEYSTROKES = { SWT.PAGE_UP, SWT.PAGE_DOWN, SWT.HOME, SWT.END };
 	public static int[] DONT_FORWARD_KEYMASKS = { SWT.COMMAND, SWT.CONTROL };
+	public static final Pattern RELAY_GAME_PATTERN = Pattern.compile("^\\:(\\d+)\\s.*");
 	protected static L10n local = L10n.getInstance();
 
 	protected List<ChatEvent> awayList = new ArrayList<ChatEvent>(100);
@@ -126,6 +129,12 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 			}
 
 			return isAcceptingChatEvent(event);
+		}
+
+		@Override
+		public void pingArrived(long millis) {
+			// TODO Auto-generated method stub
+
 		}
 	};
 	protected Connector connector;
@@ -1255,6 +1264,36 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 		}
 	}
 
+	protected void decorateQtellLinks(ChatEvent event, String message, int textStartPosition) {
+		if (event.getType() == ChatType.QTELL && getPreferences().getBoolean(PreferenceKeys.CHAT_UNDERLINE_COMMANDS)) {
+			List<int[]> linkRanges = new ArrayList<int[]>(5);
+
+			int lastNewlineIndex = 0;
+			int newLineIndex = 0;
+			while ((newLineIndex = message.indexOf('\n', lastNewlineIndex + 1)) != -1) {
+				String line = message.substring(lastNewlineIndex + 1, newLineIndex).trim();
+				if (StringUtils.isNotBlank(line)) {
+					Matcher matcher = RELAY_GAME_PATTERN.matcher(line);
+					if (matcher.matches()) {
+						String[] words = line.split("\\s+");
+						if (words.length == 5)
+							linkRanges.add(new int[] { lastNewlineIndex + 2, newLineIndex });
+					}
+				}
+				lastNewlineIndex = newLineIndex;
+			}
+
+			// add all the ranges that were found.
+			for (int[] linkRange : linkRanges) {
+				StyleRange range = new StyleRange(textStartPosition + linkRange[0], linkRange[1] - linkRange[0],
+						getPreferences().getColor(event), chatConsole.inputText.getBackground());
+				range.underline = true;
+				chatConsole.inputText.setStyleRange(range);
+			}
+
+		}
+	}
+
 	protected void decorateGamesLinks(ChatEvent event, String message, int textStartPosition) {
 		if (event.getType() == ChatType.GAMES && getPreferences().getBoolean(PreferenceKeys.CHAT_UNDERLINE_COMMANDS)) {
 			// Currently this will only work with FICS games messages that are
@@ -1768,6 +1807,7 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 		decoreateNext(event, message, textStartPosition);
 		decorateHistoryLinks(event, message, textStartPosition);
 		decorateGamesLinks(event, message, textStartPosition);
+		decorateQtellLinks(event, message, textStartPosition);
 		decorateJournalLinks(event, message, textStartPosition);
 		decorateBugWhoLinks(event, message, textStartPosition);
 		decorateNewsLinks(event, message, textStartPosition);
@@ -1799,6 +1839,7 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 		int lineIndex = chatConsole.inputText.getContent().getLineAtOffset(caretPosition);
 		String line = chatConsole.inputText.getContent().getLine(lineIndex).trim();
 		boolean isHandled = false;
+		Matcher matcher = null;
 		int spaceIndex = line.indexOf(' ');
 		if (spaceIndex != -1) {
 			String firstWord = line.trim().substring(0, spaceIndex);
@@ -1863,8 +1904,18 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 			// Games and BugWho games
 			else if (NumberUtils.isDigits(firstWord) && (line.contains("W:") || line.contains("B:"))) {
 				connector.sendMessage("observe " + firstWord, true);
+
 			}
-			// Game notifiucations
+			// Relay QTells.
+			else if ((matcher = RELAY_GAME_PATTERN.matcher(line)).matches()) {
+				if (matcher.matches()) {
+					String[] words = line.split("\\s+");
+					if (words.length == 5)
+						connector.sendMessage("observe " + matcher.group(1), true);
+				}
+
+			}
+			// Game notifications
 			else if (line.startsWith("Game notification:")) {
 				RaptorStringTokenizer tok = new RaptorStringTokenizer(line, " ", true);
 				String lastWord = null;

@@ -50,7 +50,7 @@ public class TellAllInChannelAlias extends RaptorAlias {
 						+ channel,
 						"Direct tell will be sent. However due to quotas it is throttled and "
 								+ "one tell will be sent every 2 seconds.");
-				controller.getConnector().invokeOnNextMatch(
+				controller.getConnector().invokeOnNextRegexMatch(
 						"Channel " + channel + ".*", new MessageCallback() {
 							public boolean matchReceived(ChatEvent event) {
 								RaptorStringTokenizer tok = new RaptorStringTokenizer(

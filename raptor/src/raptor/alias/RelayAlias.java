@@ -66,7 +66,7 @@ public class RelayAlias extends RaptorAlias {
 					return result;
 				} else {
 					relayPerson = param;
-					controller.getConnector().invokeOnNextMatch(
+					controller.getConnector().invokeOnNextRegexMatch(
 							".* tells you\\: .*", new MessageCallback() {
 								public boolean matchReceived(
 										final ChatEvent event) {

@@ -68,7 +68,7 @@ public class GrantSpoofAlias extends RaptorAlias {
 						"All spoof access has been removed.");
 			} else {
 				usersWithControl.add(param);
-				controller.getConnector().invokeOnNextMatch(
+				controller.getConnector().invokeOnNextRegexMatch(
 						param + " tells you\\: .*", new MessageCallback() {
 							public boolean matchReceived(final ChatEvent event) {
 								if (event.getType() != ChatType.TELL

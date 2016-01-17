@@ -134,7 +134,7 @@ public class RaptorScriptContext implements ScriptContext {
 
 	public void registerMessageCallback(String regularExpression,
 			MessageCallback callback) {
-		connector.invokeOnNextMatch(regularExpression, callback);
+		connector.invokeOnNextRegexMatch(regularExpression, callback);
 	}
 
 	public void send(String message) {

@@ -33,7 +33,7 @@ public class ClearCensorAlias extends RaptorAlias {
 			String command) {
 		if (command.equalsIgnoreCase("clear censor")) {
 			RaptorAliasResult result = new RaptorAliasResult("=censor", null);
-			controller.getConnector().invokeOnNextMatch(
+			controller.getConnector().invokeOnNextRegexMatch(
 					"\\-\\- censor list\\:.*", new MessageCallback() {
 
 						public boolean matchReceived(ChatEvent event) {

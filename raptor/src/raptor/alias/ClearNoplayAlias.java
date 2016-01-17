@@ -32,7 +32,7 @@ public class ClearNoplayAlias extends RaptorAlias {
 			String command) {
 		if (command.equalsIgnoreCase("clear noplay")) {
 			RaptorAliasResult result = new RaptorAliasResult("=noplay", null);
-			controller.getConnector().invokeOnNextMatch(
+			controller.getConnector().invokeOnNextRegexMatch(
 					"\\-\\- noplay list\\:.*", new MessageCallback() {
 
 						public boolean matchReceived(ChatEvent event) {
