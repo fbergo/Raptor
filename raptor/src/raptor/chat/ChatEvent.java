@@ -23,6 +23,7 @@ public class ChatEvent {
 	protected String source;
 	protected long time;
 	protected ChatType type;
+	protected int pingTime;
 	protected boolean hasSoundBeenHandled;
 
 	public ChatEvent() {
@@ -145,14 +146,18 @@ public class ChatEvent {
 		this.type = type;
 	}
 
-	/**
-	 * Dumps information about this ChatEvent to a string.
-	 */
-	@Override
-	public String toString() {
-		return "ChatEvent: source=" + source + " type=" + type.name()
-				+ " gameId=" + gameId + " channel=" + channel
-				+ " message='" + message + "'";
+	public int getPingTime() {
+		return pingTime;
 	}
 
+	public void setPingTime(int pingTime) {
+		this.pingTime = pingTime;
+	}
+
+	@Override
+	public String toString() {
+		return "ChatEvent [channel=" + channel + ", gameId=" + gameId + ", message=" + message + ", source=" + source
+				+ ", time=" + time + ", type=" + type + ", pingTime=" + pingTime + ", hasSoundBeenHandled="
+				+ hasSoundBeenHandled + "]";
+	}
 }

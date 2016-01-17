@@ -110,7 +110,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	private static final int MAX_MESSAGE_MESSAGE_LENGTH = 800;
 
 	private static final RaptorLogger LOG = RaptorLogger.getLog(IcsConnector.class);
-	public static final String LOGIN_CHARACTERS_TO_FILTER = "\uefbf\ubdef\ubfbd\uefbf\ubdef\ubfbd\ud89e\u0001";
+	public static final String LOGIN_CHARACTERS_TO_FILTER = "\uefbf\ubdef\ubfbd\uefbf\ubdef\ubfbd\ud89e\u0001\ufffd\ufffd";
 
 	protected class KeepAlive implements Runnable {
 		private boolean kill = false;
@@ -1047,6 +1047,12 @@ public abstract class IcsConnector implements Connector, MessageListener {
 				}
 			}
 
+			if (event.getType() == ChatType.PING_RESPONSE) {
+				if (event.getSource().equals(userName)) {
+					firePingInfo(event.getPingTime());
+				}
+			}
+
 			int ignoreIndex = ignoringChatTypes.indexOf(event.getType());
 			if (ignoreIndex != -1) {
 				try {
@@ -1583,6 +1589,25 @@ public abstract class IcsConnector implements Connector, MessageListener {
 
 			public String toString() {
 				return "IcsConnector.fireDisconnected runnable";
+			}
+		});
+	}
+
+	protected void firePingInfo(final int pingMillis) {
+		ThreadService.getInstance().run(new Runnable() {
+			public void run() {
+				if (connectorListeners == null) {
+					return;
+				}
+				synchronized (connectorListeners) {
+					for (ConnectorListener listener : connectorListeners) {
+						listener.pingArrived(pingMillis);
+					}
+				}
+			}
+
+			public String toString() {
+				return "IcsConnector.firePingInfo runnable";
 			}
 		});
 	}

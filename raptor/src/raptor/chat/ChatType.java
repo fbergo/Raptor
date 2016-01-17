@@ -177,5 +177,6 @@ public enum ChatType {
 	 * 
 	 * @since .98
 	 */
-	VARIABLES
+	VARIABLES,
+	PING_RESPONSE
 }

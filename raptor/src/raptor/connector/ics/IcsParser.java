@@ -57,6 +57,7 @@ import raptor.connector.ics.chat.NotificationEventParser;
 import raptor.connector.ics.chat.PartnerTellEventParser;
 import raptor.connector.ics.chat.PartnershipCreatedEventParser;
 import raptor.connector.ics.chat.PartnershipEndedEventParser;
+import raptor.connector.ics.chat.PingEventParser;
 import raptor.connector.ics.chat.QTellParser;
 import raptor.connector.ics.chat.ShoutEventParser;
 import raptor.connector.ics.chat.TellEventParser;
@@ -191,6 +192,7 @@ public class IcsParser implements GameConstants {
 		nonGameEventParsers.add(new BugWhoAllEventParser());
 		nonGameEventParsers.add(new NotificationEventParser());
 		nonGameEventParsers.add(new VariablesEventParser());
+		nonGameEventParsers.add(new PingEventParser());
 
 	}
 

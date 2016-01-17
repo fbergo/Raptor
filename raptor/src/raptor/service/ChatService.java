@@ -15,7 +15,6 @@ package raptor.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import raptor.Raptor;
 import raptor.chat.ChatEvent;
@@ -28,20 +27,17 @@ import raptor.pref.PreferenceKeys;
  * ChatEvents arrive on a connector.
  */
 public class ChatService {
-	public static final Pattern TIMESTAMP_2_PING_REGEX = Pattern.compile("^Average ping time for.*\\sis\\s(\\d+)ms\\.");
-
 	public static interface ChatListener {
 		public void chatEventOccured(ChatEvent e);
 
 		public boolean isHandling(ChatEvent e);
-
-		public void pingArrived(long millis);
 	}
 
 	protected Connector connector = null;
 	protected List<ChatListener> listeners = new ArrayList<ChatListener>(5);
 	protected List<ChatListener> mainConsoleListeners = new ArrayList<ChatListener>(5);
 	protected ChatLogger logger = null;
+	protected boolean killPingHandler = true;
 
 	/**
 	 * Constructs a chat service for the specified connector.
@@ -49,35 +45,10 @@ public class ChatService {
 	 * @param connector
 	 */
 	public ChatService(Connector connector) {
-		this.connector = null;
+		this.connector = connector;
 		logger = new ChatLogger(connector,
 				Raptor.USER_RAPTOR_HOME_PATH + "/chatcache/" + connector.getShortName() + ".txt");
-	}
 
-	protected void setupPing() {
-//		ThreadService.getInstance().
-//			if (connector.isConnected() && connector.isTimesseal2On()) {
-//				connector.invokeOnNextRegexMatch("^Average ping time for.*\\sis\\s(\\d+)ms\\.", new MessageCallback() {
-//					@Override
-//					public boolean matchReceived(ChatEvent event) {
-//						String message = event.getMessage();
-//						
-//						Matcher matcher = TIMESTAMP_2_PING_REGEX.matcher(message);
-//						
-//						if (matcher.matches() && matcher.groupCount() > 0) {
-//							long ping = Long.parseLong(matcher.group(1));
-//							publishPingEvent(ping);
-//							return false;
-//						}
-//						else {
-//							return false;
-//						}
-//						
-//					}
-//				});
-//				connector.sendMessage("ping", true);
-//			}
-//		}
 	}
 
 	/**
@@ -146,22 +117,6 @@ public class ChatService {
 					}
 				}
 				logger.write(event);
-			}
-		});
-	}
-
-	/**
-	 * Chat events are published asynchronously.
-	 */
-	public void publishPingEvent(final long pingMillis) {
-		ThreadService.getInstance().run(new Runnable() {
-			public void run() {
-				if (listeners == null) {
-					return;
-				}
-				for (ChatListener listener : listeners) {
-					listener.pingArrived(pingMillis);
-				}
 			}
 		});
 	}

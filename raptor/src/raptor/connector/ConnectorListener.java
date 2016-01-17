@@ -28,4 +28,10 @@ public interface ConnectorListener {
 	 * Invoked when a connector disconnects.
 	 */
 	public void onDisconnect();
+	
+	/**
+	 * Invoked when the users ping info arrives.
+	 * @param pingMilis The new ping in milliseconds.
+	 */
+	public void pingArrived(int pingMilis);
 }

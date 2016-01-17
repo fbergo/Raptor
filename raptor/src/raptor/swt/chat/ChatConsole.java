@@ -52,10 +52,13 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 
 	protected StyledText outputText;
 	protected Label promptLabel;
+	protected Label pingLabel;
+	protected Label pingValueLabel;
+	protected L10n local = L10n.getInstance();
+
 	IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().startsWith("chat")
-					|| event.getProperty().equals(APP_ZOOM_FACTOR)) {
+			if (event.getProperty().startsWith("chat") || event.getProperty().equals(APP_ZOOM_FACTOR)) {
 				updateFromPrefs();
 				redraw();
 			}
@@ -74,23 +77,20 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 
 			public void widgetDisposed(DisposeEvent e) {
 				if (propertyChangeListener != null) {
-					Raptor.getInstance().getPreferences()
-							.removePropertyChangeListener(
-									propertyChangeListener);
+					Raptor.getInstance().getPreferences().removePropertyChangeListener(propertyChangeListener);
 					propertyChangeListener = null;
 				}
 				if (controller != null) {
 					controller.dispose();
 				}
-				LOG.info("Disposed chat console.");
+				if (LOG.isInfoEnabled())
+					LOG.info("Disposed chat console.");
 			}
 		});
 		setLayout(new GridLayout(1, true));
 
-		Raptor.getInstance().getPreferences().addPropertyChangeListener(
-				propertyChangeListener);
-		inputText = new RaptorStyledText(this, SWT.V_SCROLL | SWT.MULTI
-				| SWT.BORDER);
+		Raptor.getInstance().getPreferences().addPropertyChangeListener(propertyChangeListener);
+		inputText = new RaptorStyledText(this, SWT.V_SCROLL | SWT.MULTI | SWT.BORDER);
 		inputText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		inputText.setEditable(false);
 		inputText.setWordWrap(true);
@@ -98,9 +98,8 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 		inputText.setLeftMargin(3);
 
 		southControlsComposite = new Composite(this, SWT.NONE);
-		southControlsComposite.setLayoutData(new GridData(
-				GridData.FILL_HORIZONTAL));
-		GridLayout gridLayout = new GridLayout(3, false);
+		southControlsComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridLayout gridLayout = new GridLayout(5, false);
 		gridLayout.marginBottom = 0;
 		gridLayout.marginHeight = 0;
 		gridLayout.marginRight = 0;
@@ -111,18 +110,16 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 		promptLabel = new Label(southControlsComposite, SWT.NONE);
 		promptLabel.setText(controller.getPrompt());
 
-		outputText = new StyledText(southControlsComposite, SWT.MULTI
-				| SWT.BORDER);
+		outputText = new StyledText(southControlsComposite, SWT.MULTI | SWT.BORDER);
 		outputText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-                
+
 		// Removes \n\r when text is pasted.
 		outputText.addListener(SWT.Verify, new Listener() {
 			public void handleEvent(Event e) {
 				String string = e.text;
 				if (e.text.contains("\n") || e.text.contains("\r")) {
 					e.doit = false;
-					outputText.insert(StringUtils.replaceChars(string, "\n\r",
-							""));
+					outputText.insert(StringUtils.replaceChars(string, "\n\r", ""));
 				}
 			}
 		});
@@ -135,18 +132,6 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-
-		// buttonComposite = new Composite(southControlsComposite, SWT.NONE);
-		// RowLayout rowLayout = new RowLayout();
-		// rowLayout.marginBottom = 0;
-		// rowLayout.marginHeight = 0;
-		// rowLayout.marginRight = 0;
-		// rowLayout.marginLeft = 0;
-		// rowLayout.marginTop = 0;
-		// rowLayout.pack = false;
-		// rowLayout.wrap = false;
-		// buttonComposite.setLayout(rowLayout);
-		// addButtons();
 
 		updateFromPrefs();
 	}
@@ -167,6 +152,55 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 		this.controller = controller;
 	}
 
+	public void setPingTime(long pingTimeMillis) {
+		if (LOG.isDebugEnabled())
+			LOG.debug("In set ping time: " + pingTimeMillis);
+		if (isShowingPingTime()) {
+			String newPingValue = pingTimeMillis + local.getString("chatConsolePingMilliseconds");
+			if (pingLabel == null) {
+				if (LOG.isDebugEnabled())
+					LOG.debug("Creating ping controls...");
+
+				pingLabel = new Label(southControlsComposite, SWT.NONE);
+				pingLabel.setText(local.getString("chatConsolePingLabel"));
+
+				pingValueLabel = new Label(southControlsComposite, SWT.NONE);
+				pingValueLabel.setText(newPingValue);
+
+				RaptorPreferenceStore prefs = getPreferences();
+				pingLabel.setFont(prefs.getFont(CHAT_OUTPUT_FONT));
+				pingLabel.setForeground(prefs.getColor(CHAT_PROMPT_COLOR));
+				pingLabel.setBackground(prefs.getColor(CHAT_CONSOLE_BACKGROUND_COLOR));
+
+				pingValueLabel.setFont(prefs.getFont(CHAT_OUTPUT_FONT));
+				pingValueLabel.setForeground(prefs.getColor(CHAT_PROMPT_COLOR));
+				pingValueLabel.setBackground(prefs.getColor(CHAT_CONSOLE_BACKGROUND_COLOR));
+
+				southControlsComposite.layout(true);
+				layout(true, true);
+				redraw();
+			} else {
+				if (LOG.isDebugEnabled())
+					LOG.debug("Setting ping values...");
+				pingValueLabel.setText(newPingValue);
+				southControlsComposite.layout(true);
+			}
+
+		} else {
+			if (pingLabel != null) {
+				if (LOG.isDebugEnabled())
+					LOG.debug("Disposing of ping controls...");
+				pingLabel.dispose();
+				pingValueLabel.dispose();
+				pingLabel = null;
+				pingValueLabel = null;
+				southControlsComposite.layout(true);
+				layout(true, true);
+				redraw();
+			}
+		}
+	}
+
 	public void updateFromPrefs() {
 		RaptorPreferenceStore prefs = getPreferences();
 		Color consoleBackground = prefs.getColor(CHAT_CONSOLE_BACKGROUND_COLOR);
@@ -179,14 +213,23 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 		inputText.setFont(prefs.getFont(CHAT_INPUT_FONT));
 
 		outputText.setBackground(prefs.getColor(CHAT_OUTPUT_BACKGROUND_COLOR));
-		outputText.setForeground(prefs.getColor(CHAT_OUTPUT_TEXT_COLOR));		
+		outputText.setForeground(prefs.getColor(CHAT_OUTPUT_TEXT_COLOR));
 		outputText.setFont(prefs.getFont(CHAT_OUTPUT_FONT));
 		outputText.layout(true);
 
 		promptLabel.setFont(prefs.getFont(CHAT_OUTPUT_FONT));
 		promptLabel.setForeground(prefs.getColor(CHAT_PROMPT_COLOR));
-		promptLabel
-				.setBackground(prefs.getColor(CHAT_CONSOLE_BACKGROUND_COLOR));
+		promptLabel.setBackground(prefs.getColor(CHAT_CONSOLE_BACKGROUND_COLOR));
+
+		if (pingLabel != null) {
+			pingLabel.setFont(prefs.getFont(CHAT_OUTPUT_FONT));
+			pingLabel.setForeground(prefs.getColor(CHAT_PROMPT_COLOR));
+			pingLabel.setBackground(prefs.getColor(CHAT_CONSOLE_BACKGROUND_COLOR));
+
+			pingValueLabel.setFont(prefs.getFont(CHAT_OUTPUT_FONT));
+			pingValueLabel.setForeground(prefs.getColor(CHAT_PROMPT_COLOR));
+			pingValueLabel.setBackground(prefs.getColor(CHAT_CONSOLE_BACKGROUND_COLOR));
+		}
 
 		layout(true, true);
 
@@ -211,4 +254,8 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 		return Raptor.getInstance().getPreferences();
 	}
 
+	protected boolean isShowingPingTime() {
+		return getPreferences().getBoolean(PreferenceKeys.FICS_SHOW_PING_WIDGET)
+				&& getController().getConnector().isConnected();
+	}
 }

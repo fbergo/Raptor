@@ -172,7 +172,8 @@ public class ThreadService {
 				return null;
 			}
 		} else {
-			LOG.info("Veoting runnable " + runnable + " raptor is disposed.");
+			if (LOG.isInfoEnabled())
+				LOG.info("Veoting runnable " + runnable + " raptor is disposed.");
 			return null;
 		}
 	}

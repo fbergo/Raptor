@@ -740,7 +740,9 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(FICS_NO_WRAP_ENABLED, true);
 		setDefault(FICS_CHANNEL_COMMANDS,
 				"+channel $channel,-channel $channel,in $channel");
-
+		setDefault(FICS_PING_INTERVAL_SEC,5);
+		setDefault(FICS_SHOW_PING_WIDGET,true);
+		
 		setDefault(
 				FICS_PERSON_COMMANDS,
 				"assess $person,finger $person,follow $person,history $person,journal $person,"

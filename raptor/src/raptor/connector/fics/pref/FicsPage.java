@@ -15,6 +15,7 @@ package raptor.connector.fics.pref;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 
 import raptor.Raptor;
@@ -23,9 +24,9 @@ import raptor.pref.PreferenceKeys;
 import raptor.pref.TextFieldEditor;
 
 public class FicsPage extends FieldEditorPreferencePage {
-	
+
 	protected static L10n local = L10n.getInstance();
-	
+
 	public FicsPage() {
 		super(FLAT);
 		setTitle("Fics");
@@ -34,44 +35,38 @@ public class FicsPage extends FieldEditorPreferencePage {
 
 	@Override
 	protected void createFieldEditors() {
-		BooleanFieldEditor bfe = new BooleanFieldEditor(
-				PreferenceKeys.FICS_AUTO_CONNECT, local.getString("ficsP1"),
+		BooleanFieldEditor bfe = new BooleanFieldEditor(PreferenceKeys.FICS_AUTO_CONNECT, local.getString("ficsP1"),
 				getFieldEditorParent());
 		addField(bfe);
 
-//      Timeseal 2 forced for OSX, Timeseal 1 for other OSes.
-//      For some reason windows/linux have timeseal2 issues.		
-//		addField(new BooleanFieldEditor(PreferenceKeys.FICS_TIMESEAL_IS_TIMESEAL_2,
-//				"Use Timeseal 2 (Enables pings through firewalls)", getFieldEditorParent()));
+		BooleanFieldEditor showPingWidget = new BooleanFieldEditor(PreferenceKeys.FICS_SHOW_PING_WIDGET,
+				local.getString("ficsShowPingWidget"), getFieldEditorParent());
+		addField(showPingWidget);
 
-		addField(new BooleanFieldEditor(
-				PreferenceKeys.FICS_CLOSE_TABS_ON_DISCONNECT,
-				local.getString("ficsP2"), getFieldEditorParent()));
+		IntegerFieldEditor pingWidgetDelay = new IntegerFieldEditor(PreferenceKeys.FICS_PING_INTERVAL_SEC,
+				local.getString("ficsPingWidgetDelaySec"), getFieldEditorParent());
+		addField(pingWidgetDelay);
 
-		BooleanFieldEditor bfe2 = new BooleanFieldEditor(
-				PreferenceKeys.FICS_KEEP_ALIVE,
-				local.getString("ficsP3"),
+		addField(new BooleanFieldEditor(PreferenceKeys.FICS_CLOSE_TABS_ON_DISCONNECT, local.getString("ficsP2"),
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceKeys.FICS_REMOVE_BLANK_LINES, local.getString("ficsP8"),
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceKeys.FICS_NO_WRAP_ENABLED, local.getString("ficsP4"),
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceKeys.FICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP, local.getString("ficsP5"),
+				getFieldEditorParent()));
+
+		BooleanFieldEditor bfe2 = new BooleanFieldEditor(PreferenceKeys.FICS_KEEP_ALIVE, local.getString("ficsP3"),
 				getFieldEditorParent());
 		addField(bfe2);
 
-		addField(new BooleanFieldEditor(
-				PreferenceKeys.FICS_NO_WRAP_ENABLED,
-				local.getString("ficsP4"),
+		addField(new StringFieldEditor(PreferenceKeys.FICS_KEEP_ALIVE_COMMAND, local.getString("ficsP7"),
 				getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(
-				PreferenceKeys.FICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP,
-				local.getString("ficsP5"),
-				getFieldEditorParent()));
-
-		addField(new TextFieldEditor(PreferenceKeys.FICS_LOGIN_SCRIPT,
-				local.getString("ficsP6"), getFieldEditorParent()));
-
-		addField(new StringFieldEditor(PreferenceKeys.FICS_KEEP_ALIVE_COMMAND,
-				local.getString("ficsP7"), getFieldEditorParent()));
 		
-		addField(new BooleanFieldEditor(PreferenceKeys.FICS_REMOVE_BLANK_LINES,
-				local.getString("ficsP8"), getFieldEditorParent()));
-
+		addField(new TextFieldEditor(PreferenceKeys.FICS_LOGIN_SCRIPT, local.getString("ficsP6"),
+				getFieldEditorParent()));
 	}
 }

@@ -131,6 +131,26 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys, GameC
 	protected String partnerOnConnect;
 	protected boolean isDisconnecting = false;
 
+	protected boolean killPingHandler = true;
+	protected Runnable pingHandler = new Runnable() {
+		public void run() {
+			if (LOG.isDebugEnabled())
+				LOG.debug("Running ping handler");
+			if (!killPingHandler && isConnected() && isTimesseal2On()
+					&& Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.FICS_SHOW_PING_WIDGET)) {
+				sendMessage("ping", true, ChatType.PING_RESPONSE);
+			}
+
+			if (!killPingHandler) {
+				if (LOG.isDebugEnabled())
+					LOG.debug("Scheduling ping handler");
+				ThreadService.getInstance().scheduleOneShot(
+						Raptor.getInstance().getPreferences().getInt(PreferenceKeys.FICS_PING_INTERVAL_SEC) * 1000,
+						this);
+			}
+		}
+	};
+
 	public FicsConnector() {
 		this(new IcsConnectorContext(new IcsParser(false)));
 	}
@@ -159,6 +179,7 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys, GameC
 		if (!isDisconnecting) {
 			isDisconnecting = true;
 			try {
+				killPingHandler = true;
 				if (isConnected()) {
 					super.disconnect();
 				}
@@ -636,6 +657,9 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys, GameC
 				}
 
 				sendMessage("iset lock 1", true);
+
+				killPingHandler = false;
+				ThreadService.getInstance().run(pingHandler);
 				hasVetoPower = true;
 			}
 		});

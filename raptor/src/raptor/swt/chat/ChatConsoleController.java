@@ -105,6 +105,7 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 	protected List<ChatEvent> awayList = new ArrayList<ChatEvent>(100);
 	protected ChatConsole chatConsole;
 	protected Queue<ChatEvent> chatEventQueue = new ConcurrentLinkedQueue<ChatEvent>();
+
 	protected ChatListener chatServiceListener = new ChatListener() {
 		public void chatEventOccured(final ChatEvent event) {
 			if (!isDisposed && chatConsole != null && !chatConsole.isDisposed()) {
@@ -130,12 +131,6 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 
 			return isAcceptingChatEvent(event);
 		}
-
-		@Override
-		public void pingArrived(long millis) {
-			// TODO Auto-generated method stub
-
-		}
 	};
 	protected Connector connector;
 
@@ -150,6 +145,16 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 
 		public void onDisconnect() {
 			fireItemChanged();
+		}
+
+		@Override
+		public void pingArrived(final int pingMilis) {
+			Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
+				public void execute() {
+					chatConsole.setPingTime(pingMilis);
+				}
+			});
+
 		}
 	};
 
@@ -1722,7 +1727,7 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 						// first quote ignore it.
 						boolean isASpaceTwoCharsAfterQuote = message.charAt(quoteIndex + 2) == ' ';
 
-						// If the quotes dont match ignore it.
+						// If the quotes don't match ignore it.
 						boolean doQuotesMatch = message.charAt(quoteIndex) == message.charAt(endQuote);
 
 						if (!(newLine > quoteIndex && newLine < endQuote) && !isASpaceTwoCharsAfterQuote
