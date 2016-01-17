@@ -360,7 +360,7 @@ public class GamesWindowItem implements RaptorConnectorWindowItem {
 		label = new RaptorLabel(timeIncComposite, SWT.LEFT);
 		label.setText(local.getString("gameTimeComboLabel"));
 		timeFilter = new Combo(timeIncComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		timeFilter.add("All");
+		incFilter.add(local.getString("gameAllComboValue"));
 		timeFilter.add("0");
 		timeFilter.add("1");
 		timeFilter.add("3");
@@ -388,7 +388,7 @@ public class GamesWindowItem implements RaptorConnectorWindowItem {
 		label = new RaptorLabel(timeIncComposite, SWT.LEFT);
 		label.setText(local.getString("gameIncComboLabel"));
 		incFilter = new Combo(timeIncComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		incFilter.add("All");
+		incFilter.add(local.getString("gameAllComboValue"));
 		incFilter.add("0");
 		incFilter.add("1");
 		incFilter.add("2");
@@ -401,6 +401,7 @@ public class GamesWindowItem implements RaptorConnectorWindowItem {
 		incFilter.add("45");
 		incFilter.add("60");
 		incFilter.add("120");
+		incFilter.add("180");
 		incFilter.select(Raptor.getInstance().getPreferences().getInt(PreferenceKeys.GAMES_TABLE_INC_INDEX));
 		incFilter.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
