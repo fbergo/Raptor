@@ -16,19 +16,14 @@ package raptor.alias;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
-import raptor.Raptor;
-import raptor.RaptorWindowItem;
+import raptor.swt.SWTUtils;
 import raptor.swt.chat.ChatConsoleController;
 import raptor.swt.chat.ChatUtils;
-import raptor.swt.chess.ChessBoardWindowItem;
-import raptor.swt.chess.controller.ObserveController;
 
 public class AddTabAlias extends RaptorAlias {
 	public AddTabAlias() {
-		super(
-				"+tab",
-				"Adds a chanel game or person tab. ",
-				"'+tab [channelNumber | name | games]'"
+		super("+tab", "Adds a chanel game or person tab. ",
+				"'+tab [channelNumber | name | games | seeks | bugwho | bugbottons]'"
 						+ "Examples: '+tab 13' (Adds a tab for channel 13), "
 						+ "'+tab johnthegreat' (Adds a person tab for johnthegreat)' "
 						+ "+tab games' (Adds a tab for all games you are observing).");
@@ -36,52 +31,30 @@ public class AddTabAlias extends RaptorAlias {
 	}
 
 	@Override
-	public RaptorAliasResult apply(ChatConsoleController controller,
-			String command) {
+	public RaptorAliasResult apply(ChatConsoleController controller, String command) {
 		if (StringUtils.startsWithIgnoreCase(command, "+tab")) {
 			String whatsLeft = command.substring(5).trim();
 
 			if (whatsLeft.contains(" ")) {
-				return new RaptorAliasResult(null, "Invalid command: "
-						+ command + "\n" + getUsage());
-			} else if (whatsLeft.equals("games")) {
-				RaptorWindowItem[] items = Raptor.getInstance().getWindow()
-						.getWindowItems(ChessBoardWindowItem.class);
-
-				String games = "";
-
-				for (RaptorWindowItem item : items) {
-					ChessBoardWindowItem chessBoardItem = (ChessBoardWindowItem) item;
-					if (chessBoardItem.getConnector() == controller
-							.getConnector()
-							&& chessBoardItem.getController() instanceof ObserveController) {
-						ChatUtils.openGameChatTab(
-								chessBoardItem.getConnector(), chessBoardItem
-										.getController().getGame().getId(),
-								false);
-						games += chessBoardItem.getController().getGame()
-								.getId()
-								+ " ";
-					}
-				}
-
-				if (StringUtils.isBlank(games)) {
-					return new RaptorAliasResult(null,
-							"You are not observing any games.");
-				} else {
-					return new RaptorAliasResult(null,
-							"Added game tell tab(s): " + games + ".");
-				}
+				return new RaptorAliasResult(null, "Invalid command: " + command + "\n" + getUsage());
+			} else if (whatsLeft.equalsIgnoreCase("games") || whatsLeft.equalsIgnoreCase("game")) {
+				SWTUtils.openGamesWindowItem(controller.getConnector());
+				return new RaptorAliasResult(null, "Added games tab.");
+			} else if (whatsLeft.equalsIgnoreCase("bugwho") || whatsLeft.equalsIgnoreCase("bug")) {
+				SWTUtils.openBugWhoWindowItem(controller.getConnector());
+				return new RaptorAliasResult(null, "Added bugwho tab.");
+			} else if (whatsLeft.equalsIgnoreCase("bugbuttons") || whatsLeft.equalsIgnoreCase("buttons")) {
+				SWTUtils.openBugButtonsWindowItem(controller.getConnector());
+				return new RaptorAliasResult(null, "Added bugbuttons tab.");
+			} else if (whatsLeft.equalsIgnoreCase("seeks") || whatsLeft.equalsIgnoreCase("seek")) {
+				SWTUtils.openSeekTableWindowItem(controller.getConnector());
+				return new RaptorAliasResult(null, "Added seeks tab.");
 			} else if (NumberUtils.isDigits(whatsLeft)) {
-				ChatUtils.openChannelTab(controller.getConnector(), whatsLeft,
-						false);
-				return new RaptorAliasResult(null, "Added channel tab: "
-						+ whatsLeft + ".");
+				ChatUtils.openChannelTab(controller.getConnector(), whatsLeft, false);
+				return new RaptorAliasResult(null, "Added channel tab: " + whatsLeft + ".");
 			} else {
-				ChatUtils.openPersonTab(controller.getConnector(), whatsLeft,
-						false);
-				return new RaptorAliasResult(null, "Added person tab: "
-						+ whatsLeft + ".");
+				ChatUtils.openPersonTab(controller.getConnector(), whatsLeft, false);
+				return new RaptorAliasResult(null, "Added person tab: " + whatsLeft + ".");
 			}
 		} else {
 			return null;

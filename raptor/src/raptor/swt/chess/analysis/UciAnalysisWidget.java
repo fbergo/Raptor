@@ -422,8 +422,18 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 
 	public void updateFromPrefs() {
 		Color background = Raptor.getInstance().getPreferences().getColor(PreferenceKeys.BOARD_BACKGROUND_COLOR);
+		Color labelForeground = Raptor.getInstance().getPreferences().getColor(PreferenceKeys.BOARD_CONTROL_COLOR);
+		
 		composite.setBackground(background);
 		topLine.setBackground(background);
+		bestMoveHeaderLabel.setForeground(labelForeground);
+		bestMoveLabel.setForeground(labelForeground);
+		depthHeaderLabel.setForeground(labelForeground);
+		depthLabel.setForeground(labelForeground);
+		notesHeaderLabel.setForeground(labelForeground);
+		nodesLabel.setForeground(labelForeground);
+		timeHeaderLabel.setForeground(labelForeground);
+		timeLabel.setForeground(labelForeground);
 	}
 
 	public void updateToGame() {
