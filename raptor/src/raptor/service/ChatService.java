@@ -15,14 +15,12 @@ package raptor.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import raptor.Raptor;
 import raptor.chat.ChatEvent;
 import raptor.chat.ChatLogger;
 import raptor.connector.Connector;
-import raptor.connector.MessageCallback;
 import raptor.pref.PreferenceKeys;
 
 /**

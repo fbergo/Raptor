@@ -417,8 +417,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(ACTION_SEPARATOR_SEQUENCE, 400);
 
 		// App settings.
-		setDefault(APP_NAME, "Raptor 1.0 rc3");
-		putValue("app-version", "1.0 rc3");
+		setDefault(APP_NAME, "Raptor 1.0 rc4");
+		putValue("app-version", "1.0 rc4");
 		putValue("app-update", "true");
 
 		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS,
