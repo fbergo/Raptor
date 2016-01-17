@@ -58,22 +58,22 @@ public class MatchWinnerAction extends AbstractRaptorAction {
 					|| controller.getGame().getVariant() == Variant.fischerRandomBughouse) {
 				getChessBoardControllerSource().getConnector().kibitz(
 						getChessBoardControllerSource().getGame(),
-						"Winners please");
+						"Winners");
 			} else {
 				getChessBoardControllerSource().getConnector().kibitz(
 						getChessBoardControllerSource().getGame(),
-						"Winner please");
+						"Winner");
 			}
 		} else {
 			if (controller.getGame().getVariant() == Variant.bughouse
 					|| controller.getGame().getVariant() == Variant.fischerRandomBughouse) {
 				getChessBoardControllerSource().getConnector().kibitz(
 						getChessBoardControllerSource().getGame(),
-						"No longer calling winners.");
+						"I am no longer calling winners.");
 			} else {
 				getChessBoardControllerSource().getConnector().kibitz(
 						getChessBoardControllerSource().getGame(),
-						"No longer calling winner.");
+						"I am no longer calling winner.");
 			}
 		}
 	}
