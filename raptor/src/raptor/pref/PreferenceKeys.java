@@ -105,6 +105,8 @@ public interface PreferenceKeys {
 	public static final String GAMES_TABLE_RATINGS_INDEX = "games-table-ratings-index";
 	public static final String GAMES_TABLE_MAX_RATINGS_INDEX = "games-table-max-ratings-index";
 	public static final String GAMES_TABLE_RATED_INDEX = "games-table-rated-index";
+	public static final String GAMES_TABLE_TIME_INDEX = "games-table-time-index";
+	public static final String GAMES_TABLE_INC_INDEX = "games-table-inc-index";
 	public static final String GAMES_TABLE_SHOW_BUGHOUSE = "games-table-show-bughouse";
 	public static final String GAMES_TABLE_SHOW_LIGHTNING = "games-table-show-lightning";
 	public static final String GAMES_TABLE_SHOW_BLITZ = "games-table-show-blitz";

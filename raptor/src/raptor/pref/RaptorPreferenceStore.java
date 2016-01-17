@@ -645,6 +645,9 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(GAMES_TABLE_RATINGS_INDEX, 0);
 		setDefault(GAMES_TABLE_MAX_RATINGS_INDEX,
 				GamesWindowItem.getRatings().length - 1);
+		setDefault(GAMES_TABLE_TIME_INDEX,0);
+		setDefault(GAMES_TABLE_INC_INDEX,0);
+
 		setDefault(GAMES_TABLE_RATED_INDEX, 0);
 		setDefault(GAMES_TABLE_SHOW_BUGHOUSE, true);
 		setDefault(GAMES_TABLE_SHOW_LIGHTNING, true);
