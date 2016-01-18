@@ -90,7 +90,7 @@ public class GamesWindowItem implements RaptorConnectorWindowItem {
 	protected RaptorTable gamesTable;
 	protected Composite settings;
 	protected boolean isActive = false;
-	protected static L10n local;
+	protected static L10n local = L10n.getInstance();
 
 	protected Runnable timer = new Runnable() {
 		public void run() {
