@@ -90,7 +90,7 @@ public class GamesWindowItem implements RaptorConnectorWindowItem {
 	protected RaptorTable gamesTable;
 	protected Composite settings;
 	protected boolean isActive = false;
-	protected static L10n local = L10n.getInstance();
+	protected static L10n local;
 
 	protected Runnable timer = new Runnable() {
 		public void run() {
@@ -360,7 +360,7 @@ public class GamesWindowItem implements RaptorConnectorWindowItem {
 		label = new RaptorLabel(timeIncComposite, SWT.LEFT);
 		label.setText(local.getString("gameTimeComboLabel"));
 		timeFilter = new Combo(timeIncComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		incFilter.add(local.getString("gameAllComboValue"));
+		timeFilter.add(local.getString("gameAllComboValue"));
 		timeFilter.add("0");
 		timeFilter.add("1");
 		timeFilter.add("3");
