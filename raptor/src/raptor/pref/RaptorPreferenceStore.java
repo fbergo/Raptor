@@ -420,6 +420,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 
 		if (OSUtils.isLikelyWindows()) {
 			setDefault(SPEECH_PROCESS_NAME, "SayStatic");
+		} else if (OSUtils.isLikelyLinux()) {
+			setDefault(SPEECH_PROCESS_NAME, "say");
 		}
 
 		if (OSUtils.isLikelyLinux()) {
@@ -448,7 +450,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(BOARD_COOLBAR_MODE, true);
 		setDefault(BOARD_COOLBAR_ON_TOP, true);
 		setDefault(BOARD_CHESS_SET_NAME, "Alpha");
-		setDefault(BOARD_SQUARE_BACKGROUND_NAME, "GreenMarble");
+		setDefault(BOARD_SQUARE_BACKGROUND_NAME, "Marble2");
 		setDefault(BOARD_IS_SHOW_COORDINATES, true);
 		setDefault(BOARD_PIECE_SIZE_ADJUSTMENT, .06);
 		setDefault(BOARD_IS_SHOWING_PIECE_JAIL, false);
@@ -457,7 +459,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(BOARD_IS_PLAYING_10_SECOND_COUNTDOWN_SOUNDS, true);
 		setDefault(BOARD_PREMOVE_ENABLED, true);
 		setDefault(BOARD_PLAY_MOVE_SOUND_WHEN_OBSERVING, true);
-		setDefault(BOARD_QUEUED_PREMOVE_ENABLED, false);
+		setDefault(BOARD_QUEUED_PREMOVE_ENABLED, true);
 		setDefault(BOARD_IS_USING_CROSSHAIRS_CURSOR, false);
 		setDefault(BOARD_LAYOUT, "raptor.swt.chess.layout.RightOrientedLayout");
 		setDefault(BOARD_TAKEOVER_INACTIVE_GAMES, true);
@@ -605,8 +607,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(CHAT_IS_PLAYING_CHAT_ON_PERSON_TELL, true);
 		setDefault(CHAT_IS_SMART_SCROLL_ENABLED, true);
 		setDefault(CHAT_OPEN_CHANNEL_TAB_ON_CHANNEL_TELLS, false);
-		setDefault(CHAT_OPEN_PERSON_TAB_ON_PERSON_TELLS, true);
-		setDefault(CHAT_OPEN_PARTNER_TAB_ON_PTELLS, true);
+		setDefault(CHAT_OPEN_PERSON_TAB_ON_PERSON_TELLS, false);
+		setDefault(CHAT_OPEN_PARTNER_TAB_ON_PTELLS, false);
 		setDefault(CHAT_REMOVE_SUB_TAB_MESSAGES_FROM_MAIN_TAB, false);
 		setDefault(CHAT_UNDERLINE_URLS, true);
 		setDefault(CHAT_UNDERLINE_QUOTED_TEXT, true);

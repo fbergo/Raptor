@@ -73,14 +73,12 @@ public class TakebackParser {
 			}
 			// Game 117: raptorb requests to take back 1 half move(s).
 			TakebackMessage message = new TakebackMessage();
-			RaptorStringTokenizer tok = new RaptorStringTokenizer(line, " ",
-					true);
+			RaptorStringTokenizer tok = new RaptorStringTokenizer(line, " ", true);
 
 			tok.nextToken();
 
 			message.gameId = tok.nextToken();
-			message.gameId = message.gameId.substring(0, message.gameId
-					.length() - 1);
+			message.gameId = message.gameId.substring(0, message.gameId.length() - 1);
 
 			// parse past HANDLE requests to take back
 			tok.nextToken();
@@ -93,16 +91,14 @@ public class TakebackParser {
 			gameToTakebackMessages.put(message.gameId, message);
 			System.err.println("Taleback offered.");
 			return false;
-		} else if (line.startsWith(IDENTIFIER)
-				&& line.contains(ACCEPTED_TAKE_BACK)
+		} else if (line.startsWith(IDENTIFIER) && line.contains(ACCEPTED_TAKE_BACK)
 				|| line.startsWith(YOU_ACCEPTED_TAKE_BACK)) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Processing accepted takeback.");
 			}
 
 			// Game 117: raptora accepts the takeback request.
-			RaptorStringTokenizer tok = new RaptorStringTokenizer(line, " ",
-					true);
+			RaptorStringTokenizer tok = new RaptorStringTokenizer(line, " ", true);
 			tok.nextToken();
 			String gameId = tok.nextToken();
 			gameId = gameId.substring(0, gameId.length() - 1);
@@ -111,8 +107,7 @@ public class TakebackParser {
 			if (message != null) {
 				message.wasAccepted = true;
 			} else {
-				LOG
-						.debug("Received a takback accepted for a takeback message that was never received.");
+				LOG.debug("Received a takback accepted for a takeback message that was never received.");
 				// Leave halfMoveRequested at -1. This way code which uses the
 				// parser can determine this state and react appropriately.
 				message = new TakebackMessage();
@@ -120,7 +115,8 @@ public class TakebackParser {
 				message.gameId = gameId;
 				gameToTakebackMessages.put(message.gameId, message);
 			}
-			System.err.println("Taleback accepted.");
+			if (LOG.isDebugEnabled())
+				LOG.debug("Takeback accepted.");
 			return true;
 		}
 		return false;
