@@ -138,7 +138,7 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys, GameC
 				LOG.debug("Running ping handler");
 			if (!killPingHandler && isConnected() && isTimesseal2On()
 					&& Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.FICS_SHOW_PING_WIDGET)) {
-				sendMessage("ping", true, ChatType.PING_RESPONSE);
+				sendMessage("$$ping", true, ChatType.PING_RESPONSE);
 			}
 
 			if (!killPingHandler) {

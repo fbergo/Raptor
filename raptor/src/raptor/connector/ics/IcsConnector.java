@@ -151,6 +151,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	protected IcsConnectorContext context;
 
 	protected String currentProfileName;
+	protected boolean isLoggingIn;
 
 	protected GameService gameService;
 	protected Map<String, Object> scriptHash = new HashMap<String, Object>();
@@ -253,6 +254,14 @@ public abstract class IcsConnector implements Connector, MessageListener {
 		gameService.addGameServiceListener(gameServiceListener);
 		setBughouseService(new BughouseService(this));
 		prepopulateAutoCompleteList();
+	}
+
+	public boolean isInAutomatedLogIn() {
+		return isLoggingIn;
+	}
+
+	public void setLoggingIn(boolean isLoggingIn) {
+		this.isLoggingIn = isLoggingIn;
 	}
 
 	public boolean isTimesseal2On() {
@@ -1483,6 +1492,8 @@ public abstract class IcsConnector implements Connector, MessageListener {
 
 		ScriptService.getInstance().addScriptServiceListener(scriptServiceListener);
 		refreshChatScripts();
+		
+		isLoggingIn = true;
 
 		fireConnecting();
 	}
@@ -1727,6 +1738,10 @@ public abstract class IcsConnector implements Connector, MessageListener {
 
 		message = StringUtils.replaceChars(message, LOGIN_CHARACTERS_TO_FILTER, "");
 		if (isLoginPrompt) {
+			if (hasSentLogin) {
+				isLoggingIn = false;
+			}
+
 			if (getPreferences().getBoolean(profilePrefix + "is-anon-guest") && !hasSentLogin) {
 				parseMessage(message);
 				hasSentLogin = true;
@@ -1742,6 +1757,10 @@ public abstract class IcsConnector implements Connector, MessageListener {
 				parseMessage(message);
 			}
 		} else {
+			if (hasSentPassword) {
+				isLoggingIn = false;
+			}
+
 			if (getPreferences().getBoolean(profilePrefix + "is-anon-guest") && !hasSentPassword) {
 				hasSentPassword = true;
 				parseMessage(message);
@@ -1798,6 +1817,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 		}
 
 		if (isLoggedIn) {
+			isLoggingIn = false;
 
 			// If we are logged in. Then parse out all the text between the
 			// prompts.

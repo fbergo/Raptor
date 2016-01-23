@@ -417,8 +417,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(ACTION_SEPARATOR_SEQUENCE, 400);
 
 		// App settings.
-		setDefault(APP_NAME, "Raptor 1.0 rc5");
-		putValue("app-version", "1.0 rc5");
+		setDefault(APP_NAME, "Raptor 1.0 rc6");
+		putValue("app-version", "1.0 rc6");
 		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS,
 				!OSUtils.isLikelyWindowsXP());
 		setDefault(APP_SASH_WIDTH, 8);
@@ -738,7 +738,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(FICS_NO_WRAP_ENABLED, true);
 		setDefault(FICS_CHANNEL_COMMANDS,
 				"+channel $channel,-channel $channel,in $channel");
-		setDefault(FICS_PING_INTERVAL_SEC,5);
+		setDefault(FICS_PING_INTERVAL_SEC,20);
 		setDefault(FICS_SHOW_PING_WIDGET,true);
 		
 		setDefault(

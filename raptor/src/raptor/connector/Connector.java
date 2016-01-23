@@ -597,4 +597,10 @@ public interface Connector {
 	 * Returns true if connected and timeseal2 is on.
 	 */
 	public boolean isTimesseal2On();
+	
+	/**
+	 * 
+	 * @return True if the user is in the automated login process, false otherwise.
+	 */
+	public boolean isInAutomatedLogIn();
 }

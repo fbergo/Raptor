@@ -749,25 +749,30 @@ public abstract class ChatConsoleController implements PreferenceKeys {
 	}
 
 	public void onSendOutputText() {
-		String text = chatConsole.outputText.getText();
-		RaptorAliasResult alias = AliasService.getInstance().processAlias(this, text);
+		if (connector.isInAutomatedLogIn()) {
+			onChatEvent(new ChatEvent(null, ChatType.INTERNAL,
+					"Raptor is in the process of automatically logging into fics. Send vetoed."));
+		} else {
+			String text = chatConsole.outputText.getText();
+			RaptorAliasResult alias = AliasService.getInstance().processAlias(this, text);
 
-		if (alias == null) {
-			connector.sendMessage(text);
-		} else if (alias.getNewText() != null) {
-			connector.sendMessage(alias.getNewText());
+			if (alias == null) {
+				connector.sendMessage(text);
+			} else if (alias.getNewText() != null) {
+				connector.sendMessage(alias.getNewText());
+			}
+
+			if (alias != null && alias.getUserMessage() != null) {
+				onAppendChatEventToInputText(new ChatEvent(null, ChatType.INTERNAL, alias.getUserMessage()));
+			}
+
+			chatConsole.outputText.setText(getPrependText(true));
+			setCaretToOutputTextEnd();
+			awayList.clear();
+			adjustAwayButtonEnabled();
+
+			smartScroll(true);
 		}
-
-		if (alias != null && alias.getUserMessage() != null) {
-			onAppendChatEventToInputText(new ChatEvent(null, ChatType.INTERNAL, alias.getUserMessage()));
-		}
-
-		chatConsole.outputText.setText(getPrependText(true));
-		setCaretToOutputTextEnd();
-		awayList.clear();
-		adjustAwayButtonEnabled();
-
-		smartScroll(true);
 	}
 
 	public void processInputTextKeystroke(Event event, boolean isKeyUp) {
