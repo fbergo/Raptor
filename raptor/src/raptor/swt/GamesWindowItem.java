@@ -216,7 +216,7 @@ public class GamesWindowItem implements RaptorConnectorWindowItem {
 		gamesTable.addColumn(local.getString("gameWI5"), SWT.LEFT, 10, true, new IntegerComparator());
 		gamesTable.addColumn(local.getString("gameWI6"), SWT.LEFT, 15, true, new RatingComparator());
 		gamesTable.addColumn(local.getString("gameWI7"), SWT.LEFT, 20, true, null);
-		gamesTable.addColumn(local.getString("gameWI8"), SWT.LEFT, 15, true, null);
+		gamesTable.addColumn(local.getString("gameWI8"), SWT.LEFT, 15, true, new RatingComparator());
 		gamesTable.addColumn(local.getString("gameWI9"), SWT.LEFT, 20, true, null);
 		gamesTable.addColumn(local.getString("gameWI10"), SWT.LEFT, 20, true, null);
 
