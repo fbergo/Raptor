@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -103,6 +105,8 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 
 	protected boolean isTimesealOn;
 
+	private Lock writeLock = new ReentrantLock(true);
+
 	public boolean isTimeseal2On() {
 		return isTimesealOn;
 	}
@@ -110,9 +114,12 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 	@Override
 	public void send(String message) {
 		try {
+			writeLock.lock();
 			getOutputStream().write(message.getBytes());
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
@@ -242,7 +249,14 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 	}
 
 	private void sendAck() throws IOException {
-		getOutputStream().write("\0029\n".getBytes());
+		try {
+			writeLock.lock();
+			getOutputStream().write("\0029\n".getBytes());
+		} catch (IOException ioe) {
+			throw ioe;
+		} finally {
+			writeLock.unlock();
+		}
 	}
 
 	private void init() throws IOException {
@@ -255,9 +269,14 @@ public class TimesealSocketMessageProducer implements MessageProducer {
 
 		if (isTimesealOn) {
 			OutputStream outputstream = getOutputStream();
-			synchronized (socket) {
+			try {
+				writeLock.lock();
 				outputstream.write(initialTimesealString.getBytes());
 				outputstream.write(10);
+			} catch (IOException ioe) {
+				throw ioe;
+			} finally {
+				writeLock.unlock();
 			}
 		}
 
