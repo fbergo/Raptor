@@ -60,13 +60,10 @@ import raptor.util.RaptorStringUtils;
  * The RaptorPreferenceStore. Automatically loads and saves itself at
  * Raptor.USER_RAPTOR_DIR/raptor.properties . Had additional data type support.
  */
-public class RaptorPreferenceStore extends PreferenceStore implements
-		PreferenceKeys {
-	private static final RaptorLogger LOG = RaptorLogger
-			.getLog(RaptorPreferenceStore.class);
+public class RaptorPreferenceStore extends PreferenceStore implements PreferenceKeys {
+	private static final RaptorLogger LOG = RaptorLogger.getLog(RaptorPreferenceStore.class);
 	public static final String PREFERENCE_PROPERTIES_FILE = "raptor.properties";
-	public static final File RAPTOR_PROPERTIES = new File(
-			Raptor.USER_RAPTOR_DIR, "raptor.properties");
+	public static final File RAPTOR_PROPERTIES = new File(Raptor.USER_RAPTOR_DIR, "raptor.properties");
 	protected String defaultMonospacedFontName;
 	protected String defaultFontName;
 	protected int defaultLargeFontSize;
@@ -80,11 +77,8 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		public void propertyChange(PropertyChangeEvent event) {
 			String key = event.getProperty();
 			if (key.endsWith("color")) {
-				Raptor.getInstance()
-						.getColorRegistry()
-						.put(key,
-								PreferenceConverter.getColor(
-										RaptorPreferenceStore.this, key));
+				Raptor.getInstance().getColorRegistry().put(key,
+						PreferenceConverter.getColor(RaptorPreferenceStore.this, key));
 			} else if (key.endsWith("font")) {
 				// Adjust all the zoomed fonts, as well as the font being
 				// changed,
@@ -93,8 +87,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 				// Add all the fonts to change to a list to avoid the
 				// concurrency issues.
 				List<String> fontKeysToChange = new ArrayList<String>();
-				for (Object fontRegistryKey : Raptor.getInstance()
-						.getFontRegistry().getKeySet()) {
+				for (Object fontRegistryKey : Raptor.getInstance().getFontRegistry().getKeySet()) {
 					String fontKey = fontRegistryKey.toString();
 					if (fontKey.startsWith(key)) {
 						fontKeysToChange.add(fontKey);
@@ -103,19 +96,12 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 
 				for (String fontKey : fontKeysToChange) {
 					if (fontKey.equals(key)) {
-						Raptor.getInstance()
-								.getFontRegistry()
-								.put(key,
-										PreferenceConverter
-												.getFontDataArray(
-														RaptorPreferenceStore.this,
-														key));
+						Raptor.getInstance().getFontRegistry().put(key,
+								PreferenceConverter.getFontDataArray(RaptorPreferenceStore.this, key));
 					} else {
-						double zoomFactor = Double.parseDouble(fontKey
-								.substring(key.length() + 1));
+						double zoomFactor = Double.parseDouble(fontKey.substring(key.length() + 1));
 
-						Raptor.getInstance().getFontRegistry()
-								.put(fontKey, zoomFont(key, zoomFactor));
+						Raptor.getInstance().getFontRegistry().put(fontKey, zoomFont(key, zoomFactor));
 					}
 				}
 			}
@@ -126,8 +112,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		String chessSet = getString(BOARD_CHESS_SET_NAME);
 		File file = new File(Raptor.RESOURCES_DIR + "set/" + chessSet);
 		if (!file.exists() || !file.isDirectory()) {
-			setValue(BOARD_CHESS_SET_NAME,
-					getDefaultString(BOARD_CHESS_SET_NAME));
+			setValue(BOARD_CHESS_SET_NAME, getDefaultString(BOARD_CHESS_SET_NAME));
 		}
 	}
 
@@ -137,8 +122,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		FileOutputStream fileOut = null;
 
 		try {
-			LOG.info("Loading RaptorPreferenceStore store "
-					+ PREFERENCE_PROPERTIES_FILE);
+			LOG.info("Loading RaptorPreferenceStore store " + PREFERENCE_PROPERTIES_FILE);
 			loadDefaults();
 			if (RAPTOR_PROPERTIES.exists()) {
 				load(fileIn = new FileInputStream(RAPTOR_PROPERTIES));
@@ -146,8 +130,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 			} else {
 				RAPTOR_PROPERTIES.getParentFile().mkdir();
 				RAPTOR_PROPERTIES.createNewFile();
-				save(fileOut = new FileOutputStream(RAPTOR_PROPERTIES),
-						"Last saved on " + new Date());
+				save(fileOut = new FileOutputStream(RAPTOR_PROPERTIES), "Last saved on " + new Date());
 			}
 		} catch (Exception e) {
 			LOG.error("Error reading or writing to file ", e);
@@ -169,8 +152,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		}
 
 		addPropertyChangeListener(propertyChangeListener);
-		LOG.info("Loaded preferences from "
-				+ RAPTOR_PROPERTIES.getAbsolutePath());
+		LOG.info("Loaded preferences from " + RAPTOR_PROPERTIES.getAbsolutePath());
 	}
 
 	/**
@@ -219,8 +201,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 	public Color getColor(ChatEvent event) {
 		String key = null;
 		if (event.getType() == ChatType.CHANNEL_TELL) {
-			key = CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + event.getType() + "-"
-					+ event.getChannel() + "-color";
+			key = CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + event.getType() + "-" + event.getChannel() + "-color";
 		} else {
 			key = getKeyForChatType(event.getType());
 		}
@@ -236,14 +217,11 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		String result = null;
 		if (type == ChatType.CHANNEL_TELL) {
 			result = null;
-		} else if (type == ChatType.BUGWHO_AVAILABLE_TEAMS
-				|| type == ChatType.BUGWHO_GAMES
+		} else if (type == ChatType.BUGWHO_AVAILABLE_TEAMS || type == ChatType.BUGWHO_GAMES
 				|| type == ChatType.BUGWHO_UNPARTNERED_BUGGERS) {
-			result = CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.BUGWHO_ALL
-					+ "-color";
+			result = CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.BUGWHO_ALL + "-color";
 		} else if (type == ChatType.NOTIFICATION_DEPARTURE) {
-			result = CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO
-					+ ChatType.NOTIFICATION_ARRIVAL + "-color";
+			result = CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + ChatType.NOTIFICATION_ARRIVAL + "-color";
 		} else {
 			result = CHAT_CHAT_EVENT_TYPE_COLOR_APPEND_TO + type + "-color";
 		}
@@ -298,14 +276,10 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 			return "Lucida Console";
 		else {
 			if (!isDefFontLoaded) {
-				isDefFontLoaded = Raptor.getInstance().getDisplay()
-						.loadFont(Raptor.RESOURCES_DIR + "Inconsolata.ttf");
-				Font fnt = new Font(Raptor.getInstance().getDisplay(),
-						"Inconsolata", 15, SWT.NORMAL);
-				Raptor.getInstance().getFontRegistry()
-						.put(CHAT_OUTPUT_FONT, fnt.getFontData());
-				Raptor.getInstance().getFontRegistry()
-						.put(CHAT_INPUT_FONT, fnt.getFontData());
+				isDefFontLoaded = Raptor.getInstance().getDisplay().loadFont(Raptor.RESOURCES_DIR + "Inconsolata.ttf");
+				Font fnt = new Font(Raptor.getInstance().getDisplay(), "Inconsolata", 15, SWT.NORMAL);
+				Raptor.getInstance().getFontRegistry().put(CHAT_OUTPUT_FONT, fnt.getFontData());
+				Raptor.getInstance().getFontRegistry().put(CHAT_INPUT_FONT, fnt.getFontData());
 			}
 			return "Inconsolata";
 		}
@@ -333,8 +307,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 				adjustedKey = getZoomFontKey(key, zoomFactor);
 			}
 
-			if (!Raptor.getInstance().getFontRegistry()
-					.hasValueFor(adjustedKey)) {
+			if (!Raptor.getInstance().getFontRegistry().hasValueFor(adjustedKey)) {
 				FontData[] fontData = null;
 
 				if (!isAdjustingForZoomFactor) {
@@ -343,13 +316,11 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 					fontData = zoomFont(key, getDouble(APP_ZOOM_FACTOR));
 				}
 
-				Raptor.getInstance().getFontRegistry()
-						.put(adjustedKey, fontData);
+				Raptor.getInstance().getFontRegistry().put(adjustedKey, fontData);
 			}
 			return Raptor.getInstance().getFontRegistry().get(adjustedKey);
 		} catch (Throwable t) {
-			LOG.error("Error in getFont(" + key + ") Returning default font.",
-					t);
+			LOG.error("Error in getFont(" + key + ") Returning default font.", t);
 			return Raptor.getInstance().getFontRegistry().defaultFont();
 		}
 	}
@@ -393,22 +364,19 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 	}
 
 	public void applyDefaultLayout() {
-		Map<String, String> map = new ClassicLayout()
-				.getPreferenceAdjustments();
+		Map<String, String> map = new ClassicLayout().getPreferenceAdjustments();
 		for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
 			String value = stringStringEntry.getValue();
 			if (value == null) {
 				setToDefault(stringStringEntry.getKey());
 			} else {
-				setDefault(stringStringEntry.getKey(),
-						stringStringEntry.getValue());
+				setDefault(stringStringEntry.getKey(), stringStringEntry.getValue());
 			}
 		}
 	}
 
 	public void loadDefaults() {
-		defaultFontName = Raptor.getInstance().getFontRegistry().defaultFont()
-				.getFontData()[0].getName();
+		defaultFontName = Raptor.getInstance().getFontRegistry().defaultFont().getFontData()[0].getName();
 		defaultMonospacedFontName = getDefaultMonospacedFont();
 
 		setDefaultMonitorBasedSizes();
@@ -419,32 +387,24 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		// App settings.
 		setDefault(APP_NAME, "Raptor 1.0 rc6");
 		putValue("app-version", "1.0 rc6");
-		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS,
-				!OSUtils.isLikelyWindowsXP());
+		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS, !OSUtils.isLikelyWindowsXP());
 		setDefault(APP_SASH_WIDTH, 8);
 		PreferenceConverter.setDefault(this, APP_PING_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultSmallFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultSmallFontSize, 0) });
 		PreferenceConverter.setDefault(this, APP_PING_COLOR, new RGB(0, 0, 0));
 
 		PreferenceConverter.setDefault(this, APP_STATUS_BAR_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultSmallFontSize, 0) });
-		PreferenceConverter.setDefault(this, APP_STATUS_BAR_COLOR, new RGB(0,
-				0, 0));
-		setDefault(APP_HOME_URL,
-				"https://raptor-fics-interface.github.io/Raptor/");
+				new FontData[] { new FontData(defaultFontName, defaultSmallFontSize, 0) });
+		PreferenceConverter.setDefault(this, APP_STATUS_BAR_COLOR, new RGB(0, 0, 0));
+		setDefault(APP_HOME_URL, "https://raptor-fics-interface.github.io/Raptor/");
 		setDefault(APP_SOUND_ENABLED, true);
-		setDefault(APP_USER_TAGS,
-				"Dupe,Friend,Lagger,Idiot,Good Partner,No Partner,Premover,Troll");
-		setDefault(APP_PGN_FILE, Raptor.USER_RAPTOR_HOME_PATH
-				+ "/games/raptorGames.pgn");
+		setDefault(APP_USER_TAGS, "Dupe,Friend,Lagger,Idiot,Good Partner,No Partner,Premover,Troll");
+		setDefault(APP_PGN_FILE, Raptor.USER_RAPTOR_HOME_PATH + "/games/raptorGames.pgn");
 		setDefault(APP_LAYOUT, "Layout1");
 		setDefault(APP_OPEN_LINKS_IN_EXTERNAL_BROWSER, false);
 		setDefault(APP_BROWSER_QUADRANT, Quadrant.II);
-		setDefault(APP_CHESS_BOARD_QUADRANTS,
-				new String[] { Quadrant.II.toString(), Quadrant.III.toString(),
-						Quadrant.IV.toString(), Quadrant.V.toString() });
+		setDefault(APP_CHESS_BOARD_QUADRANTS, new String[] { Quadrant.II.toString(), Quadrant.III.toString(),
+				Quadrant.IV.toString(), Quadrant.V.toString() });
 		setDefault(APP_PGN_RESULTS_QUADRANT, Quadrant.III);
 		setDefault(APP_IS_LAUNCHING_HOME_PAGE, true);
 		setDefault(APP_IS_LAUNCHING_LOGIN_DIALOG, true);
@@ -458,26 +418,21 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(APP_WINDOW_BOUNDS, new Rectangle(0, 0, -1, -1));
 		setDefault(APP_ZOOM_FACTOR, 1.0);
 
-		if (OSUtils.isLikelyWindows() && !OSUtils.isLikelyWindows7()) {
+		if (OSUtils.isLikelyWindows()) {
 			setDefault(SPEECH_PROCESS_NAME, "SayStatic");
 		}
 
 		if (OSUtils.isLikelyLinux()) {
 			try {
-				if (Runtime.getRuntime().exec(new String[] { "which", "play" })
-						.waitFor() == 0) {
+				if (Runtime.getRuntime().exec(new String[] { "which", "play" }).waitFor() == 0) {
 					setDefault(PreferenceKeys.SOUND_PROCESS_NAME, "play");
-				} else if (Runtime.getRuntime()
-						.exec(new String[] { "which", "aplay" }).waitFor() == 0) {
+				} else if (Runtime.getRuntime().exec(new String[] { "which", "aplay" }).waitFor() == 0) {
 					setDefault(PreferenceKeys.SOUND_PROCESS_NAME, "aplay");
-				} else if (Runtime.getRuntime()
-						.exec(new String[] { "which", "mplayer" }).waitFor() == 0) {
+				} else if (Runtime.getRuntime().exec(new String[] { "which", "mplayer" }).waitFor() == 0) {
 					setDefault(PreferenceKeys.SOUND_PROCESS_NAME, "mplayer");
 				}
 			} catch (Throwable t) {
-				LOG.warn(
-						"Error launching which to determine sound process in linux.",
-						t);
+				LOG.warn("Error launching which to determine sound process in linux.", t);
 			}
 		}
 
@@ -498,8 +453,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(BOARD_PIECE_SIZE_ADJUSTMENT, .06);
 		setDefault(BOARD_IS_SHOWING_PIECE_JAIL, false);
 		setDefault(BOARD_CLOCK_SHOW_MILLIS_WHEN_LESS_THAN, Integer.MIN_VALUE);
-		setDefault(BOARD_CLOCK_SHOW_SECONDS_WHEN_LESS_THAN,
-				1000L * 60L * 60L + 1L);
+		setDefault(BOARD_CLOCK_SHOW_SECONDS_WHEN_LESS_THAN, 1000L * 60L * 60L + 1L);
 		setDefault(BOARD_IS_PLAYING_10_SECOND_COUNTDOWN_SOUNDS, true);
 		setDefault(BOARD_PREMOVE_ENABLED, true);
 		setDefault(BOARD_PLAY_MOVE_SOUND_WHEN_OBSERVING, true);
@@ -517,91 +471,56 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(BOARD_SPEAK_WHEN_OBSERVING, false);
 		setDefault(BOARD_SPEAK_RESULTS, false);
 		setDefault(BOARD_IGNORE_OBSERVED_GAMES_IF_PLAYING, false);
-		setDefault(BOARD_MOVE_LIST_CLASS,
-				"raptor.swt.chess.movelist.TextAreaMoveList");
+		setDefault(BOARD_MOVE_LIST_CLASS, "raptor.swt.chess.movelist.TextAreaMoveList");
 		setDefault(BOARD_IS_USING_SOLID_BACKGROUND_COLORS, false);
-		setDefault(BOARD_SQUARE_BACKGROUND_IMAGE_EFFECT,
-				SquareBackgroundImageEffect.RandomCrop.toString());
+		setDefault(BOARD_SQUARE_BACKGROUND_IMAGE_EFFECT, SquareBackgroundImageEffect.RandomCrop.toString());
 		setDefault(BOARD_TRAVERSE_WITH_MOUSE_WHEEL, true);
 
-		PreferenceConverter.setDefault(this,
-				BOARD_LIGHT_SQUARE_SOLID_BACKGROUND_COLOR,
-				new RGB(178, 180, 78));
-		PreferenceConverter.setDefault(this,
-				BOARD_DARK_SQUARE_SOLID_BACKGROUND_COLOR, new RGB(94, 145, 91));
+		PreferenceConverter.setDefault(this, BOARD_LIGHT_SQUARE_SOLID_BACKGROUND_COLOR, new RGB(178, 180, 78));
+		PreferenceConverter.setDefault(this, BOARD_DARK_SQUARE_SOLID_BACKGROUND_COLOR, new RGB(94, 145, 91));
 
 		PreferenceConverter.setDefault(this, BOARD_COORDINATES_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultMediumFontSize, 0) });
-		PreferenceConverter
-				.setDefault(this, BOARD_CLOCK_FONT,
-						new FontData[] { new FontData(
-								defaultMonospacedFontName, 24, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultMediumFontSize, 0) });
+		PreferenceConverter.setDefault(this, BOARD_CLOCK_FONT,
+				new FontData[] { new FontData(defaultMonospacedFontName, 24, 0) });
 		PreferenceConverter.setDefault(this, BOARD_LAG_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultTinyFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultTinyFontSize, 0) });
 		PreferenceConverter.setDefault(this, BOARD_PLAYER_NAME_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultLargeFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultLargeFontSize, 0) });
 		PreferenceConverter.setDefault(this, BOARD_PIECE_JAIL_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultMediumFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultMediumFontSize, 0) });
 		PreferenceConverter.setDefault(this, BOARD_OPENING_DESC_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultTinyFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultTinyFontSize, 0) });
 		PreferenceConverter.setDefault(this, BOARD_STATUS_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultTinyFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultTinyFontSize, 0) });
 		PreferenceConverter.setDefault(this, BOARD_GAME_DESCRIPTION_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultTinyFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultTinyFontSize, 0) });
 		PreferenceConverter.setDefault(this, BOARD_PREMOVES_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultTinyFontSize, 0) });
+				new FontData[] { new FontData(defaultFontName, defaultTinyFontSize, 0) });
 
 		// Controller button preferences.
-		setDefault(PLAYING_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION,
-				PlayingMouseAction.None.toString());
-		setDefault(PLAYING_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION,
-				PlayingMouseAction.PopupMenu.toString());
-		setDefault(PLAYING_CONTROLLER + MIDDLE_MOUSE_BUTTON_ACTION,
-				PlayingMouseAction.SmartMove.toString());
-		setDefault(PLAYING_CONTROLLER + MISC1_MOUSE_BUTTON_ACTION,
-				PlayingMouseAction.None.toString());
-		setDefault(PLAYING_CONTROLLER + MISC2_MOUSE_BUTTON_ACTION,
-				PlayingMouseAction.None.toString());
-		setDefault(PLAYING_CONTROLLER + LEFT_DOUBLE_CLICK_MOUSE_BUTTON_ACTION,
-				PlayingMouseAction.None.toString());
-		setDefault(OBSERVING_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION,
-				ObservingMouseAction.MakePrimaryGame.toString());
-		setDefault(OBSERVING_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION,
-				ObservingMouseAction.AddGameChatTab.toString());
-		setDefault(OBSERVING_CONTROLLER + MIDDLE_MOUSE_BUTTON_ACTION,
-				ObservingMouseAction.MatchWinner.toString());
-		setDefault(OBSERVING_CONTROLLER + MISC1_MOUSE_BUTTON_ACTION,
-				ObservingMouseAction.None.toString());
-		setDefault(OBSERVING_CONTROLLER + MISC2_MOUSE_BUTTON_ACTION,
-				ObservingMouseAction.None.toString());
-		setDefault(
-				OBSERVING_CONTROLLER + LEFT_DOUBLE_CLICK_MOUSE_BUTTON_ACTION,
-				ObservingMouseAction.None.toString());
-		setDefault(INACTIVE_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION,
-				InactiveMouseAction.None.toString());
-		setDefault(INACTIVE_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION,
-				InactiveMouseAction.None.toString());
-		setDefault(INACTIVE_CONTROLLER + MIDDLE_MOUSE_BUTTON_ACTION,
-				InactiveMouseAction.Rematch.toString());
-		setDefault(INACTIVE_CONTROLLER + MISC1_MOUSE_BUTTON_ACTION,
-				InactiveMouseAction.None.toString());
-		setDefault(INACTIVE_CONTROLLER + MISC2_MOUSE_BUTTON_ACTION,
-				InactiveMouseAction.None.toString());
-		setDefault(INACTIVE_CONTROLLER + LEFT_DOUBLE_CLICK_MOUSE_BUTTON_ACTION,
-				InactiveMouseAction.None.toString());
+		setDefault(PLAYING_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION, PlayingMouseAction.None.toString());
+		setDefault(PLAYING_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION, PlayingMouseAction.PopupMenu.toString());
+		setDefault(PLAYING_CONTROLLER + MIDDLE_MOUSE_BUTTON_ACTION, PlayingMouseAction.SmartMove.toString());
+		setDefault(PLAYING_CONTROLLER + MISC1_MOUSE_BUTTON_ACTION, PlayingMouseAction.None.toString());
+		setDefault(PLAYING_CONTROLLER + MISC2_MOUSE_BUTTON_ACTION, PlayingMouseAction.None.toString());
+		setDefault(PLAYING_CONTROLLER + LEFT_DOUBLE_CLICK_MOUSE_BUTTON_ACTION, PlayingMouseAction.None.toString());
+		setDefault(OBSERVING_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION, ObservingMouseAction.MakePrimaryGame.toString());
+		setDefault(OBSERVING_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION, ObservingMouseAction.AddGameChatTab.toString());
+		setDefault(OBSERVING_CONTROLLER + MIDDLE_MOUSE_BUTTON_ACTION, ObservingMouseAction.MatchWinner.toString());
+		setDefault(OBSERVING_CONTROLLER + MISC1_MOUSE_BUTTON_ACTION, ObservingMouseAction.None.toString());
+		setDefault(OBSERVING_CONTROLLER + MISC2_MOUSE_BUTTON_ACTION, ObservingMouseAction.None.toString());
+		setDefault(OBSERVING_CONTROLLER + LEFT_DOUBLE_CLICK_MOUSE_BUTTON_ACTION, ObservingMouseAction.None.toString());
+		setDefault(INACTIVE_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION, InactiveMouseAction.None.toString());
+		setDefault(INACTIVE_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION, InactiveMouseAction.None.toString());
+		setDefault(INACTIVE_CONTROLLER + MIDDLE_MOUSE_BUTTON_ACTION, InactiveMouseAction.Rematch.toString());
+		setDefault(INACTIVE_CONTROLLER + MISC1_MOUSE_BUTTON_ACTION, InactiveMouseAction.None.toString());
+		setDefault(INACTIVE_CONTROLLER + MISC2_MOUSE_BUTTON_ACTION, InactiveMouseAction.None.toString());
+		setDefault(INACTIVE_CONTROLLER + LEFT_DOUBLE_CLICK_MOUSE_BUTTON_ACTION, InactiveMouseAction.None.toString());
 
 		// BugArena
 		setDefault(BUG_ARENA_PARTNERS_INDEX, 0);
-		setDefault(BUG_ARENA_MAX_PARTNERS_INDEX,
-				BugPartners.getRatings().length - 1);
+		setDefault(BUG_ARENA_MAX_PARTNERS_INDEX, BugPartners.getRatings().length - 1);
 		setDefault(BUG_ARENA_TEAMS_LOW_INDEX, 0);
 		setDefault(BUG_ARENA_TEAMS_HIGH_INDEX, 22);
 		setDefault(BUG_ARENA_TEAMS_IS_RATED, true);
@@ -613,8 +532,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 
 		// SeekTable
 		setDefault(SEEK_TABLE_RATINGS_INDEX, 0);
-		setDefault(SEEK_TABLE_MAX_RATINGS_INDEX,
-				SeekTableWindowItem.getRatings().length - 1);
+		setDefault(SEEK_TABLE_MAX_RATINGS_INDEX, SeekTableWindowItem.getRatings().length - 1);
 		setDefault(SEEK_TABLE_RATED_INDEX, 0);
 		setDefault(SEEK_TABLE_SHOW_COMPUTERS, true);
 		setDefault(SEEK_TABLE_SHOW_LIGHTNING, true);
@@ -629,22 +547,17 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(SEEK_TABLE_SHOW_UNTIMED, true);
 		setDefault(SEEK_TABLE_SELECTED_TAB, 2);
 
-		PreferenceConverter.setDefault(this, SEEK_GRAPH_COMPUTER_COLOR,
-				new RGB(0, 0, 255));
-		PreferenceConverter.setDefault(this, SEEK_GRAPH_MANY_COLOR, new RGB(
-				255, 255, 102));
-		PreferenceConverter.setDefault(this, SEEK_GRAPH_RATED_COLOR, new RGB(0,
-				255, 0));
-		PreferenceConverter.setDefault(this, SEEK_GRAPH_UNRATED_COLOR, new RGB(
-				255, 0, 0));
+		PreferenceConverter.setDefault(this, SEEK_GRAPH_COMPUTER_COLOR, new RGB(0, 0, 255));
+		PreferenceConverter.setDefault(this, SEEK_GRAPH_MANY_COLOR, new RGB(255, 255, 102));
+		PreferenceConverter.setDefault(this, SEEK_GRAPH_RATED_COLOR, new RGB(0, 255, 0));
+		PreferenceConverter.setDefault(this, SEEK_GRAPH_UNRATED_COLOR, new RGB(255, 0, 0));
 
 		// Games table
 		setDefault(GAMES_TABLE_SELECTED_TAB, 1);
 		setDefault(GAMES_TABLE_RATINGS_INDEX, 0);
-		setDefault(GAMES_TABLE_MAX_RATINGS_INDEX,
-				GamesWindowItem.getRatings().length - 1);
-		setDefault(GAMES_TABLE_TIME_INDEX,0);
-		setDefault(GAMES_TABLE_INC_INDEX,0);
+		setDefault(GAMES_TABLE_MAX_RATINGS_INDEX, GamesWindowItem.getRatings().length - 1);
+		setDefault(GAMES_TABLE_TIME_INDEX, 0);
+		setDefault(GAMES_TABLE_INC_INDEX, 0);
 
 		setDefault(GAMES_TABLE_RATED_INDEX, 0);
 		setDefault(GAMES_TABLE_SHOW_BUGHOUSE, true);
@@ -678,8 +591,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(HIGHLIGHT_WIDTH_PERCENTAGE, 3);
 
 		PreferenceConverter.setDefault(this, RESULTS_FONT,
-				new FontData[] { new FontData(defaultMonospacedFontName, 40,
-						SWT.BOLD) });
+				new FontData[] { new FontData(defaultMonospacedFontName, 40, SWT.BOLD) });
 		setDefault(RESULTS_IS_SHOWING, true);
 		setDefault(RESULTS_FADE_AWAY_MODE, true);
 		setDefault(RESULTS_ANIMATION_DELAY, 2000L);
@@ -702,24 +614,21 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_ARRIVALS, true);
 		setDefault(CHAT_PLAY_NOTIFICATION_SOUND_ON_DEPARTURES, true);
 		setDefault(CHAT_UNDERLINE_COMMANDS, true);
-		setDefault(PROCESS_SPEECH_MAX_TIME_SECONDS,15);
+		setDefault(PROCESS_SPEECH_MAX_TIME_SECONDS, 15);
 
 		setDefault(CHAT_COMMAND_LINE_SPELL_CHECK, !OSUtils.isLikelyLinux());
 
 		PreferenceConverter.setDefault(this, CHAT_INPUT_FONT,
-				new FontData[] { new FontData(defaultMonospacedFontName,
-						defaultLargeFontSize, 0) });
+				new FontData[] { new FontData(defaultMonospacedFontName, defaultLargeFontSize, 0) });
 		PreferenceConverter.setDefault(this, CHAT_OUTPUT_FONT,
-				new FontData[] { new FontData(defaultMonospacedFontName,
-						defaultMediumFontSize, 0) });
+				new FontData[] { new FontData(defaultMonospacedFontName, defaultMediumFontSize, 0) });
 
 		applyDefaultTheme();
 		applyDefaultLayout();
 
 		// Bug house buttons settings.
 		PreferenceConverter.setDefault(this, BUG_BUTTONS_FONT,
-				new FontData[] { new FontData(defaultFontName,
-						defaultSmallFontSize, SWT.BOLD) });
+				new FontData[] { new FontData(defaultFontName, defaultSmallFontSize, SWT.BOLD) });
 		// Bug house
 		setDefault(BUGHOUSE_PLAYING_OPEN_PARTNER_BOARD, true);
 		setDefault(BUGHOUSE_OBSERVING_OPEN_PARTNER_BOARD, true);
@@ -736,19 +645,16 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(FICS_CLOSE_TABS_ON_DISCONNECT, false);
 		setDefault(FICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP, true);
 		setDefault(FICS_NO_WRAP_ENABLED, true);
-		setDefault(FICS_CHANNEL_COMMANDS,
-				"+channel $channel,-channel $channel,in $channel");
-		setDefault(FICS_PING_INTERVAL_SEC,20);
-		setDefault(FICS_SHOW_PING_WIDGET,true);
-		
-		setDefault(
-				FICS_PERSON_COMMANDS,
+		setDefault(FICS_CHANNEL_COMMANDS, "+channel $channel,-channel $channel,in $channel");
+		setDefault(FICS_PING_INTERVAL_SEC, 20);
+		setDefault(FICS_SHOW_PING_WIDGET, true);
+
+		setDefault(FICS_PERSON_COMMANDS,
 				"assess $person,finger $person,follow $person,history $person,journal $person,"
 						+ "observe $person,partner $person,stored $person,variables $person,"
 						+ "separator,pstat $userName $person,oldpstat $userName $person");
 
-		setDefault(
-				FICS_PERSON_MATCH_COMMANDS,
+		setDefault(FICS_PERSON_MATCH_COMMANDS,
 				"match $person 1 0,match $person 3 0,match $person 5 0,match $person 15 0,separator,"
 						+ "match $person 1 0 atomic,match $person 3 0 atomic,match $person 5 0 atomic,separator,"
 						+ "match $person 1 0 bughouse,match $person 2 0 bughouse,match $person 3 0 bughouse,separator,"
@@ -757,14 +663,11 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 						+ "match $person 1 0 zh,match $person 3 0 zh,match $person 5 0 zh,separator,"
 						+ "match $person 1 0 wildfr,match $person 2 0 wildfr,match $person 3 0 wildfr");
 
-		setDefault(
-				FICS_PERSON_LIST_COMMANDS,
+		setDefault(FICS_PERSON_LIST_COMMANDS,
 				"+censor $person,-censor $person,separator,+notify $person,-notify $person,separator,+gnotify $person,-gnotify $person,separator,+noplay $person,-noplay $person");
 
-		setDefault(FICS_GAME_COMMANDS,
-				"observe $gameId,allobservers $gameId,moves $gameId");
-		setDefault(
-				FICS_REGULAR_EXPRESSIONS_TO_BLOCK,
+		setDefault(FICS_GAME_COMMANDS, "observe $gameId,allobservers $gameId,moves $gameId");
+		setDefault(FICS_REGULAR_EXPRESSIONS_TO_BLOCK,
 				"defprompt set\\.,gameinfo set\\.,ms set\\.,startpos set\\.,"
 						+ "pendinfo set\\.,nowrap set\\.,smartmove set\\.,premove set\\.,"
 						+ "Style 12 set\\.,Your prompt will now not show the time\\.,"
@@ -782,8 +685,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 		setDefault(FICS_SEEK_FORMULA, true);
 		setDefault(FICS_SEEK_RATED, true);
 		setDefault(FICS_SEEK_COLOR, "");
-		setDefault(FICS_KEEP_ALIVE_COMMAND,
-				"set busy is away from the keyboard.");
+		setDefault(FICS_KEEP_ALIVE_COMMAND, "set busy is away from the keyboard.");
 
 		// Fics Primary
 		setDefault(FICS_PRIMARY_USER_NAME, "");
@@ -832,8 +734,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 	public void save() {
 		FileOutputStream fileOut = null;
 		try {
-			save(fileOut = new FileOutputStream(RAPTOR_PROPERTIES),
-					"Last saved on " + new Date());
+			save(fileOut = new FileOutputStream(RAPTOR_PROPERTIES), "Last saved on " + new Date());
 			fileOut.flush();
 		} catch (IOException ioe) {
 			LOG.error("Error saving raptor preferences:", ioe);
@@ -911,8 +812,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements
 	}
 
 	protected void setDefaultMonitorBasedSizes() {
-		Rectangle fullViewBounds = Display.getCurrent().getPrimaryMonitor()
-				.getBounds();
+		Rectangle fullViewBounds = Display.getCurrent().getPrimaryMonitor().getBounds();
 		int toolbarPieceSize = 12;
 
 		String iconSize = "tiny";
