@@ -14,9 +14,9 @@
 package raptor.swt;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,13 +34,14 @@ import org.eclipse.swt.widgets.Shell;
 
 import raptor.Raptor;
 import raptor.chess.Game;
-import raptor.chess.pgn.AbstractPgnParser;
 import raptor.chess.pgn.LenientPgnParserListener;
+import raptor.chess.pgn.PgnHeader;
 import raptor.chess.pgn.PgnParserError;
 import raptor.chess.pgn.PgnUtils;
 import raptor.chess.pgn.StreamingPgnParser;
 import raptor.international.L10n;
 import raptor.service.ThreadService;
+import raptor.swt.chess.PgnParseResultsRow;
 import raptor.swt.chess.PgnParseResultsWindowItem;
 import raptor.util.RaptorLogger;
 import raptor.util.RaptorRunnable;
@@ -49,7 +50,7 @@ public class PgnProcessingDialog extends Dialog {
 	public class ProfressPgnParserListener extends LenientPgnParserListener {
 		private ArrayList<PgnParserError> errors = new ArrayList<PgnParserError>();
 
-		private ArrayList<Game> games = new ArrayList<Game>();
+		private ArrayList<PgnParseResultsRow> rows = new ArrayList<PgnParseResultsRow>();
 
 		public ProfressPgnParserListener() {
 			super();
@@ -66,47 +67,53 @@ public class PgnProcessingDialog extends Dialog {
 		}
 
 		@Override
-		public void gameParsed(Game game, final int lineNumber) {
+		public boolean gameParsed(Game game, final int lineNumber) {
 			if (isClosed) {
 				throw new RuntimeException("Closed");
 			} else {
-				games.add(game);
-				if (games.size() % 20 == 0) {
+				PgnParseResultsRow row = new PgnParseResultsRow();
+				row.setVariant(StringUtils.defaultString(game.getHeader(PgnHeader.Variant), "?"));
+				row.setDate(StringUtils.defaultString(game.getHeader(PgnHeader.Date), "?"));
+				row.setEvent(StringUtils.defaultString(game.getHeader(PgnHeader.Event), "?"));
+				row.setWhite(StringUtils.defaultString(game.getHeader(PgnHeader.White), "?"));
+				row.setWhiteElo(StringUtils.defaultString(game.getHeader(PgnHeader.WhiteElo), "?"));
+				row.setBlack(StringUtils.defaultString(game.getHeader(PgnHeader.Black), "?"));
+				row.setBlackElo(StringUtils.defaultString(game.getHeader(PgnHeader.BlackElo), "?"));
+				row.setResultDescription(StringUtils.defaultString(game.getHeader(PgnHeader.Result), "?"));
+				row.setEco(StringUtils.defaultString(game.getHeader(PgnHeader.ECO), "?"));
+				row.setOpening(StringUtils.defaultString(game.getHeader(PgnHeader.Opening), "?"));
+				row.setLineNumber(lineNumber);
+				row.setResult(game.getResult());
+				rows.add(row);
+
+				if (rows.size() % 20 == 0) {
 					shell.getDisplay().asyncExec(new RaptorRunnable() {
 						@Override
 						public void execute() {
-							processMessageLabel.setText(L10n.getInstance()
-									.getString("pgnParseWI30")
-									+ ": "
-									+ lineNumber
-									+ " "
-									+ L10n.getInstance().getString(
-											"pgnParseWI3")
-									+ games.size()
-									+ " "
-									+ L10n.getInstance().getString(
-											"pgnParseWI27") + errors.size());
-							progressBar.setSelection(games.size());
+							processMessageLabel.setText(L10n.getInstance().getString("pgnParseWI30") + ": " + lineNumber
+									+ " " + L10n.getInstance().getString("pgnParseWI3") + rows.size() + " "
+									+ L10n.getInstance().getString("pgnParseWI27") + errors.size());
+							progressBar.setSelection(rows.size());
 						}
 					});
 				}
 			}
+			return false;
 		}
 
 		public ArrayList<PgnParserError> getErrors() {
 			return errors;
 		}
 
-		public ArrayList<Game> getGames() {
-			return games;
+		public ArrayList<PgnParseResultsRow> getGames() {
+			return rows;
 		}
 
 	}
 
 	public static final int MAX_BYTES_IN_FILE = 1048576 * 15;
 
-	private static final RaptorLogger LOG = RaptorLogger
-			.getLog(PgnProcessingDialog.class);
+	private static final RaptorLogger LOG = RaptorLogger.getLog(PgnProcessingDialog.class);
 
 	private Button cancelButton;
 	private Composite cancelComposite;
@@ -119,8 +126,7 @@ public class PgnProcessingDialog extends Dialog {
 	private CLabel message;
 
 	protected int processBarStyle = SWT.SMOOTH; // process bar style
-	protected String processMessage = L10n.getInstance()
-			.getString("processing");
+	protected String processMessage = L10n.getInstance().getString("processing");
 	private Label processMessageLabel;
 	private ProgressBar progressBar = null;
 	private Composite progressBarComposite;
@@ -132,11 +138,8 @@ public class PgnProcessingDialog extends Dialog {
 		this.file = new File(file);
 
 		if (this.file.length() > MAX_BYTES_IN_FILE) {
-			Raptor.getInstance().alert(
-					L10n.getInstance()
-							.getString("pgnProcD1")
-							.replaceAll("MAX_BYTES_IN_FILE",
-									Integer.toString(MAX_BYTES_IN_FILE)));
+			Raptor.getInstance().alert(L10n.getInstance().getString("pgnProcD1").replaceAll("MAX_BYTES_IN_FILE",
+					Integer.toString(MAX_BYTES_IN_FILE)));
 
 		}
 	}
@@ -148,14 +151,13 @@ public class PgnProcessingDialog extends Dialog {
 
 		ThreadService.getInstance().scheduleOneShot(250, new Runnable() {
 			public void run() {
-				FileReader reader = null;
-				LenientPgnParserListener listener;
+				// FileReader reader = null;
+				LenientPgnParserListener listener = null;
+				StreamingPgnParser parser = null;
 				try {
-					AbstractPgnParser parser;
 
 					// start work
-					parser = new StreamingPgnParser(reader = new FileReader(
-							file), MAX_BYTES_IN_FILE);
+					parser = new StreamingPgnParser(file, MAX_BYTES_IN_FILE);
 					listener = new ProfressPgnParserListener();
 
 					parser.addPgnParserListener(listener);
@@ -164,9 +166,7 @@ public class PgnProcessingDialog extends Dialog {
 					parser.parse();
 
 					if (LOG.isDebugEnabled()) {
-						LOG.debug("Parsed in "
-								+ (System.currentTimeMillis() - startTime)
-								+ "ms");
+						LOG.debug("Parsed in " + (System.currentTimeMillis() - startTime) + "ms");
 					}
 
 					shell.getDisplay().asyncExec(new RaptorRunnable() {
@@ -176,24 +176,20 @@ public class PgnProcessingDialog extends Dialog {
 						}
 					});
 
-					PgnParseResultsWindowItem windowItem = new PgnParseResultsWindowItem(
-							file.getName(),
+					PgnParseResultsWindowItem windowItem = new PgnParseResultsWindowItem(file.getName(),
 							((ProfressPgnParserListener) listener).getErrors(),
-							((ProfressPgnParserListener) listener).getGames(),
-							file.getAbsolutePath());
-					Raptor.getInstance().getWindow()
-							.addRaptorWindowItem(windowItem);
+							((ProfressPgnParserListener) listener).getGames(), file.getAbsolutePath());
+					Raptor.getInstance().getWindow().addRaptorWindowItem(windowItem);
 
 				} catch (Throwable t) {
 					if (!isClosed) {
 						LOG.error("Error parsing pgn file", t);
-						Raptor.getInstance().onError(
-								L10n.getInstance().getString("pgnProcD2")
-										+ file, t);
+						Raptor.getInstance().onError(L10n.getInstance().getString("pgnProcD2") + file, t);
 					}
 				} finally {
 					try {
-						reader.close();
+						if (parser != null)
+							parser.close();
 					} catch (Throwable t) {
 					}
 				}
@@ -232,35 +228,28 @@ public class PgnProcessingDialog extends Dialog {
 		shell.setText(L10n.getInstance().getString("parsing", file.getName()));
 
 		final Composite composite = new Composite(shell, SWT.NONE);
-		composite.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
-				true, false));
+		composite.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		composite.setLayout(new GridLayout());
 
 		message = new CLabel(composite, SWT.NONE);
-		message.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
-				true, false));
+		message.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 		message.setText(processMessage);
 
 		progressBarComposite = new Composite(shell, SWT.NONE);
-		progressBarComposite.setLayoutData(new GridData(GridData.FILL,
-				GridData.CENTER, false, false));
+		progressBarComposite.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		progressBarComposite.setLayout(new FillLayout());
 
 		progressBar = new ProgressBar(progressBarComposite, processBarStyle);
-		progressBar.setMaximum(PgnUtils.getApproximateGameCount(file
-				.getAbsolutePath()));
+		progressBar.setMaximum(PgnUtils.getApproximateGameCount(file.getAbsolutePath()));
 
 		processMessageLabel = new Label(shell, SWT.NONE);
-		processMessageLabel.setLayoutData(new GridData(GridData.FILL,
-				GridData.CENTER, false, false));
+		processMessageLabel.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		lineLabel = new Label(shell, SWT.HORIZONTAL | SWT.SEPARATOR);
-		lineLabel.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
-				false, false));
+		lineLabel.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 		processMessageLabel.setText("                                     ");
 
 		cancelComposite = new Composite(shell, SWT.NONE);
-		cancelComposite.setLayoutData(new GridData(GridData.END,
-				GridData.CENTER, false, false));
+		cancelComposite.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 		final GridLayout gridLayout_1 = new GridLayout();
 		gridLayout_1.numColumns = 2;
 		cancelComposite.setLayout(gridLayout_1);

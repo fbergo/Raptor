@@ -14,18 +14,28 @@
 package raptor.chess.pgn;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 
 public class StreamingPgnParser extends SimplePgnParser {
 	int charsParsed = 0;
 	int maxChars = -1;
+	private File file;
 	private BufferedReader reader;
 
-	public StreamingPgnParser(Reader reader, int maxChars) throws IOException {
+	public StreamingPgnParser(File file, int maxChars) throws IOException {
 		super("garbage");
-		this.reader = new BufferedReader(reader, 5000);
+		this.file = file;
+		initReader();
 		this.maxChars = maxChars;
+	}
+
+	public void jumpToLine(int lineNumber) {
+		initReader();
+		while (this.lineNumber  < (lineNumber-1)) {
+			readNextLine();
+		}
 	}
 
 	@Override
@@ -42,5 +52,32 @@ public class StreamingPgnParser extends SimplePgnParser {
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);
 		}
+	}
+
+	protected void initReader() {
+		try {
+			if (reader != null) {
+				reader.close();
+				reader = null;
+			}
+			charsParsed = 0;
+			lineNumber = 0;
+
+			reader = new BufferedReader(new FileReader(file), 5000);
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		}
+	}
+
+	public void close() {
+		try {
+			if (reader != null) {
+				reader.close();
+				reader = null;
+			}
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		}
+
 	}
 }

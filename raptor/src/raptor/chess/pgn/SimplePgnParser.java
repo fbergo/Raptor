@@ -65,29 +65,26 @@ public class SimplePgnParser extends AbstractPgnParser {
 		boolean isSearchingForHeaders = true;
 
 		readNextLine();
-		while (currentLine != null) {
+		outer: while (currentLine != null) {
 
 			if (currentLine.trim().length() == 0) {
 				readNextLine();
-				continue;
+				continue outer;
 			}
 
 			if (isSearchingForHeaders) {
-				while (isSearchingForHeaders && currentLine != null
-						&& currentLine.length() > 0) {
+				while (isSearchingForHeaders && currentLine != null && currentLine.length() > 0) {
 					int openBracketIndex = currentLine.indexOf('[');
 					int closeBracketIndex = currentLine.indexOf(']');
 
 					if (openBracketIndex != -1 && closeBracketIndex != -1) {
-						String suggestedHeader = currentLine.substring(
-								openBracketIndex, closeBracketIndex + 1);
+						String suggestedHeader = currentLine.substring(openBracketIndex, closeBracketIndex + 1);
 
 						String[] headers = parseForHeader(suggestedHeader);
 
 						if (headers != null) {
 							if (openBracketIndex != 0) {
-								fireUnknown(currentLine.substring(0,
-										openBracketIndex));
+								fireUnknown(currentLine.substring(0, openBracketIndex));
 								columnNumber += openBracketIndex;
 							}
 
@@ -96,8 +93,7 @@ public class SimplePgnParser extends AbstractPgnParser {
 							}
 
 							fireHeader(headers[0], headers[1]);
-							currentLine = currentLine
-									.substring(closeBracketIndex + 1);
+							currentLine = currentLine.substring(closeBracketIndex + 1);
 
 						} else // We encountered something that was'nt a header.
 						// Assume it is part of the game.
@@ -115,8 +111,7 @@ public class SimplePgnParser extends AbstractPgnParser {
 				}
 			}
 
-			RaptorStringTokenizer wordTok = new RaptorStringTokenizer(
-					currentLine, " ", true);
+			RaptorStringTokenizer wordTok = new RaptorStringTokenizer(currentLine, " ", true);
 			String nextWord = wordTok.nextToken();
 
 			do {
@@ -138,30 +133,26 @@ public class SimplePgnParser extends AbstractPgnParser {
 					if (closingParenIndex != -1) {
 						// Definitely a comment.
 						if (nextWord.length() > 2) {
-							fireAnnotation(nextWord.substring(1, nextWord
-									.length()));
+							fireAnnotation(nextWord.substring(1, nextWord.length()));
 						} else {
 							// Just eat it its a () comment and move on.
 						}
 					} else if (nextWord.length() > 1) {
-						if (nextWord.charAt(1) == '{'
-								|| Character.isDigit(nextWord.charAt(1))) {
+						if (nextWord.charAt(1) == '{' || Character.isDigit(nextWord.charAt(1))) {
 							// Definitely a subline.
 							fireSublineStart();
 							nextWord = nextWord.substring(1);
 						} else {
 							// Definitely a comment.
 							wordTok.changeDelimiters(")");
-							String annotation = nextWord.substring(1) + " "
-									+ wordTok.nextToken();
+							String annotation = nextWord.substring(1) + " " + wordTok.nextToken();
 							wordTok.changeDelimiters(" ");
 							fireAnnotation(annotation);
 							nextWord = wordTok.nextToken();
 						}
 					} else {
 						String nextNextWord = wordTok.peek();
-						if (nextNextWord.charAt(0) == '{'
-								|| Character.isDigit(nextNextWord.charAt(0))) {
+						if (nextNextWord.charAt(0) == '{' || Character.isDigit(nextNextWord.charAt(0))) {
 							// Definitely a subline.
 							fireSublineStart();
 							if (nextWord.length() > 1) {
@@ -171,8 +162,7 @@ public class SimplePgnParser extends AbstractPgnParser {
 							}
 						} else {
 							wordTok.changeDelimiters(")");
-							String annotation = nextWord.substring(1) + " "
-									+ wordTok.nextToken();
+							String annotation = nextWord.substring(1) + " " + wordTok.nextToken();
 							wordTok.changeDelimiters(" ");
 							fireAnnotation(annotation);
 							nextWord = wordTok.nextToken();
@@ -186,40 +176,34 @@ public class SimplePgnParser extends AbstractPgnParser {
 						fireAnnotation(annotation);
 
 						if (nextWord.length() > closingBrace + 1) {
-							nextWord = nextWord.substring(closingBrace + 1,
-									nextWord.length());
+							nextWord = nextWord.substring(closingBrace + 1, nextWord.length());
 						} else {
 							nextWord = wordTok.nextToken();
 						}
 					} else {
 						if (wordTok.indexInWhatsLeft('}') != -1) {
 							wordTok.changeDelimiters("}");
-							String annotation = nextWord.substring(1) + " "
-									+ wordTok.nextToken();
+							String annotation = nextWord.substring(1) + " " + wordTok.nextToken();
 							wordTok.changeDelimiters(" ");
 							fireAnnotation(annotation);
 							nextWord = wordTok.nextToken();
 						} else {
 							StringBuilder annotation = new StringBuilder(
-									nextWord.substring(1) + " "
-											+ wordTok.getWhatsLeft());
+									nextWord.substring(1) + " " + wordTok.getWhatsLeft());
 
 							int closingBraceIndex = -1;
 							do {
 								readNextLine();
 
 								if (currentLine != null) {
-									closingBraceIndex = currentLine
-											.indexOf('}');
+									closingBraceIndex = currentLine.indexOf('}');
 									if (closingBraceIndex == -1) {
-                                        annotation.append(" ").append(currentLine);
+										annotation.append(" ").append(currentLine);
 									} else {
-                                        annotation.append(" ").append(currentLine.substring(0,
-                                                closingBraceIndex));
+										annotation.append(" ").append(currentLine.substring(0, closingBraceIndex));
 									}
 								}
-							} while (currentLine != null
-									&& closingBraceIndex == -1);
+							} while (currentLine != null && closingBraceIndex == -1);
 
 							if (currentLine == null) {
 								fireUnknown(annotation.toString());
@@ -229,14 +213,13 @@ public class SimplePgnParser extends AbstractPgnParser {
 								break;
 							} else {
 								fireAnnotation(annotation.toString());
-								wordTok = new RaptorStringTokenizer(currentLine
-										.substring(closingBraceIndex + 1),
-										" \t", true);
+								wordTok = new RaptorStringTokenizer(currentLine.substring(closingBraceIndex + 1), " \t",
+										true);
 								nextWord = wordTok.nextToken();
 							}
 						}
 					}
-				} else {					
+				} else {
 					String[] moveNumberSplit = splitOutGameMoveNumber(nextWord);
 					if (moveNumberSplit != null) {
 						int moveNumber = Integer.parseInt(moveNumberSplit[0]);
@@ -256,13 +239,14 @@ public class SimplePgnParser extends AbstractPgnParser {
 							} else {
 								fireMoveNag(nag);
 							}
-							nextWord = nagSplit.length == 1 ? wordTok
-									.nextToken() : nagSplit[1];
+							nextWord = nagSplit.length == 1 ? wordTok.nextToken() : nagSplit[1];
 
 						} else {
 							String[] gameEndSplit = splitOutGameEnd(nextWord);
 							if (gameEndSplit != null) {
 								fireGameEnd(Result.get(gameEndSplit[0]));
+								if (isParseCancelled())
+									break outer;
 
 								String whatsLeft = wordTok.getWhatsLeft();
 
@@ -274,12 +258,10 @@ public class SimplePgnParser extends AbstractPgnParser {
 								break;
 							} else if (nextWord.equals(GAME_START_WORD)) {
 								isSearchingForHeaders = true;
-								currentLine = nextWord + " "
-										+ wordTok.getWhatsLeft();
+								currentLine = nextWord + " " + wordTok.getWhatsLeft();
 								break;
 							} else if (nextWord.endsWith(")")) {
-								nextWord = nextWord.substring(0, nextWord
-										.length() - 1);
+								nextWord = nextWord.substring(0, nextWord.length() - 1);
 								fireMoveWord(nextWord);
 								fireSublineEnd();
 								nextWord = wordTok.nextToken();
@@ -302,18 +284,15 @@ public class SimplePgnParser extends AbstractPgnParser {
 	 * fast and does'nt use REGEX for parsing.
 	 */
 	public String[] parseForHeader(String string) {
-		if (string.length() >= 7 && string.startsWith("[")
-				&& string.endsWith("]")) {
+		if (string.length() >= 7 && string.startsWith("[") && string.endsWith("]")) {
 			int quoteIndex = string.indexOf('\"');
 			if (quoteIndex != -1) {
 				int quote2Index = string.lastIndexOf('\"');
 
-				if (quote2Index > quoteIndex
-						&& RaptorStringUtils.count(string, '\"') == 2
+				if (quote2Index > quoteIndex && RaptorStringUtils.count(string, '\"') == 2
 						&& quote2Index + 2 == string.length()) {
 					int spaceIndex = string.indexOf(' ');
-					if (spaceIndex != -1 && spaceIndex < quoteIndex
-							&& spaceIndex >= 2) {
+					if (spaceIndex != -1 && spaceIndex < quoteIndex && spaceIndex >= 2) {
 						return new String[] { string.substring(1, spaceIndex),
 								string.substring(quoteIndex + 1, quote2Index) };
 					}
@@ -336,16 +315,13 @@ public class SimplePgnParser extends AbstractPgnParser {
 	 */
 	private String[] splitOutGameEnd(String wordToken) {
 		if (wordToken.startsWith(Result.BLACK_WON.getDescription())) {
-			return splitOutStartString(wordToken, Result.BLACK_WON
-					.getDescription());
+			return splitOutStartString(wordToken, Result.BLACK_WON.getDescription());
 		} else if (wordToken.startsWith(Result.WHITE_WON.getDescription())) {
-			return splitOutStartString(wordToken, Result.WHITE_WON
-					.getDescription());
+			return splitOutStartString(wordToken, Result.WHITE_WON.getDescription());
 		} else if (wordToken.startsWith(Result.DRAW.getDescription())) {
 			return splitOutStartString(wordToken, Result.DRAW.getDescription());
 		} else if (wordToken.startsWith(Result.ON_GOING.getDescription())) {
-			return splitOutStartString(wordToken, Result.ON_GOING
-					.getDescription());
+			return splitOutStartString(wordToken, Result.ON_GOING.getDescription());
 		} else {
 			return null;
 		}
@@ -368,21 +344,17 @@ public class SimplePgnParser extends AbstractPgnParser {
 				int firstThreeDotIndex = wordToken.indexOf("...");
 				if (firstThreeDotIndex != -1) {
 					if (wordToken.length() > firstThreeDotIndex + 3) {
-						return new String[] {
-								wordToken.substring(0, firstThreeDotIndex),
+						return new String[] { wordToken.substring(0, firstThreeDotIndex),
 								wordToken.substring(firstThreeDotIndex + 3) };
 					} else {
-						return new String[] { wordToken.substring(0,
-								firstThreeDotIndex) };
+						return new String[] { wordToken.substring(0, firstThreeDotIndex) };
 					}
 				} else {
 					if (wordToken.length() > firstDotIndex + 1) {
-						return new String[] {
-								wordToken.substring(0, firstDotIndex),
+						return new String[] { wordToken.substring(0, firstDotIndex),
 								wordToken.substring(firstDotIndex + 1) };
 					} else {
-						return new String[] { wordToken.substring(0,
-								firstDotIndex) };
+						return new String[] { wordToken.substring(0, firstDotIndex) };
 					}
 				}
 			}
@@ -422,7 +394,6 @@ public class SimplePgnParser extends AbstractPgnParser {
 
 	private String[] splitOutStartString(String wordToken, String startString) {
 		return wordToken.length() == startString.length() ? new String[] { startString }
-				: new String[] { startString,
-						wordToken.substring(startString.length()) };
+				: new String[] { startString, wordToken.substring(startString.length()) };
 	}
 }

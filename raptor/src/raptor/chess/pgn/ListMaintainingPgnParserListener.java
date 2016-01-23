@@ -32,8 +32,9 @@ public class ListMaintainingPgnParserListener extends LenientPgnParserListener {
 	}
 
 	@Override
-	public void gameParsed(Game game, int lineNumber) {
+	public boolean gameParsed(Game game, int lineNumber) {
 		games.add(game);
+		return false;
 	}
 
 	public ArrayList<PgnParserError> getErrors() {

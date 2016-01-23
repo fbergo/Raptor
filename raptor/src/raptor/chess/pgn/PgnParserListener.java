@@ -18,7 +18,7 @@ import raptor.chess.Result;
 public interface PgnParserListener {
 	public void onAnnotation(PgnParser parser, String annotation);
 
-	public void onGameEnd(PgnParser parser, Result result);
+	public boolean onGameEnd(PgnParser parser, Result result);
 
 	public void onGameStart(PgnParser parser);
 

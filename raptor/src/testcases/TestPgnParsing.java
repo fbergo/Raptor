@@ -14,6 +14,7 @@
 package testcases;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +38,12 @@ public class TestPgnParsing {
 	public static class LoggingPgnParserListener implements PgnParserListener {
 
 		public void onAnnotation(PgnParser parser, String annotation) {
-			System.out.println("onAnotation (" + parser.getLineNumber() + ") "
-					+ annotation);
+			System.out.println("onAnotation (" + parser.getLineNumber() + ") " + annotation);
 		}
 
-		public void onGameEnd(PgnParser parser, Result result) {
-			System.out.println("onGameEnd (" + parser.getLineNumber() + ") "
-					+ result.name());
+		public boolean onGameEnd(PgnParser parser, Result result) {
+			System.out.println("onGameEnd (" + parser.getLineNumber() + ") " + result.name());
+			return false;
 		}
 
 		public void onGameStart(PgnParser parser) {
@@ -51,40 +51,32 @@ public class TestPgnParsing {
 
 		}
 
-		public void onHeader(PgnParser parser, String headerName,
-				String headerValue) {
-			System.out.println("onHeader (" + parser.getLineNumber() + ") "
-					+ headerName + " " + headerValue);
+		public void onHeader(PgnParser parser, String headerName, String headerValue) {
+			System.out.println("onHeader (" + parser.getLineNumber() + ") " + headerName + " " + headerValue);
 		}
 
 		public void onMoveNag(PgnParser parser, Nag nag) {
-			System.out.println("onMoveNag (" + parser.getLineNumber() + ") "
-					+ nag.name());
+			System.out.println("onMoveNag (" + parser.getLineNumber() + ") " + nag.name());
 		}
 
 		public void onMoveNumber(PgnParser parser, int moveNumber) {
-			System.out.println("onMoveNumber (" + parser.getLineNumber() + ") "
-					+ moveNumber);
+			System.out.println("onMoveNumber (" + parser.getLineNumber() + ") " + moveNumber);
 		}
 
 		public void onMoveSublineEnd(PgnParser parser) {
-			System.out.println("onMoveSublineEnd (" + parser.getLineNumber()
-					+ ") ");
+			System.out.println("onMoveSublineEnd (" + parser.getLineNumber() + ") ");
 		}
 
 		public void onMoveSublineStart(PgnParser parser) {
-			System.out.println("onMoveSublineStart (" + parser.getLineNumber()
-					+ ") ");
+			System.out.println("onMoveSublineStart (" + parser.getLineNumber() + ") ");
 		}
 
 		public void onMoveWord(PgnParser parser, String word) {
-			System.out.println("onMoveWord (" + parser.getLineNumber() + ") "
-					+ word);
+			System.out.println("onMoveWord (" + parser.getLineNumber() + ") " + word);
 		}
 
 		public void onUnknown(PgnParser parser, String unknown) {
-			System.out.println("onUnknown (" + parser.getLineNumber() + ") "
-					+ unknown);
+			System.out.println("onUnknown (" + parser.getLineNumber() + ") " + unknown);
 
 		}
 	}
@@ -95,17 +87,16 @@ public class TestPgnParsing {
 		public void onAnnotation(PgnParser parser, String annotation) {
 		}
 
-		public void onGameEnd(PgnParser parser, Result result) {
-			System.out.println("onGameEnd duration="
-					+ (System.currentTimeMillis() - lastStartTime));
+		public boolean onGameEnd(PgnParser parser, Result result) {
+			System.out.println("onGameEnd duration=" + (System.currentTimeMillis() - lastStartTime));
+			return false;
 		}
 
 		public void onGameStart(PgnParser parser) {
 			lastStartTime = System.currentTimeMillis();
 		}
 
-		public void onHeader(PgnParser parser, String headerName,
-				String headerValue) {
+		public void onHeader(PgnParser parser, String headerName, String headerValue) {
 		}
 
 		public void onMoveNag(PgnParser parser, Nag nag) {
@@ -127,8 +118,8 @@ public class TestPgnParsing {
 		}
 	}
 
-	public static final String[] PGN_TEST_FILES = new String[] {// "error.pgn"};//,
-	"nestedsublines.pgn" };// , "test2.pgn" };
+	public static final String[] PGN_TEST_FILES = new String[] { // "error.pgn"};//,
+			"nestedsublines.pgn" };// , "test2.pgn" };
 
 	@Test
 	public void speedTest() throws Exception {
@@ -142,8 +133,7 @@ public class TestPgnParsing {
 
 	@Test
 	public void testAtomic() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/atomic.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/atomic.pgn"), Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -151,16 +141,16 @@ public class TestPgnParsing {
 		long startTime = System.currentTimeMillis();
 		parser.parse();
 
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		System.err.println(listener.getErrors());
 	}
 
 	@Test
 	public void testAtomicNotInCheckIfOppKingExplodes() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/atomicTest1.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/atomicTest1.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -172,8 +162,8 @@ public class TestPgnParsing {
 
 	@Test
 	public void testAtomicQxf2() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/atomicTest2.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/atomicTest2.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -185,8 +175,8 @@ public class TestPgnParsing {
 
 	@Test
 	public void testCrazyhosueFile() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/crazyhouseGames.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/crazyhouseGames.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -194,23 +184,23 @@ public class TestPgnParsing {
 		long startTime = System.currentTimeMillis();
 		parser.parse();
 
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		System.err.println(listener.getErrors());
 	}
 
 	@Test
 	public void testFischerRandom() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/wildFrGames.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/wildFrGames.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
 		long startTime = System.currentTimeMillis();
 		parser.parse();
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		System.err.println(listener.getErrors());
 
@@ -219,8 +209,8 @@ public class TestPgnParsing {
 
 	@Test
 	public void testfr3() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/enpassantfr.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/enpassantfr.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -228,8 +218,8 @@ public class TestPgnParsing {
 		long startTime = System.currentTimeMillis();
 		parser.parse();
 
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		System.err.println(listener.getErrors());
 
@@ -238,8 +228,8 @@ public class TestPgnParsing {
 
 	@Test
 	public void testFRKingc8() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/frTest2.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/frTest2.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -252,8 +242,8 @@ public class TestPgnParsing {
 
 	@Test
 	public void testFRLongCastle() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/frTest1.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/frTest1.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -266,8 +256,8 @@ public class TestPgnParsing {
 
 	@Test
 	public void testLargeFile() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/Alekhine4Pawns.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/Alekhine4Pawns.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -277,16 +267,16 @@ public class TestPgnParsing {
 
 		ArrayList<Game> games = listener.getGames();
 
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		performRollbackTest(games);
 	}
 
 	@Test
 	public void testLosersFile() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/losersgames.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/losersgames.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -294,16 +284,16 @@ public class TestPgnParsing {
 		long startTime = System.currentTimeMillis();
 		parser.parse();
 
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		System.err.println(listener.getErrors());
 	}
 
 	@Test
 	public void testSuicideFile() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/suicidegames.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/suicidegames.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -311,8 +301,8 @@ public class TestPgnParsing {
 		long startTime = System.currentTimeMillis();
 		parser.parse();
 
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		System.err.println(listener.getErrors());
 	}
@@ -345,8 +335,8 @@ public class TestPgnParsing {
 
 	@Test
 	public void testWild5File() throws Exception {
-		StreamingPgnParser parser = new StreamingPgnParser(new FileReader(
-				"projectFiles/test/wild5games.pgn"), Integer.MAX_VALUE);
+		StreamingPgnParser parser = new StreamingPgnParser(new File("projectFiles/test/wild5games.pgn"),
+				Integer.MAX_VALUE);
 		ListMaintainingPgnParserListener listener = new ListMaintainingPgnParserListener();
 		parser.addPgnParserListener(new TimingPgnParserListener());
 		parser.addPgnParserListener(listener);
@@ -354,8 +344,8 @@ public class TestPgnParsing {
 		long startTime = System.currentTimeMillis();
 		parser.parse();
 
-		System.err.println("Parsed " + listener.getGames().size() + " games "
-				+ " in " + (System.currentTimeMillis() - startTime) + "ms");
+		System.err.println("Parsed " + listener.getGames().size() + " games " + " in "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		System.err.println(listener.getErrors());
 	}
@@ -374,13 +364,10 @@ public class TestPgnParsing {
 				game.rollback();
 			}
 			for (int i = 0; i < moveList.getSize(); i++) {
-				Assert.assertTrue(
-						i + "/" + games.size() + " Move " + moveList.get(i)
-								+ " was illegal\n" + game,
+				Assert.assertTrue(i + "/" + games.size() + " Move " + moveList.get(i) + " was illegal\n" + game,
 						game.move(moveList.get(i)));
 			}
-			System.err.println(g + "/" + games.size()
-					+ " performRollbackTest duration="
+			System.err.println(g + "/" + games.size() + " performRollbackTest duration="
 					+ (System.currentTimeMillis() - gameStart));
 		}
 	}
@@ -388,8 +375,7 @@ public class TestPgnParsing {
 	private String pgnFileAsString(String fileName) throws Exception {
 		StringBuilder builder = new StringBuilder();
 		@SuppressWarnings("resource")
-		BufferedReader reader = new BufferedReader(new FileReader(
-				"projectFiles/test/" + fileName));
+		BufferedReader reader = new BufferedReader(new FileReader("projectFiles/test/" + fileName));
 
 		String currentLine = reader.readLine();
 		while (currentLine != null) {

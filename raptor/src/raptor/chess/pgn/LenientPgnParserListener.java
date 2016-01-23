@@ -13,7 +13,11 @@
  */
 package raptor.chess.pgn;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -47,8 +51,7 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 
 	protected Move currentMoveInfo;
 
-	protected List<MoveAnnotation> danglingAnnotations = new ArrayList<MoveAnnotation>(
-			5);
+	protected List<MoveAnnotation> danglingAnnotations = new ArrayList<MoveAnnotation>(5);
 
 	protected boolean isIgnoringCurrentGame;
 
@@ -65,6 +68,8 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 	protected boolean isSearchingForGameStart = true;
 
 	protected int nestedSublineCount = 0;
+	
+	protected int lastStartLineNumber = 0;
 
 	public LenientPgnParserListener() {
 	}
@@ -81,47 +86,34 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 		// Check for the Variant header.
 		if (currentHeaders.get(PgnHeader.Variant.name()) != null) {
 			try {
-				variant = Variant.valueOf(currentHeaders.get(PgnHeader.Variant
-						.name()));
+				variant = Variant.valueOf(currentHeaders.get(PgnHeader.Variant.name()));
 			} catch (IllegalArgumentException iae) {
 			}
 		}
 
 		// Couldn't find it now check for keywords in event.
-		if (variant == null
-				&& currentHeaders.get(PgnHeader.Event.name()) != null) {
-			if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "crazyhouse")) {
+		if (variant == null && currentHeaders.get(PgnHeader.Event.name()) != null) {
+			if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "crazyhouse")) {
 				variant = Variant.crazyhouse;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "standard")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "standard")) {
 				variant = Variant.standard;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "blitz")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "blitz")) {
 				variant = Variant.blitz;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "lightning")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "lightning")) {
 				variant = Variant.lightning;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "bullet")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "bullet")) {
 				variant = Variant.lightning;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "atomic")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "atomic")) {
 				variant = Variant.atomic;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "suicide")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "suicide")) {
 				variant = Variant.suicide;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "losers")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "losers")) {
 				variant = Variant.losers;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "wild/fr")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "wild/fr")) {
 				variant = Variant.fischerRandom;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "bughouse")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "bughouse")) {
 				variant = Variant.bughouse;
-			} else if (StringUtils.containsIgnoreCase(currentHeaders
-					.get(PgnHeader.Event.name()), "wild")) {
+			} else if (StringUtils.containsIgnoreCase(currentHeaders.get(PgnHeader.Event.name()), "wild")) {
 				variant = Variant.wild;
 			}
 		}
@@ -146,29 +138,27 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 
 	public abstract void errorEncountered(PgnParserError error);
 
-	public abstract void gameParsed(Game game, int lineNumber);
+	public abstract boolean gameParsed(Game game, int lineNumber);
 
 	public void onAnnotation(PgnParser parser, String annotation) {
 		if (!isIgnoringCurrentGame) {
 			if (isParsingGameMoves) {
 				if (isParsingSubline && !isIgnoringSubline) {
-					if (currentAnalysisLine == null
-							|| currentAnalysisLine.getMove() == null) {
+					if (currentAnalysisLine == null || currentAnalysisLine.getMove() == null) {
 						// This can happen in chess base for now just don't
 						// support it its a pain in the ass.
 						MoveAnnotation[] annotations = pgnAnnotationToMoveAnnotations(annotation);
-                        Collections.addAll(danglingAnnotations, annotations);
+						Collections.addAll(danglingAnnotations, annotations);
 					} else {
 						MoveAnnotation[] annotations = pgnAnnotationToMoveAnnotations(annotation);
 						for (MoveAnnotation moveAnnotation : annotations) {
-							currentAnalysisLine.getMove().addAnnotation(
-									moveAnnotation);
+							currentAnalysisLine.getMove().addAnnotation(moveAnnotation);
 						}
 					}
 				} else if (isParsingMove && !isIgnoringSubline) {
 					if (currentMoveInfo == null) {
 						MoveAnnotation[] annotations = pgnAnnotationToMoveAnnotations(annotation);
-                        Collections.addAll(danglingAnnotations, annotations);
+						Collections.addAll(danglingAnnotations, annotations);
 					} else {
 						MoveAnnotation[] annotations = pgnAnnotationToMoveAnnotations(annotation);
 						for (MoveAnnotation moveAnnotation : annotations) {
@@ -178,47 +168,45 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 				}
 			} else if (!isIgnoringSubline) {
 				MoveAnnotation[] annotations = pgnAnnotationToMoveAnnotations(annotation);
-                Collections.addAll(danglingAnnotations, annotations);
+				Collections.addAll(danglingAnnotations, annotations);
 			}
 		}
 	}
 
-	public void onGameEnd(PgnParser parser, Result result) {
+	public boolean onGameEnd(PgnParser parser, Result result) {
+		boolean returnResult = false;
+
 		if (!isIgnoringCurrentGame) {
 			if (isParsingGameMoves) {
 				// Check for dangling sublines.
 				if (!isIgnoringSubline && currentAnalysisLine != null) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_SUBLINE,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.DANGLING_SUBLINE,
+							PgnParserError.Action.IGNORING, parser.getLineNumber()));
 					currentAnalysisLine = null;
 				}
 
 				// add the game
-				currentGame
-						.setHeader(PgnHeader.Result, result.getDescription());
+				currentGame.setHeader(PgnHeader.Result, result.getDescription());
 				currentGame.addState(Game.INACTIVE_STATE);
-				gameParsed(currentGame, parser.getLineNumber());
+				returnResult = gameParsed(currentGame, lastStartLineNumber);
 			} else {
-				errorEncountered(new PgnParserError(
-						PgnParserError.Type.UNEXPECTED_GAME_END,
-						PgnParserError.Action.IGNORING_CURRENT_GAME, parser
-								.getLineNumber()));
+				errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_GAME_END,
+						PgnParserError.Action.IGNORING_CURRENT_GAME, parser.getLineNumber()));
 			}
 		}
 
 		setStateToSearchingForNewGame();
+		return returnResult;
 	}
 
 	public void onGameStart(PgnParser parser) {
 		if (!isSearchingForGameStart) {
-			errorEncountered(new PgnParserError(
-					PgnParserError.Type.UNEXPECTED_GAME_START,
-					PgnParserError.Action.NONE, parser.getLineNumber()));
+			errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_GAME_START, PgnParserError.Action.NONE,
+					parser.getLineNumber()));
 		}
 		setStateToSearchingForNewGame();
 		isParsingGameHeaders = true;
+		lastStartLineNumber = parser.getLineNumber();
 	}
 
 	public void onHeader(PgnParser parser, String headerName, String headerValue) {
@@ -226,8 +214,7 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 			if (isParsingGameHeaders) {
 				currentHeaders.put(headerName, headerValue);
 			} else {
-				errorEncountered(new PgnParserError(
-						PgnParserError.Type.UNEXPECTED_HEADER,
+				errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_HEADER,
 						PgnParserError.Action.IGNORING, parser.getLineNumber()));
 			}
 		}
@@ -237,22 +224,17 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 		if (!isIgnoringCurrentGame && isParsingMove) {
 			if (!isParsingSubline) {
 				if (currentMoveInfo == null) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_NAG,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber(), new String[] { nag
-									.getNagString() }));
+					errorEncountered(
+							new PgnParserError(PgnParserError.Type.DANGLING_NAG, PgnParserError.Action.IGNORING,
+									parser.getLineNumber(), new String[] { nag.getNagString() }));
 				} else {
 					currentMoveInfo.addAnnotation(nag);
 				}
 			} else if (!isIgnoringSubline) {
-				if (currentAnalysisLine == null
-						|| currentAnalysisLine.getMove() == null) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_NAG,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber(), new String[] { nag
-									.getNagString() }));
+				if (currentAnalysisLine == null || currentAnalysisLine.getMove() == null) {
+					errorEncountered(
+							new PgnParserError(PgnParserError.Type.DANGLING_NAG, PgnParserError.Action.IGNORING,
+									parser.getLineNumber(), new String[] { nag.getNagString() }));
 				} else {
 					currentAnalysisLine.getMove().addAnnotation(nag);
 				}
@@ -269,10 +251,8 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 				isParsingMove = true;
 			} else if (isParsingGameMoves && !isParsingSubline) {
 				if (!isIgnoringSubline && currentAnalysisLine != null) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_SUBLINE,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.DANGLING_SUBLINE,
+							PgnParserError.Action.IGNORING, parser.getLineNumber()));
 					currentAnalysisLine = null;
 				}
 			} else if (isParsingGameMoves && isParsingSubline) {
@@ -284,13 +264,10 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 	public void onMoveSublineEnd(PgnParser parser) {
 		if (isParsingGameMoves) {
 			nestedSublineCount--;
-			if (currentAnalysisLine == null
-					|| currentAnalysisLine.getMove() == null) {
+			if (currentAnalysisLine == null || currentAnalysisLine.getMove() == null) {
 				if (!isIgnoringSubline) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.UNEXPECTED_SUBLINE_END,
-							PgnParserError.Action.IGNORING_CURRENT_SUBLINE,
-							parser.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_SUBLINE_END,
+							PgnParserError.Action.IGNORING_CURRENT_SUBLINE, parser.getLineNumber()));
 				}
 
 				if (nestedSublineCount > 0) {
@@ -302,33 +279,26 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 				}
 			} else if (nestedSublineCount < 0) {
 				if (!isIgnoringSubline) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.UNEXPECTED_SUBLINE_END,
-							PgnParserError.Action.IGNORING_CURRENT_SUBLINE,
-							parser.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_SUBLINE_END,
+							PgnParserError.Action.IGNORING_CURRENT_SUBLINE, parser.getLineNumber()));
 				}
 				currentAnalysisLine = null;
 				isParsingSubline = false;
 				isIgnoringSubline = false;
 			} else if (nestedSublineCount > 0) {
 				if (currentAnalysisLine == null) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.INVALID_SUBLINE_STATE,
-							PgnParserError.Action.IGNORING_CURRENT_SUBLINE,
-							parser.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.INVALID_SUBLINE_STATE,
+							PgnParserError.Action.IGNORING_CURRENT_SUBLINE, parser.getLineNumber()));
 					isIgnoringSubline = true;
 				} else {
 					// We need to find the sub-line owner. This happens to be
 					// the greatest parents sub-line owner.
-					SublineNode greatestParent = currentAnalysisLine
-							.getGreatestParent();
+					SublineNode greatestParent = currentAnalysisLine.getGreatestParent();
 					if (greatestParent.hasSublineOwner()) {
 						currentAnalysisLine = greatestParent.getSublineOwner();
 					} else {
-						errorEncountered(new PgnParserError(
-								PgnParserError.Type.INVALID_SUBLINE_STATE,
-								PgnParserError.Action.IGNORING_CURRENT_SUBLINE,
-								parser.getLineNumber()));
+						errorEncountered(new PgnParserError(PgnParserError.Type.INVALID_SUBLINE_STATE,
+								PgnParserError.Action.IGNORING_CURRENT_SUBLINE, parser.getLineNumber()));
 						isIgnoringSubline = true;
 					}
 				}
@@ -354,24 +324,19 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 					if (currentAnalysisLine != null && !isIgnoringSubline) {
 						currentMoveInfo.addAnnotation(currentAnalysisLine);
 					} else if (!isIgnoringSubline) {
-						errorEncountered(new PgnParserError(
-								PgnParserError.Type.INVALID_SUBLINE_STATE,
-								PgnParserError.Action.IGNORING, parser
-										.getLineNumber()));
+						errorEncountered(new PgnParserError(PgnParserError.Type.INVALID_SUBLINE_STATE,
+								PgnParserError.Action.IGNORING, parser.getLineNumber()));
 					}
 				} else if (!isIgnoringSubline) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.INVALID_SUBLINE_STATE,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.INVALID_SUBLINE_STATE,
+							PgnParserError.Action.IGNORING, parser.getLineNumber()));
 				}
 				currentAnalysisLine = null;
 				isParsingSubline = false;
 				isIgnoringSubline = false;
 			}
 		} else {
-			errorEncountered(new PgnParserError(
-					PgnParserError.Type.UNEXPECTED_SUBLINE_END,
+			errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_SUBLINE_END,
 					PgnParserError.Action.IGNORING, parser.getLineNumber()));
 		}
 	}
@@ -381,19 +346,15 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 		if (isParsingGameMoves) {
 			if (nestedSublineCount == 0) {
 				if (currentAnalysisLine != null && !isIgnoringSubline) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_SUBLINE,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.DANGLING_SUBLINE,
+							PgnParserError.Action.IGNORING, parser.getLineNumber()));
 				}
 				currentAnalysisLine = new SublineNode();
 				isParsingSubline = true;
 			} else if (!isParsingSubline) {
 				if (!isIgnoringSubline) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_SUBLINE,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.DANGLING_SUBLINE,
+							PgnParserError.Action.IGNORING, parser.getLineNumber()));
 					isIgnoringSubline = true;
 				}
 				isParsingSubline = true;
@@ -402,21 +363,16 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 				// set
 				// the currentAnalysisLine to it.
 				if (currentAnalysisLine == null && !isIgnoringSubline) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_SUBLINE,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.DANGLING_SUBLINE,
+							PgnParserError.Action.IGNORING, parser.getLineNumber()));
 					isIgnoringSubline = true;
 				} else if (!isIgnoringSubline) {
 					if (currentAnalysisLine.getMove() == null) {
-						errorEncountered(new PgnParserError(
-								PgnParserError.Type.INVALID_SUBLINE_STATE,
-								PgnParserError.Action.IGNORING, parser
-										.getLineNumber()));
+						errorEncountered(new PgnParserError(PgnParserError.Type.INVALID_SUBLINE_STATE,
+								PgnParserError.Action.IGNORING, parser.getLineNumber()));
 						isIgnoringSubline = true;
 					} else {
-						currentAnalysisLine = currentAnalysisLine
-								.createSubline(null);
+						currentAnalysisLine = currentAnalysisLine.createSubline(null);
 					}
 				} else {
 					currentAnalysisLine = new SublineNode();
@@ -425,8 +381,7 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 			}
 			nestedSublineCount++;
 		} else {
-			errorEncountered(new PgnParserError(
-					PgnParserError.Type.UNEXPECTED_SUBLINE_START,
+			errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_SUBLINE_START,
 					PgnParserError.Action.IGNORING, parser.getLineNumber()));
 		}
 	}
@@ -434,17 +389,13 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 	public void onMoveWord(PgnParser parser, String word) {
 		if (!isIgnoringCurrentGame) {
 			if (!isParsingGameMoves) {
-				errorEncountered(new PgnParserError(
-						PgnParserError.Type.UNEXPECTED_MOVE_WORD,
-						PgnParserError.Action.IGNORING, parser.getLineNumber(),
-						new String[] { word }));
+				errorEncountered(new PgnParserError(PgnParserError.Type.UNEXPECTED_MOVE_WORD,
+						PgnParserError.Action.IGNORING, parser.getLineNumber(), new String[] { word }));
 			} else if (!isParsingSubline) {
 
 				if (!isIgnoringSubline && currentAnalysisLine != null) {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.DANGLING_SUBLINE,
-							PgnParserError.Action.IGNORING, parser
-									.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.DANGLING_SUBLINE,
+							PgnParserError.Action.IGNORING, parser.getLineNumber()));
 					currentAnalysisLine = null;
 				}
 
@@ -453,10 +404,9 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 					currentMoveInfo = makeGameMoveFromWord(word);
 				} catch (IllegalArgumentException ime) {
 					LOG.error("Invalid move encountered", ime);
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.ILLEGAL_MOVE_ENCOUNTERED,
-							PgnParserError.Action.IGNORING_CURRENT_GAME, parser
-									.getLineNumber(), new String[] { word }));
+					errorEncountered(new PgnParserError(PgnParserError.Type.ILLEGAL_MOVE_ENCOUNTERED,
+							PgnParserError.Action.IGNORING_CURRENT_GAME, parser.getLineNumber(),
+							new String[] { word }));
 					isIgnoringCurrentGame = true;
 				}
 			} else if (!isIgnoringSubline) {
@@ -562,10 +512,8 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 						// }
 					}
 				} else {
-					errorEncountered(new PgnParserError(
-							PgnParserError.Type.INVALID_SUBLINE_STATE,
-							PgnParserError.Action.IGNORING_CURRENT_SUBLINE,
-							parser.getLineNumber()));
+					errorEncountered(new PgnParserError(PgnParserError.Type.INVALID_SUBLINE_STATE,
+							PgnParserError.Action.IGNORING_CURRENT_SUBLINE, parser.getLineNumber()));
 				}
 			}
 		}
@@ -573,10 +521,8 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 
 	public void onUnknown(PgnParser parser, String unknown) {
 		if (!isIgnoringCurrentGame) {
-			errorEncountered(new PgnParserError(
-					PgnParserError.Type.UNKNOWN_TEXT_ENCOUNTERED,
-					PgnParserError.Action.IGNORING, parser.getLineNumber(),
-					new String[] { unknown }));
+			errorEncountered(new PgnParserError(PgnParserError.Type.UNKNOWN_TEXT_ENCOUNTERED,
+					PgnParserError.Action.IGNORING, parser.getLineNumber(), new String[] { unknown }));
 		}
 	}
 
@@ -621,8 +567,7 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 			for (Map.Entry<String, String> stringStringEntry : currentHeaders.entrySet()) {
 
 				try {
-					currentGame.setHeader(PgnHeader.valueOf(stringStringEntry.getKey()),
-                            stringStringEntry.getValue());
+					currentGame.setHeader(PgnHeader.valueOf(stringStringEntry.getKey()), stringStringEntry.getValue());
 				} catch (IllegalArgumentException iae) {
 					// errorEncountered(new PgnParserError(
 					// PgnParserError.Type.UNSUPPORTED_PGN_HEADER,
@@ -633,17 +578,14 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 			}
 		} catch (IllegalArgumentException ife) {
 			LOG.warn("error setting up game", ife);
-			errorEncountered(new PgnParserError(
-					PgnParserError.Type.UNABLE_TO_PARSE_INITIAL_FEN,
-					PgnParserError.Action.IGNORING_CURRENT_GAME, parser
-							.getLineNumber()));
+			errorEncountered(new PgnParserError(PgnParserError.Type.UNABLE_TO_PARSE_INITIAL_FEN,
+					PgnParserError.Action.IGNORING_CURRENT_GAME, parser.getLineNumber()));
 			isIgnoringCurrentGame = true;
 		}
 
 	}
 
-	protected Move makeGameMoveFromWord(String word)
-			throws IllegalArgumentException {
+	protected Move makeGameMoveFromWord(String word) throws IllegalArgumentException {
 		NagWordTrimResult trim = trimOutNag(word);
 
 		Move result = currentGame.makeSanMove(trim.move);
@@ -660,8 +602,7 @@ public abstract class LenientPgnParserListener implements PgnParserListener {
 		return result;
 	}
 
-	protected MoveAnnotation[] pgnAnnotationToMoveAnnotations(
-			String pgnAnnotation) {
+	protected MoveAnnotation[] pgnAnnotationToMoveAnnotations(String pgnAnnotation) {
 		List<MoveAnnotation> annotations = new ArrayList<MoveAnnotation>(3);
 
 		if (pgnAnnotation.startsWith("[%emt")) {

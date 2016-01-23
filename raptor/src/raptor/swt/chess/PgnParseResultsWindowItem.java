@@ -16,6 +16,7 @@ package raptor.swt.chess;
 import java.io.File;
 import java.io.FileWriter;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -43,8 +44,10 @@ import raptor.Raptor;
 import raptor.RaptorWindowItem;
 import raptor.chess.Game;
 import raptor.chess.Result;
+import raptor.chess.pgn.LenientPgnParserListener;
 import raptor.chess.pgn.PgnHeader;
 import raptor.chess.pgn.PgnParserError;
+import raptor.chess.pgn.StreamingPgnParser;
 import raptor.international.L10n;
 import raptor.pref.PreferenceKeys;
 import raptor.swt.ItemChangedListener;
@@ -58,29 +61,27 @@ import raptor.util.RaptorLogger;
  * A window item that displays a list of games from a PGN file.
  */
 public class PgnParseResultsWindowItem implements RaptorWindowItem {
-	private static final RaptorLogger LOG = RaptorLogger
-			.getLog(PgnParseResultsWindowItem.class);
+	private static final RaptorLogger LOG = RaptorLogger.getLog(PgnParseResultsWindowItem.class);
 
-	public static final Quadrant[] MOVE_TO_QUADRANTS = { Quadrant.I,
-			Quadrant.II, Quadrant.III, Quadrant.IV, Quadrant.V, Quadrant.VI,
-			Quadrant.VII, Quadrant.VIII, Quadrant.IX };
+	public static final Quadrant[] MOVE_TO_QUADRANTS = { Quadrant.I, Quadrant.II, Quadrant.III, Quadrant.IV, Quadrant.V,
+			Quadrant.VI, Quadrant.VII, Quadrant.VIII, Quadrant.IX };
 
 	protected Composite composite;
 	protected RaptorTable gamesTable;
 	protected RaptorTable errorsTable;
 
 	protected List<PgnParserError> errors;
-	protected List<Game> games;
+	protected List<PgnParseResultsRow> gameRows;
 	protected String title;
 	protected boolean isPassive;
 	protected String pathToFile;
 
 	protected static L10n local = L10n.getInstance();
 
-	public PgnParseResultsWindowItem(String title, List<PgnParserError> errors,
-			List<Game> games, String pathToFile) {
+	public PgnParseResultsWindowItem(String title, List<PgnParserError> errors, List<PgnParseResultsRow> gameRows,
+			String pathToFile) {
 		this.errors = errors;
-		this.games = games;
+		this.gameRows = gameRows;
 		this.title = title;
 		this.pathToFile = pathToFile;
 	}
@@ -103,9 +104,9 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 			errors.clear();
 			errors = null;
 		}
-		if (games != null) {
-			games.clear();
-			games = null;
+		if (gameRows != null) {
+			gameRows.clear();
+			gameRows = null;
 		}
 		if (composite != null && !composite.isDisposed()) {
 			composite.dispose();
@@ -135,14 +136,13 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 		if (total == 0 || count == 0) {
 			return "0%";
 		} else {
-			return new BigDecimal((double) count / (double) total * 100.0)
-					.setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "%";
+			return new BigDecimal((double) count / (double) total * 100.0).setScale(2, BigDecimal.ROUND_HALF_UP)
+					.toString() + "%";
 		}
 	}
 
 	public Quadrant getPreferredQuadrant() {
-		return Raptor.getInstance().getPreferences()
-				.getQuadrant(PreferenceKeys.APP_PGN_RESULTS_QUADRANT);
+		return Raptor.getInstance().getPreferences().getQuadrant(PreferenceKeys.APP_PGN_RESULTS_QUADRANT);
 	}
 
 	public String getTitle() {
@@ -162,14 +162,14 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 		int blackWins = 0;
 		int draws = 0;
 
-		for (Game game : games) {
-			if (game.getResult() == Result.WHITE_WON) {
+		for (PgnParseResultsRow row : gameRows) {
+			if (row.getResult() == Result.WHITE_WON) {
 				whiteWins++;
 				finishedGames++;
-			} else if (game.getResult() == Result.BLACK_WON) {
+			} else if (row.getResult() == Result.BLACK_WON) {
 				blackWins++;
 				finishedGames++;
-			} else if (game.getResult() == Result.DRAW) {
+			} else if (row.getResult() == Result.DRAW) {
 				draws++;
 				finishedGames++;
 			}
@@ -177,65 +177,29 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 
 		Label gamesTotalLabel = new Label(composite, SWT.LEFT);
 
-		int size = games.size();
-		gamesTotalLabel.setText(local.getString("pgnParseWI3") + size
-				+ local.getString("pgnParseWI4")
-				+ getPercentage(whiteWins, finishedGames)
-				+ local.getString("pgnParseWI5")
-				+ getPercentage(blackWins, finishedGames)
-				+ local.getString("pgnParseWI6")
+		int size = gameRows.size();
+		gamesTotalLabel.setText(local.getString("pgnParseWI3") + size + local.getString("pgnParseWI4")
+				+ getPercentage(whiteWins, finishedGames) + local.getString("pgnParseWI5")
+				+ getPercentage(blackWins, finishedGames) + local.getString("pgnParseWI6")
 				+ getPercentage(draws, finishedGames));
-		gamesTotalLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-				false));
+		gamesTotalLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
-		gamesTable = new RaptorTable(composite, SWT.BORDER | SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
+		gamesTable = new RaptorTable(composite,
+				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
 		gamesTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		if (games != null) { // used standard SimplePgnParser
-			gamesTable.addColumn(local.getString("pgnParseWI7"), SWT.LEFT, 3,
-					true, new IntegerComparator());
-			gamesTable.addColumn(local.getString("pgnParseWI8"), SWT.LEFT, 5,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI9"), SWT.LEFT, 10,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI10"), SWT.LEFT, 15,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI11"), SWT.LEFT, 15,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI12"), SWT.LEFT, 5,
-					true, new IntegerComparator());
-			gamesTable.addColumn(local.getString("pgnParseWI13"), SWT.LEFT, 15,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI14"), SWT.LEFT, 5,
-					true, new IntegerComparator());
-			gamesTable.addColumn(local.getString("pgnParseWI15"), SWT.LEFT, 3,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI16"), SWT.LEFT, 3,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI17"), SWT.LEFT, 21,
-					true, null);
-		} else { // Chesspresso was used during parsing
-			gamesTable.addColumn(local.getString("pgnParseWI7"), SWT.LEFT, 3,
-					true, new IntegerComparator());
-			gamesTable.addColumn(local.getString("pgnParseWI8"), SWT.LEFT, 10,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI9"), SWT.LEFT, 10,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI10"), SWT.LEFT, 19,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI11"), SWT.LEFT, 19,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI12"), SWT.LEFT, 5,
-					true, new IntegerComparator());
-			gamesTable.addColumn(local.getString("pgnParseWI13"), SWT.LEFT, 15,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI14"), SWT.LEFT, 5,
-					true, new IntegerComparator());
-			gamesTable.addColumn(local.getString("pgnParseWI15"), SWT.LEFT, 7,
-					true, null);
-			gamesTable.addColumn(local.getString("pgnParseWI16"), SWT.LEFT, 7,
-					true, null);
+		if (gameRows != null) { // used standard SimplePgnParser
+			gamesTable.addColumn(local.getString("pgnParseWI7"), SWT.LEFT, 3, true, new IntegerComparator());
+			gamesTable.addColumn(local.getString("pgnParseWI8"), SWT.LEFT, 5, true, null);
+			gamesTable.addColumn(local.getString("pgnParseWI9"), SWT.LEFT, 10, true, null);
+			gamesTable.addColumn(local.getString("pgnParseWI10"), SWT.LEFT, 15, true, null);
+			gamesTable.addColumn(local.getString("pgnParseWI11"), SWT.LEFT, 15, true, null);
+			gamesTable.addColumn(local.getString("pgnParseWI12"), SWT.LEFT, 5, true, new IntegerComparator());
+			gamesTable.addColumn(local.getString("pgnParseWI13"), SWT.LEFT, 15, true, null);
+			gamesTable.addColumn(local.getString("pgnParseWI14"), SWT.LEFT, 5, true, new IntegerComparator());
+			gamesTable.addColumn(local.getString("pgnParseWI15"), SWT.LEFT, 3, true, null);
+			gamesTable.addColumn(local.getString("pgnParseWI16"), SWT.LEFT, 3, true, null);
+			gamesTable.addColumn(local.getString("pgnParseWI17"), SWT.LEFT, 21, true, null);
 		}
 
 		gamesTable.addRaptorTableListener(new RaptorTableListener() {
@@ -267,8 +231,7 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 						gamesTable.removeRow(rowId);
 					}
 				});
-				menu.setLocation(gamesTable.getTable().toDisplay(event.x,
-						event.y));
+				menu.setLocation(gamesTable.getTable().toDisplay(event.x, event.y));
 				menu.setVisible(true);
 				while (!menu.isDisposed() && menu.isVisible()) {
 					if (!gamesTable.getDisplay().readAndDispatch()) {
@@ -290,8 +253,7 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 		populateGamesTable();
 
 		Button saveButton = new Button(composite, SWT.PUSH);
-		saveButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-				false));
+		saveButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 		saveButton.setText(local.getString("pgnParseWI19"));
 		saveButton.addSelectionListener(new SelectionListener() {
 			@Override
@@ -300,7 +262,7 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (games == null || games.size() == 0) {
+				if (gameRows.size() == 0) {
 					Raptor.getInstance().alert(local.getString("pgnParseWI20"));
 					return;
 				}
@@ -317,18 +279,19 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 					try {
 						fileWriter = new FileWriter(new File(pathToFile), false);
 						for (int i = 0; i < gamesTable.getRowCount(); i++) {
-							int id = Integer.parseInt(gamesTable.getText(0, 0));
-							Game game = games.get(id);
-							fileWriter.write(game.toPgn() + "\n\n");
-							fileWriter.flush();
+							int row = Integer.parseInt(gamesTable.getSelectedRowData()[0]);
+							Game game = loadGame(row);
+							if (game != null) {
+								fileWriter.write(game.toPgn() + "\n\n");
+								fileWriter.flush();
+							} else {
+								Raptor.getInstance().onError("Error occurred loading game at linenumber " + row + ".");
+							}
 						}
-						Raptor.getInstance()
-								.alert(local.getString("pgnParseWI23")
-										+ gamesTable.getRowCount()
-										+ local.getString("pgnParseWI24") + pathToFile + "."); //$NON-NLS-2$
+						Raptor.getInstance().alert(local.getString("pgnParseWI23") + gamesTable.getRowCount()
+								+ local.getString("pgnParseWI24") + pathToFile + "."); //$NON-NLS-2$
 					} catch (Throwable t) {
-						Raptor.getInstance().onError(
-								local.getString("pgnParseWI26") + pathToFile);
+						Raptor.getInstance().onError(local.getString("pgnParseWI26") + pathToFile);
 					} finally {
 						if (fileWriter != null) {
 							try {
@@ -343,21 +306,15 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 
 		if (errors != null && !errors.isEmpty()) {
 			Label errorsLabel = new Label(composite, SWT.LEFT);
-			errorsLabel
-					.setText(local.getString("pgnParseWI27") + errors.size());
-			errorsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-					false));
+			errorsLabel.setText(local.getString("pgnParseWI27") + errors.size());
+			errorsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
-			errorsTable = new RaptorTable(composite, SWT.BORDER | SWT.H_SCROLL
-					| SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
-			errorsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-					true));
-			errorsTable.addColumn(local.getString("pgnParseWI28"), SWT.LEFT,
-					50, true, null);
-			errorsTable.addColumn(local.getString("pgnParseWI29"), SWT.LEFT,
-					40, true, null);
-			errorsTable.addColumn(local.getString("pgnParseWI30"), SWT.LEFT,
-					10, true, new IntegerComparator());
+			errorsTable = new RaptorTable(composite,
+					SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
+			errorsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			errorsTable.addColumn(local.getString("pgnParseWI28"), SWT.LEFT, 50, true, null);
+			errorsTable.addColumn(local.getString("pgnParseWI29"), SWT.LEFT, 40, true, null);
+			errorsTable.addColumn(local.getString("pgnParseWI30"), SWT.LEFT, 10, true, new IntegerComparator());
 			String[][] content = new String[errors.size()][3];
 			for (int i = 0; i < errors.size(); i++) {
 				PgnParserError error = errors.get(i);
@@ -393,47 +350,61 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 	}
 
 	protected void openGame(int index) {
+		int row = Integer.parseInt(gamesTable.getSelectedRowData()[0]);
 
-		Game selectedGame = games.get(index + 1);
-		Raptor.getInstance()
-				.getWindow()
-				.addRaptorWindowItem(
-						new ChessBoardWindowItem(new InactiveController(
-								selectedGame, selectedGame
-										.getHeader(PgnHeader.White)
-										+ " vs "
-										+ selectedGame
-												.getHeader(PgnHeader.Black),
-								false)));
+		Game selectedGame = loadGame(row);
 
+		if (selectedGame != null) {
+			Raptor.getInstance().getWindow()
+					.addRaptorWindowItem(new ChessBoardWindowItem(new InactiveController(selectedGame,
+							selectedGame.getHeader(PgnHeader.White) + " vs " + selectedGame.getHeader(PgnHeader.Black),
+							false)));
+		} else {
+			Raptor.getInstance().onError("Error occurred loading game at line number " + row + ".");
+		}
+	}
+
+	protected Game loadGame(int lineNumber) {
+		try {
+			StreamingPgnParser parser = new StreamingPgnParser(new File(pathToFile), Integer.MAX_VALUE);
+			parser.jumpToLine(lineNumber);
+			final List<Game> gameList = new ArrayList<Game>(1);
+			parser.addPgnParserListener(new LenientPgnParserListener() {
+				@Override
+				public boolean gameParsed(Game game, int lineNumber) {
+					gameList.add(game);
+					return true;
+				}
+
+				@Override
+				public void errorEncountered(PgnParserError error) {
+				}
+			});
+			parser.parse();
+
+			return gameList.size() == 0 ? null : gameList.get(0);
+
+		} catch (Throwable t) {
+
+		}
+		return null;
 	}
 
 	protected void populateGamesTable() {
-
-		String[][] gamesData = new String[games.size()][11];
-		for (int i = 0; i < games.size(); i++) {
-			Game game = games.get(i);
-			gamesData[i][0] = String.valueOf(i);
-			gamesData[i][1] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.Variant), "?");
-			gamesData[i][2] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.Date), "?");
-			gamesData[i][3] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.Event), "?");
-			gamesData[i][4] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.White), "?");
-			gamesData[i][5] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.WhiteElo), "?");
-			gamesData[i][6] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.Black), "?");
-			gamesData[i][7] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.BlackElo), "?");
-			gamesData[i][8] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.Result), "?");
-			gamesData[i][9] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.ECO), "");
-			gamesData[i][10] = StringUtils.defaultString(
-					game.getHeader(PgnHeader.Opening), "");
+		String[][] gamesData = new String[gameRows.size()][11];
+		for (int i = 0; i < gameRows.size(); i++) {
+			PgnParseResultsRow row = gameRows.get(i);
+			gamesData[i][0] = "" + row.getLineNumber();
+			gamesData[i][1] = StringUtils.defaultString(row.getVariant());
+			gamesData[i][2] = StringUtils.defaultString(row.getDate());
+			gamesData[i][3] = StringUtils.defaultString(row.getEvent());
+			gamesData[i][4] = StringUtils.defaultString(row.getWhite());
+			gamesData[i][5] = StringUtils.defaultString(row.getWhiteElo());
+			gamesData[i][6] = StringUtils.defaultString(row.getBlack());
+			gamesData[i][7] = StringUtils.defaultString(row.getBlackElo());
+			gamesData[i][8] = StringUtils.defaultString(row.getResultDescription());
+			gamesData[i][9] = StringUtils.defaultString(row.getEco());
+			gamesData[i][10] = StringUtils.defaultString(row.getOpening());
 		}
 		gamesTable.refreshTable(gamesData);
 	}

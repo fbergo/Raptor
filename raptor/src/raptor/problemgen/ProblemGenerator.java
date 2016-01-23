@@ -13,7 +13,7 @@
  */
 package raptor.problemgen;
 
-import java.io.FileReader;
+import java.io.File;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -50,8 +50,7 @@ public class ProblemGenerator {
 				if (info instanceof ScoreInfo) {
 					score = (ScoreInfo) info;
 					if (!hasIssuedStop && score.getMateInMoves() != 0
-							|| !score.isLowerBoundScore()
-							&& !score.isUpperBoundScore()) {
+							|| !score.isLowerBoundScore() && !score.isUpperBoundScore()) {
 						hasIssuedStop = true;
 						new Thread(new Runnable() {
 							public void run() {
@@ -87,8 +86,7 @@ public class ProblemGenerator {
 				if (info instanceof ScoreInfo) {
 					score = (ScoreInfo) info;
 					if (score.getMateInMoves() == 0) {
-						double scoreInPawns = getScoreInPawns(score,
-								isWhitesMove);
+						double scoreInPawns = getScoreInPawns(score, isWhitesMove);
 
 						if (bestScore == .55599) {
 							worstScore = bestScore = scoreInPawns;
@@ -114,8 +112,7 @@ public class ProblemGenerator {
 		UCIEngine engine = new UCIEngine();
 		engine.setUsingThreadService(false);
 		engine.setProcessPath("/Applications/HIARCS/Hiarcs12.1SPUCI");
-		new ProblemGenerator(engine,
-				"/Users/mindspan/raptor/raptor/projectFiles/test/Alekhine4Pawns.pgn");
+		new ProblemGenerator(engine, "/Users/mindspan/raptor/raptor/projectFiles/test/Alekhine4Pawns.pgn");
 	}
 
 	protected int numGames;
@@ -131,28 +128,25 @@ public class ProblemGenerator {
 		}
 
 		@Override
-		public void gameParsed(Game game, int lineNumber) {
+		public boolean gameParsed(Game game, int lineNumber) {
 			if (game.getVariant() == Variant.classic) {
 				checkGameForCandidates(game);
 			}
+			return false;
 		}
 	};
 
 	public ProblemGenerator(UCIEngine engine, String pgnFile) throws Exception {
 		this.engine = engine;
-		parser = new StreamingPgnParser(new FileReader(pgnFile),
-				Integer.MAX_VALUE);
+		parser = new StreamingPgnParser(new File(pgnFile), Integer.MAX_VALUE);
 		parser.addPgnParserListener(parserLisetener);
 		parser.parse();
 	}
 
 	public void checkGameForCandidates(Game game) {
-		System.err.println(new Date() + " " + "Checking game: " + numGames++
-				+ " " + game.getHeader(PgnHeader.Event) + " "
-				+ game.getHeader(PgnHeader.White) + "("
-				+ game.getHeader(PgnHeader.WhiteElo) + ") vs "
-				+ game.getHeader(PgnHeader.Black) + "("
-				+ game.getHeader(PgnHeader.BlackElo) + ")");
+		System.err.println(new Date() + " " + "Checking game: " + numGames++ + " " + game.getHeader(PgnHeader.Event)
+				+ " " + game.getHeader(PgnHeader.White) + "(" + game.getHeader(PgnHeader.WhiteElo) + ") vs "
+				+ game.getHeader(PgnHeader.Black) + "(" + game.getHeader(PgnHeader.BlackElo) + ")");
 
 		MoveList moveList = game.getMoveList().deepCopy();
 		if (moveList.getSize() > 20) {
@@ -168,8 +162,7 @@ public class ProblemGenerator {
 			while (moveList.getSize() > game.getHalfMoveCount()) {
 				engine.setPosition(game.toFen(), null);
 				if (isCandidate()) {
-					System.err
-							.println("Found candidate. Testing to see if its a real problem.");
+					System.err.println("Found candidate. Testing to see if its a real problem.");
 					testForProblem(game, moveList);
 					break;
 				} else {
@@ -192,20 +185,16 @@ public class ProblemGenerator {
 				Move gameMove = null;
 
 				if (move.isPromotion()) {
-					gameMove = game.makeMove(move.getStartSquare(), move
-							.getEndSquare(), move.getPromotedPiece());
+					gameMove = game.makeMove(move.getStartSquare(), move.getEndSquare(), move.getPromotedPiece());
 				} else {
-					gameMove = game.makeMove(move.getStartSquare(), move
-							.getEndSquare());
+					gameMove = game.makeMove(move.getStartSquare(), move.getEndSquare());
 				}
 
 				String san = gameMove.getSan();
-				String moveNumber = isFirstMove && !gameMove.isWhitesMove() ? gameMove
-						.getFullMoveCount()
-						+ ") ... "
-						: gameMove.isWhitesMove() ? gameMove.getFullMoveCount()
-								+ ") " : "";
-                line.append(StringUtils.isBlank(line.toString()) ? "" : " ").append(moveNumber).append(san).append(game.isInCheck() ? "+" : "").append(game.isCheckmate() ? "#" : "");
+				String moveNumber = isFirstMove && !gameMove.isWhitesMove() ? gameMove.getFullMoveCount() + ") ... "
+						: gameMove.isWhitesMove() ? gameMove.getFullMoveCount() + ") " : "";
+				line.append(StringUtils.isBlank(line.toString()) ? "" : " ").append(moveNumber).append(san)
+						.append(game.isInCheck() ? "+" : "").append(game.isCheckmate() ? "#" : "");
 				isFirstMove = false;
 			} catch (Throwable t) {
 				t.printStackTrace();
@@ -216,13 +205,11 @@ public class ProblemGenerator {
 	}
 
 	protected double getScoreInPawns(ScoreInfo score, boolean isWhitesMove) {
-		return !isWhitesMove ? -1 * score.getValueInCentipawns() / 100.0
-				: score.getValueInCentipawns() / 100.0;
+		return !isWhitesMove ? -1 * score.getValueInCentipawns() / 100.0 : score.getValueInCentipawns() / 100.0;
 	}
 
 	protected void handleNewProblem(Game game, BestLineFoundInfo bestLine) {
-		System.err.println("\nFound problem:\n" + game.toFen() + "\n"
-				+ getLine(game, bestLine) + "\n\n");
+		System.err.println("\nFound problem:\n" + game.toFen() + "\n" + getLine(game, bestLine) + "\n\n");
 	}
 
 	protected boolean isCandidate() {
@@ -237,8 +224,7 @@ public class ProblemGenerator {
 			}
 		}
 
-		if (listener.score.getMateInMoves() > 0
-				|| Math.abs(listener.score.getValueInCentipawns() / 100.0) > 3) {
+		if (listener.score.getMateInMoves() > 0 || Math.abs(listener.score.getValueInCentipawns() / 100.0) > 3) {
 			result = true;
 		}
 		return result;
@@ -267,11 +253,9 @@ public class ProblemGenerator {
 				} catch (Throwable t) {
 				}
 			}
-			double finalScore = getScoreInPawns(listener.score, game
-					.isWhitesMove());
+			double finalScore = getScoreInPawns(listener.score, game.isWhitesMove());
 			if (listener.score.getMateInMoves() != 0
-					|| Math.abs(listener.bestScore - listener.worstScore) >= 2.0
-					&& Math.abs(finalScore) >= 2.0) {
+					|| Math.abs(listener.bestScore - listener.worstScore) >= 2.0 && Math.abs(finalScore) >= 2.0) {
 				handleNewProblem(game, listener.bestLineFound);
 				break;
 			}

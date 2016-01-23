@@ -20,8 +20,16 @@ import raptor.chess.Result;
 
 public abstract class AbstractPgnParser implements PgnParser {
 
-	public List<PgnParserListener> listeners = new ArrayList<PgnParserListener>(
-			3);
+	protected boolean parseCancelled = false;
+	public List<PgnParserListener> listeners = new ArrayList<PgnParserListener>(3);
+
+	public boolean isParseCancelled() {
+		return parseCancelled;
+	}
+
+	public void setParseCancelled(boolean parseCancelled) {
+		this.parseCancelled = parseCancelled;
+	}
 
 	public void addPgnParserListener(PgnParserListener listener) {
 		listeners.add(listener);
@@ -39,7 +47,9 @@ public abstract class AbstractPgnParser implements PgnParser {
 
 	protected void fireGameEnd(Result result) {
 		for (PgnParserListener listener : listeners) {
-			listener.onGameEnd(this, result);
+			parseCancelled = listener.onGameEnd(this, result);
+			if (parseCancelled)
+				break;
 		}
 	}
 
