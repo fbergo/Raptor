@@ -148,8 +148,8 @@ public class RaptorTable extends Composite {
 		}
 
 		public int compare(TableItem o1, TableItem o2) {
-			String string1 = o1.getText(columnIndex);
-			String string2 = o2.getText(columnIndex);
+			String string1 = StringUtils.defaultString(o1.getText(columnIndex)).toLowerCase();
+			String string2 = StringUtils.defaultString(o2.getText(columnIndex)).toLowerCase();
 			return isAscending ? comparator.compare(string1, string2) : -1
 					* comparator.compare(string1, string2);
 		}
@@ -160,7 +160,10 @@ public class RaptorTable extends Composite {
 
 	protected static final Comparator<String> STRING_COMPARATOR = new Comparator<String>() {
 		public int compare(String arg0, String arg1) {
-			return arg0.compareTo(arg1);
+			String string1 = StringUtils.defaultString(arg0).toLowerCase();
+			String string2 = StringUtils.defaultString(arg1).toLowerCase();
+			
+			return string1.compareTo(string2);
 		}
 	};
 
