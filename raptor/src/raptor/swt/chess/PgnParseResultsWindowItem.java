@@ -398,9 +398,9 @@ public class PgnParseResultsWindowItem implements RaptorWindowItem {
 			gamesData[i][1] = StringUtils.defaultString(row.getVariant());
 			gamesData[i][2] = StringUtils.defaultString(row.getDate());
 			gamesData[i][3] = StringUtils.defaultString(row.getEvent());
-			gamesData[i][4] = StringUtils.defaultString(row.getWhite());
+			gamesData[i][4] = StringUtils.defaultString(row.getWhite()).toUpperCase();
 			gamesData[i][5] = StringUtils.defaultString(row.getWhiteElo());
-			gamesData[i][6] = StringUtils.defaultString(row.getBlack());
+			gamesData[i][6] = StringUtils.defaultString(row.getBlack()).toUpperCase();
 			gamesData[i][7] = StringUtils.defaultString(row.getBlackElo());
 			gamesData[i][8] = StringUtils.defaultString(row.getResultDescription());
 			gamesData[i][9] = StringUtils.defaultString(row.getEco());
