@@ -61,13 +61,8 @@ public interface PreferenceKeys {
 	public static final String APP_ICON_SIZE = "app-icon-size";
 	public static final String APP_TOOLBAR_PIECE_SIZE = "app-toolbar-piece-size";
 	public static final String APP_OPEN_LINKS_IN_EXTERNAL_BROWSER = "app-open-links-in-external-browser";
-	public static final String APP_PING_COLOR = "app-lag-color";
-	public static final String APP_PING_FONT = "app-lag-font";
 	public static final String APP_SASH_WIDTH = "app-sash-width";
-	public static final String APP_SHOW_STATUS_BAR = "app-show-status-bar";
 	public static final String APP_SOUND_ENABLED = "sound-enabled";
-	public static final String APP_STATUS_BAR_COLOR = "app-starus-bar-color";
-	public static final String APP_STATUS_BAR_FONT = "app-status-bar-font";
 	public static final String APP_HOME_URL = "app-home-url";
 	public static final String APP_LAYOUT = "app-layout";
 	public static final String APP_BROWSER_QUADRANT = "app-browser-quadrantv2.0";

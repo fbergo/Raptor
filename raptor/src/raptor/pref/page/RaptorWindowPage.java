@@ -13,11 +13,8 @@
  */
 package raptor.pref.page;
 
-import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FontFieldEditor;
 
 import raptor.Raptor;
 import raptor.international.L10n;
@@ -43,32 +40,5 @@ public class RaptorWindowPage extends FieldEditorPreferencePage {
 				PreferenceKeys.APP_SASH_WIDTH, local.getString("divSashWid"),
 				sliderWidthPreferences, getFieldEditorParent());
 		addField(setFieldEditor);
-
-		ColorFieldEditor pingTimeColor = new ColorFieldEditor(
-				PreferenceKeys.APP_PING_COLOR, local.getString("pingTFontCol"),
-				getFieldEditorParent());
-		addField(pingTimeColor);
-
-		addField(pingTimeColor);
-		FontFieldEditor pingTimeFont = new FontFieldEditor(
-				PreferenceKeys.APP_PING_FONT, local.getString("pingTFont"),
-				getFieldEditorParent());
-		addField(pingTimeFont);
-
-		ColorFieldEditor statusBarFontColor = new ColorFieldEditor(
-				PreferenceKeys.APP_STATUS_BAR_COLOR, local.getString("statBarFontCol"),
-				getFieldEditorParent());
-		addField(statusBarFontColor);
-
-		FontFieldEditor statusBarFont = new FontFieldEditor(
-				PreferenceKeys.APP_STATUS_BAR_FONT, local.getString("statBarFont"),
-				getFieldEditorParent());
-		addField(statusBarFont);
-		
-		addField(new BooleanFieldEditor(
-				PreferenceKeys.APP_SHOW_STATUS_BAR,
-				local.getString("showWinStar"),
-				getFieldEditorParent()));
-
 	}
 }

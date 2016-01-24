@@ -525,7 +525,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 
 		publishEvent(new ChatEvent(null, ChatType.INTERNAL, L10n.getInstance().getString("disconn")));
 
-		Raptor.getInstance().getWindow().setPingTime(this, -1);
 		fireDisconnected();
 		LOG.info("Disconnected from " + getShortName());
 	}
@@ -1800,21 +1799,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	public void messageArrived(StringBuilder buffer) {
 
 		// System.err.println("Message arrived (buffer): " + buffer);
-
-		if (lastSendPingTime != 0 && (lagNotifyCounter % 10 == 0)) {
-			ThreadService.getInstance().run(new Runnable() {
-				public void run() {
-					long currentTime = System.currentTimeMillis();
-					lastPingTime = currentTime - lastSendPingTime;
-					Raptor.getInstance().getWindow().setPingTime(IcsConnector.this, lastPingTime);
-					lastSendPingTime = 0;
-				}
-
-				public String toString() {
-					return "IcsConnector.messageArrived runnable";
-				}
-			});
-		}
 
 		if (isLoggedIn) {
 			isLoggingIn = false;

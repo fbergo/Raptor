@@ -39,7 +39,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -57,6 +56,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import raptor.chat.ChatEvent;
+import raptor.chat.ChatType;
 import raptor.connector.Connector;
 import raptor.international.L10n;
 import raptor.layout.Layout;
@@ -1191,59 +1192,6 @@ public class RaptorWindow extends ApplicationWindow {
 	}
 
 	/**
-	 * Sets the ping time on the window for the specified connector. If time is
-	 * -1 the label will disappear.
-	 */
-	public void setPingTime(final Connector connectorToSet, final long pingTime) {
-		if (Raptor.getInstance().isShutdown() || Raptor.getInstance().isDisposed() || zoomCombo == null
-				|| statusBar == null) {
-			return;
-		}
-
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("setPingTime " + connectorToSet.getShortName() + " " + pingTime);
-		}
-
-		Raptor.getInstance().getDisplay().syncExec(new RaptorRunnable() {
-			@Override
-			public void execute() {
-				if (pingLabelsMap != null && connectorToSet != null) {
-					Label label = pingLabelsMap.get(connectorToSet.getShortName());
-					if (label == null) {
-						zoomCombo.dispose();
-						label = new Label(statusBar, SWT.NONE);
-						GridData gridData = new GridData();
-						gridData.grabExcessHorizontalSpace = false;
-						gridData.grabExcessVerticalSpace = false;
-						gridData.horizontalAlignment = SWT.END;
-						gridData.verticalAlignment = SWT.CENTER;
-						label.setLayoutData(gridData);
-						pingLabelsMap.put(connectorToSet.getShortName(), label);
-						label.setFont(
-								Raptor.getInstance().getPreferences().getFont(PreferenceKeys.APP_PING_FONT, false));
-						label.setForeground(
-								Raptor.getInstance().getPreferences().getColor(PreferenceKeys.APP_PING_COLOR));
-						label.setToolTipText("An estimate of ping time.");
-						createZoomCombo();
-						statusBar.layout(true, true);
-					}
-					if (pingTime == -1) {
-						label.setVisible(false);
-						label.dispose();
-						pingLabelsMap.remove(connectorToSet.getShortName());
-						statusBar.layout(true, true);
-					} else {
-						label.setText(" " + connectorToSet.getShortName() + " (" + pingTime + "ms) ");
-						label.setVisible(true);
-						statusBar.layout(true, true);
-						label.redraw();
-					}
-				}
-			}
-		});
-	}
-
-	/**
 	 * Sets the windows status message.
 	 */
 	public void setStatusMessage(final String newStatusMessage) {
@@ -1366,7 +1314,6 @@ public class RaptorWindow extends ApplicationWindow {
 
 		createLeftCoolbar();
 		createFolderAndSashControls();
-		createStatusBarControls();
 		return windowComposite;
 	}
 
@@ -1610,6 +1557,113 @@ public class RaptorWindow extends ApplicationWindow {
 			});
 		}
 		windowMenu.add(layoutsMenu);
+
+		final MenuManager zoomMenu = new MenuManager(local.getString("rapWinZoomMenu"));
+		windowMenu.add(zoomMenu);
+		zoomMenu.add(new Action("25%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, .25);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 25%"));
+			}
+		});
+		zoomMenu.add(new Action("50%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, .5);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 50%"));
+			}
+		});
+		zoomMenu.add(new Action("75%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, .75);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 75%"));
+			}
+		});
+		zoomMenu.add(new Action("100%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 1.0);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 100%"));
+			}
+		});
+		zoomMenu.add(new Action("125%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 1.25);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 125%"));
+			}
+		});
+		zoomMenu.add(new Action("150%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 1.5);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 150%"));
+			}
+		});
+		zoomMenu.add(new Action("175%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 1.75);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 175%"));
+			}
+		});
+		zoomMenu.add(new Action("200%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 2.0);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 200%"));
+			}
+		});
+		zoomMenu.add(new Action("225%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 2.25);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 225%"));
+			}
+		});
+		zoomMenu.add(new Action("250%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 2.5);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 250%"));
+			}
+		});
+		zoomMenu.add(new Action("275%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 2.75);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 275%"));
+			}
+		});
+		zoomMenu.add(new Action("300%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 3.0);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 300%"));
+			}
+		});
+		zoomMenu.add(new Action("325%") {
+			@Override
+			public void run() {
+				Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, 3.25);
+				ConnectorService.getInstance().getConnectors()[0].publishEvent(
+						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 325%"));
+			}
+		});
 
 		final MenuManager themesMenu = new MenuManager(local.getString("rapWinL24"));
 		windowMenu.add(themesMenu);
@@ -1910,73 +1964,6 @@ public class RaptorWindow extends ApplicationWindow {
 		folders[Quadrant.VII.ordinal()] = new RaptorTabFolder(quad6quad7Sash, SWT.BORDER, Quadrant.VII);
 
 		folders[Quadrant.VIII.ordinal()] = new RaptorTabFolder(quad67quad8Sash, SWT.BORDER, Quadrant.VIII);
-	}
-
-	/**
-	 * Creates the status bar controls.
-	 */
-	protected void createStatusBarControls() {
-		if (Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.APP_SHOW_STATUS_BAR)) {
-			statusBar = new Composite(windowComposite, SWT.NONE);
-			statusBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-			GridLayout statusBarLayout = SWTUtils.createMarginlessGridLayout(20, false);
-			statusBar.setLayout(statusBarLayout);
-
-			statusLabel = new Label(statusBar, SWT.NONE);
-			statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-			statusLabel
-					.setFont(Raptor.getInstance().getPreferences().getFont(PreferenceKeys.APP_STATUS_BAR_FONT, false));
-			statusLabel
-					.setForeground(Raptor.getInstance().getPreferences().getColor(PreferenceKeys.APP_STATUS_BAR_COLOR));
-
-			createZoomCombo();
-		}
-	}
-
-	protected void createZoomCombo() {
-		zoomCombo = new Combo(statusBar, SWT.READ_ONLY | SWT.BORDER);
-		zoomCombo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		zoomCombo.add("25%");
-		zoomCombo.add("50%");
-		zoomCombo.add("70%");
-		zoomCombo.add("80%");
-		zoomCombo.add("90%");
-		zoomCombo.add("100%");
-		zoomCombo.add("110%");
-		zoomCombo.add("120%");
-		zoomCombo.add("130%");
-		zoomCombo.add("150%");
-		zoomCombo.add("175%");
-		zoomCombo.add("200%");
-		zoomCombo.add("250%");
-		zoomCombo.setToolTipText(local.getString("rapWinL53"));
-
-		int selection = -1;
-
-		int resizePercentage = (int) (Raptor.getInstance().getPreferences().getDouble(PreferenceKeys.APP_ZOOM_FACTOR)
-				* 100);
-		String resizeValue = resizePercentage + "%";
-		for (int i = 0; i < zoomCombo.getItemCount(); i++) {
-			if (resizeValue.equals(zoomCombo.getItem(i))) {
-				selection = i;
-				break;
-			}
-		}
-		zoomCombo.select(selection);
-
-		zoomCombo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String selection = zoomCombo.getText();
-				if (StringUtils.isNotBlank(selection)) {
-					selection = selection.substring(0, selection.length() - 1);
-					double resize = Integer.parseInt(selection) / 100.0;
-					Raptor.getInstance().getPreferences().setValue(PreferenceKeys.APP_ZOOM_FACTOR, resize);
-				}
-
-			}
-		});
-		zoomCombo.setFont(Raptor.getInstance().getPreferences().getFont(PreferenceKeys.APP_STATUS_BAR_FONT, false));
 	}
 
 	protected RaptorTabFolder getFolderContainingCursor() {

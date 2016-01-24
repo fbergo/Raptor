@@ -389,13 +389,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		putValue("app-version", "1.0 rc6");
 		setDefault(APP_IS_SHOWING_CHESS_PIECE_UNICODE_CHARS, !OSUtils.isLikelyWindowsXP());
 		setDefault(APP_SASH_WIDTH, 8);
-		PreferenceConverter.setDefault(this, APP_PING_FONT,
-				new FontData[] { new FontData(defaultFontName, defaultSmallFontSize, 0) });
-		PreferenceConverter.setDefault(this, APP_PING_COLOR, new RGB(0, 0, 0));
-
-		PreferenceConverter.setDefault(this, APP_STATUS_BAR_FONT,
-				new FontData[] { new FontData(defaultFontName, defaultSmallFontSize, 0) });
-		PreferenceConverter.setDefault(this, APP_STATUS_BAR_COLOR, new RGB(0, 0, 0));
 		setDefault(APP_HOME_URL, "https://raptor-fics-interface.github.io/Raptor/");
 		setDefault(APP_SOUND_ENABLED, true);
 		setDefault(APP_USER_TAGS, "Dupe,Friend,Lagger,Idiot,Good Partner,No Partner,Premover,Troll");
@@ -412,7 +405,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(APP_IS_LOGGING_CONSOLE, false);
 		setDefault(APP_IS_LOGGING_PERSON_TELLS, false);
 		setDefault(APP_IS_LOGGING_CHANNEL_TELLS, false);
-		setDefault(PreferenceKeys.APP_SHOW_STATUS_BAR, false);
 
 		// Layout 1 settings.
 		setDefault(APP_WINDOW_BOUNDS, new Rectangle(0, 0, -1, -1));
