@@ -464,11 +464,16 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 								engine.connect();
 							}
 
-							if (controller.getGame().getVariant() == Variant.fischerRandom
-									&& engine.hasOption("UCI_Chess960")) {
+							if (controller.getGame().getVariant() == Variant.fischerRandom) {
 								UCICheck opt = (UCICheck) engine.getOption("UCI_Chess960");
 								opt.setValue("true");
+								engine.setOption(opt);
+							} else {
+								UCICheck opt = (UCICheck) engine.getOption("UCI_Chess960");
+								opt.setValue("false");
+								engine.setOption(opt);
 							}
+							
 
 							engine.newGame();
 							engine.setPosition(controller.getGame().toFen(), null);

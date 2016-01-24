@@ -103,6 +103,10 @@ public enum Variant {
 			return null;
 		}
 	}
+	
+	public static boolean isFischerRandom(Variant variant) {
+		return variant == Variant.fischerRandom;
+	}
 
 	public static boolean isBughouse(Variant variant) {
 		return variant == Variant.bughouse
