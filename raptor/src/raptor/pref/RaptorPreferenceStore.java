@@ -494,7 +494,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 
 		// Controller button preferences.
 		setDefault(PLAYING_CONTROLLER + LEFT_MOUSE_BUTTON_ACTION, PlayingMouseAction.None.toString());
-		setDefault(PLAYING_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION, PlayingMouseAction.PopupMenu.toString());
+		setDefault(PLAYING_CONTROLLER + RIGHT_MOUSE_BUTTON_ACTION, PlayingMouseAction.ClearPremoves.toString());
 		setDefault(PLAYING_CONTROLLER + MIDDLE_MOUSE_BUTTON_ACTION, PlayingMouseAction.SmartMove.toString());
 		setDefault(PLAYING_CONTROLLER + MISC1_MOUSE_BUTTON_ACTION, PlayingMouseAction.None.toString());
 		setDefault(PLAYING_CONTROLLER + MISC2_MOUSE_BUTTON_ACTION, PlayingMouseAction.None.toString());
