@@ -330,8 +330,8 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 
 		bestMoves = new RaptorTable(composite, SWT.BORDER | SWT.FULL_SELECTION, false, true);
 		bestMoves.setToolTipText(local.getString("uciAnalW_37"));
-		bestMoves.addColumn(local.getString("uciAnalW_38"), SWT.LEFT, 10, false, null);
-		bestMoves.addColumn(local.getString("uciAnalW_42"), SWT.LEFT, 90, false, null);
+		bestMoves.addColumn(local.getString("uciAnalW_38"), SWT.LEFT, 18, false, null);
+		bestMoves.addColumn(local.getString("uciAnalW_42"), SWT.LEFT, 82, false, null);
 		bestMoves.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		bestMoves.addRaptorTableListener(new RaptorTableAdapter() {
