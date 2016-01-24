@@ -87,6 +87,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 	protected Combo engineCombo;
 	protected RaptorTable bestMoves;
 	protected Button startStopButton;
+	protected boolean ignoreUciInfo = false;
 	protected static L10n local = L10n.getInstance();
 	protected Object engineLock = new Object();
 
@@ -95,7 +96,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		}
 
 		public void engineSentInfo(final UCIInfo[] infos) {
-			if (engine.isConnected()) {
+			if (engine.isConnected() && !ignoreUciInfo) {
 				Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
 					@Override
 					public void execute() {
@@ -185,7 +186,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 							}
 						}
 
-						if (score != null && multiPv != -1) {
+						if (!ignoreUciInfo && score != null && multiPv != -1) {
 							final String finalScore = score;
 							final String finalTime = time;
 							final String finalDepth = depth;
@@ -256,6 +257,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				if (engine != null) {
+					ignoreUciInfo = true;
 					engine.quit();
 				}
 			}
@@ -380,6 +382,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 	}
 
 	public void quit() {
+		ignoreUciInfo = true;
 		Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable(controller.getConnector()) {
 			@Override
 			public void execute() {
@@ -403,6 +406,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 
 	public void stop() {
 		if (engine != null) {
+			ignoreUciInfo = true;
 			ThreadService.getInstance().run(new Runnable() {
 				public void run() {
 					try {
@@ -469,6 +473,7 @@ public class UciAnalysisWidget implements EngineAnalysisWidget {
 							engine.newGame();
 							engine.setPosition(controller.getGame().toFen(), null);
 							engine.isReady();
+							ignoreUciInfo = false;
 							engine.go(engine.getGoAnalysisParameters(), listener);
 							Raptor.getInstance().getDisplay().asyncExec(new RaptorRunnable() {
 								@Override
