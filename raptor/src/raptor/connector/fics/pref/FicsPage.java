@@ -43,6 +43,9 @@ public class FicsPage extends FieldEditorPreferencePage {
 				local.getString("ficsShowPingWidget"), getFieldEditorParent());
 		addField(showPingWidget);
 
+		addField(new BooleanFieldEditor(PreferenceKeys.FICS_KEEP_ALIVE_ENABLED, local.getString("ficsKeepAliveEnabled"),
+				getFieldEditorParent()));
+
 		IntegerFieldEditor pingWidgetDelay = new IntegerFieldEditor(PreferenceKeys.FICS_PING_INTERVAL_SEC,
 				local.getString("ficsPingWidgetDelaySec"), getFieldEditorParent());
 		addField(pingWidgetDelay);
@@ -59,13 +62,6 @@ public class FicsPage extends FieldEditorPreferencePage {
 		addField(new BooleanFieldEditor(PreferenceKeys.FICS_SHOW_BUGBUTTONS_ON_PARTNERSHIP, local.getString("ficsP5"),
 				getFieldEditorParent()));
 
-		BooleanFieldEditor bfe2 = new BooleanFieldEditor(PreferenceKeys.FICS_KEEP_ALIVE, local.getString("ficsP3"),
-				getFieldEditorParent());
-		addField(bfe2);
-
-		addField(new StringFieldEditor(PreferenceKeys.FICS_KEEP_ALIVE_COMMAND, local.getString("ficsP7"),
-				getFieldEditorParent()));
-		
 		addField(new TextFieldEditor(PreferenceKeys.FICS_LOGIN_SCRIPT, local.getString("ficsP6"),
 				getFieldEditorParent()));
 	}

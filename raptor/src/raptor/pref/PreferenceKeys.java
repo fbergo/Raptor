@@ -270,7 +270,6 @@ public interface PreferenceKeys {
 	// Connector preferences should always use the short name of the connector
 	// followed by the preference.
 	public static final String FICS_AUTO_CONNECT = "fics-auto-connect";
-	public static final String FICS_KEEP_ALIVE = "fics-keep-alive";
 	public static final String FICS_LOGIN_SCRIPT = "fics-login-script";
 	public static final String FICS_PROFILE = "fics-profile";
 	public static final String FICS_CLOSE_TABS_ON_DISCONNECT = "fics-close-tabs-on-disconnect";
@@ -282,7 +281,7 @@ public interface PreferenceKeys {
 	public static final String FICS_PERSON_MATCH_COMMANDS = "fics-person-match-commands";
 	public static final String FICS_PERSON_LIST_COMMANDS = "fics-person-list-commands";
 	public static final String FICS_NO_WRAP_ENABLED = "fics-no-wrap-enabled";
-	public static final String FICS_KEEP_ALIVE_COMMAND = "fics-keep-alive-command";
+	public static final String FICS_KEEP_ALIVE_ENABLED = "fics-keep-alive-enabled";
 	public static final String FICS_REGULAR_EXPRESSIONS_TO_BLOCK = "fics-"
 			+ REGULAR_EXPRESSIONS_TO_BLOCK;
 	public static final String FICS_REMOVE_BLANK_LINES = "fics-"

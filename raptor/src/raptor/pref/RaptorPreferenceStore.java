@@ -631,7 +631,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(BUGHOUSE_IS_PLAYING_PARTNERSHIP_OFFERED_SOUND, true);
 
 		// Fics
-		setDefault(FICS_KEEP_ALIVE, false);
+		setDefault(FICS_KEEP_ALIVE_ENABLED, false);
 		setDefault(FICS_AUTO_CONNECT, false);
 		setDefault(FICS_LOGIN_SCRIPT, "set seek 0\nset autoflag 1\nt relay listgames\n");
 		setDefault(FICS_AUTO_CONNECT, false);
@@ -679,7 +679,6 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(FICS_SEEK_FORMULA, true);
 		setDefault(FICS_SEEK_RATED, true);
 		setDefault(FICS_SEEK_COLOR, "");
-		setDefault(FICS_KEEP_ALIVE_COMMAND, "set busy is away from the keyboard.");
 
 		// Fics Primary
 		setDefault(FICS_PRIMARY_USER_NAME, "");
