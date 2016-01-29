@@ -16,7 +16,6 @@ package raptor.connector.fics.pref;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.jface.preference.StringFieldEditor;
 
 import raptor.Raptor;
 import raptor.international.L10n;
