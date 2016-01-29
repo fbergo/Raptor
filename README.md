@@ -38,6 +38,7 @@ Raptor is in need of some contributors in the following areas. If you would like
 * [Bug games on fics](https://www.youtube.com/watch?v=7YUe9yUg-3g)
 
 ##Screenshots
+![](https://cloud.githubusercontent.com/assets/16505202/12541432/ff479814-c2e4-11e5-9434-b6a49e1e2bd7.png)
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-2.png)
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-3.png)
 ![](https://github.com/Raptor-Fics-Interface/Raptor/blob/master/raptor/github-images/raptor1.0-4.png)
