@@ -1787,6 +1787,7 @@ public class RaptorWindow extends ApplicationWindow {
 			}
 		});
 		helpMenu.add(new Separator());
+		
 
 		MenuManager raptorHelp = new MenuManager(local.getString("rapWinL34"));
 		raptorHelp.add(new Action(local.getString("rapWinL35")) {
@@ -1850,6 +1851,24 @@ public class RaptorWindow extends ApplicationWindow {
 			}
 		});
 		helpMenu.add(ficsHelp);
+		
+		MenuManager bughouseHelp = new MenuManager(local.getString("rapWinBughouseHelp"));
+		bughouseHelp.add(new Action(local.getString("howToPlayBugWithRaptor")) {
+			@Override
+			public void run() {
+				BrowserUtils.openInternalUrl("https://www.youtube.com/watch?v=TVkQvj59MTo");
+
+			}
+		});
+		bughouseHelp.add(new Action(local.getString("bughouseConcepts")) {
+			@Override
+			public void run() {
+				File file = new File(Raptor.RESOURCES_DIR + "/bughouse concepts/bughouse concepts.html");
+				BrowserUtils.openInternalUrl("file://" +file.getAbsolutePath());
+
+			}
+		});
+		helpMenu.add(bughouseHelp);
 
 		helpMenu.add(new Separator());
 		helpMenu.add(new Action(local.getString("rapWinL47")) {
