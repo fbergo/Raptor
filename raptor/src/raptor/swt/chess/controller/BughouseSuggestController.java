@@ -128,7 +128,7 @@ public class BughouseSuggestController extends ObserveController {
 			item.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
 					connector.sendMessage(connector.getPartnerTellPrefix()
-							+ " I suggest P@" + GameUtils.getSan(square));
+							+ " I suggest 'P@" + GameUtils.getSan(square) + "'");
 				}
 			});
 
@@ -140,7 +140,7 @@ public class BughouseSuggestController extends ObserveController {
 			item.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
 					connector.sendMessage(connector.getPartnerTellPrefix()
-							+ " I suggest N@" + GameUtils.getSan(square));
+							+ " I suggest 'N@" + GameUtils.getSan(square) + "'");
 				}
 			});
 
@@ -152,7 +152,7 @@ public class BughouseSuggestController extends ObserveController {
 			item.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
 					connector.sendMessage(connector.getPartnerTellPrefix()
-							+ " I suggest B@" + GameUtils.getSan(square));
+							+ " I suggest 'B@" + GameUtils.getSan(square)+ "'");
 				}
 			});
 
@@ -164,19 +164,19 @@ public class BughouseSuggestController extends ObserveController {
 			item.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
 					connector.sendMessage(connector.getPartnerTellPrefix()
-							+ " I suggest R@" + GameUtils.getSan(square));
+							+ " I suggest 'R@" + GameUtils.getSan(square)+ "'");
 				}
 			});
 
 			item = new MenuItem(menu, SWT.PUSH);
-			item.setText("Suggest "
+			item.setText("Suggest \""
 					+ GameUtils.getPieceRepresentation(GameUtils
 							.getColoredPiece(QUEEN, color)) + "@"
-					+ GameUtils.getSan(square));
+					+ GameUtils.getSan(square) + "\"");
 			item.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
 					connector.sendMessage(connector.getPartnerTellPrefix()
-							+ " I suggest Q@" + GameUtils.getSan(square));
+							+ " I suggest 'Q@" + GameUtils.getSan(square)+ "'");
 				}
 			});
 
@@ -317,7 +317,7 @@ public class BughouseSuggestController extends ObserveController {
 		if (isColoredPieceWhite && isPartnerWhite || !isColoredPieceWhite
 				&& !isPartnerWhite) {
 			connector.sendMessage(connector.getPartnerTellPrefix()
-					+ " I suggest " + san);
+					+ " I suggest '" + san + "'");
 		} else {
 			connector.sendMessage(connector.getPartnerTellPrefix()
 					+ " Watch out for " + san);
