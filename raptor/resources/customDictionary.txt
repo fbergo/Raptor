@@ -21,6 +21,7 @@ babas
 inemisis
 blik
 rybka
+stockfish
 premove
 smartmove
 inc
