@@ -1087,7 +1087,11 @@ public abstract class IcsConnector implements Connector, MessageListener {
 					} else if (type.equals("GamesWindowItem")) {
 						SWTUtils.openGamesWindowItem(this);
 					}
+				} else {
+					break;
 				}
+			} else {
+				break;
 			}
 		}
 
