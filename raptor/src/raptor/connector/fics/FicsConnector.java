@@ -132,18 +132,24 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys, GameC
 	protected boolean isDisconnecting = false;
 
 	protected boolean killPingHandler = true;
-	protected Runnable pingHandler = new Runnable() {
+	protected Runnable pingAndKeepalive = new Runnable() {
 		public void run() {
 			if (LOG.isDebugEnabled())
-				LOG.debug("Running ping handler");
+				LOG.debug("Running ping/keep alive handler");
+			
+			
+			if (!killPingHandler && isConnected() && Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.FICS_KEEP_ALIVE_ENABLED)) {
+				if (System.currentTimeMillis() - lastSendTime > 1000 * 60 * 50) {
+					String command = "date";
+					sendMessage("date", true);
+					publishEvent(new ChatEvent("", ChatType.INTERNAL,
+							"The messsage: \"" + command + "\" was just sent as a keep alive."));
+				}
+			}
+			
 			if (!killPingHandler && isConnected() && isTimesseal2On()
 					&& Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.FICS_SHOW_PING_WIDGET)) {
-				boolean isKeepAliveEnabled = Raptor.getInstance().getPreferences().getBoolean(PreferenceKeys.FICS_KEEP_ALIVE_ENABLED);
-				
-				String pingCommand = "ping";
-				if (isKeepAliveEnabled)
-					pingCommand = "$$" + pingCommand;
-				sendMessage(pingCommand, true, ChatType.PING_RESPONSE);
+				sendMessage("$$ping", true, ChatType.PING_RESPONSE);
 			}
 
 			if (!killPingHandler) {
@@ -664,7 +670,7 @@ public class FicsConnector extends IcsConnector implements PreferenceKeys, GameC
 				sendMessage("iset lock 1", true);
 
 				killPingHandler = false;
-				ThreadService.getInstance().run(pingHandler);
+				ThreadService.getInstance().run(pingAndKeepalive);
 				hasVetoPower = true;
 			}
 		});

@@ -112,35 +112,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	private static final RaptorLogger LOG = RaptorLogger.getLog(IcsConnector.class);
 	public static final String LOGIN_CHARACTERS_TO_FILTER = "\uefbf\ubdef\ubfbd\uefbf\ubdef\ubfbd\ud89e\u0001\ufffd\ufffd";
 
-	protected class KeepAlive implements Runnable {
-		private boolean kill = false;
-
-		public void kill() {
-			kill = true;
-		}
-
-		public void run() {
-			if (!kill || (isConnected() && getPreferences().getBoolean(context.getShortName() + "-keep-alive"))) {
-				if (System.currentTimeMillis() - lastSendTime > 1000 * 60 * 50) {
-					String command = getPreferences()
-							.getString(context.getPreferencePrefix() + PreferenceKeys.KEEP_ALIVE_COMMAND);
-
-					if (StringUtils.isBlank(command)) {
-						command = "date";
-					}
-					sendMessage(command, true);
-					publishEvent(new ChatEvent("", ChatType.INTERNAL,
-							"The messsage: \"" + command + "\" was just sent as a keep alive."));
-				}
-				ThreadService.getInstance().scheduleOneShot(1000 * 60 * 5, this);
-			}
-		}
-
-		public String toString() {
-			return "IcsConnector.KeepAlive Runnable";
-		}
-	};
-
 	protected BughouseService bughouseService;
 
 	protected ChatService chatService;
@@ -217,7 +188,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	protected long lagNotifyCounter = 0;
 
 	protected String simulBugPartnerName;
-	protected KeepAlive keepAlive = new KeepAlive();
 
 	protected long lastPingTime;
 	protected long lastSendTime;
@@ -501,15 +471,10 @@ public abstract class IcsConnector implements Connector, MessageListener {
 				} catch (Throwable t) {
 					LOG.error("Error disconencting from ICSConnector.", t);
 				}
-
-				if (keepAlive != null) {
-					keepAlive.kill();
-				}
 			} catch (Throwable t) {
 				LOG.error("Error disconencting from ICSConnector.", t);
 			} finally {
 				messageProducer = null;
-				keepAlive = null;
 				isSimulBugConnector = false;
 				simulBugPartnerName = null;
 				peopleToSpeakTellsFrom.clear();
@@ -547,15 +512,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 			gameService.dispose();
 			gameService = null;
 		}
-
-		// if (inputBuffer != null) {
-		// inputBuffer.clear();
-		// inputBuffer = null;
-		// }
-		if (keepAlive != null) {
-			ThreadService.getInstance().getExecutor().remove(keepAlive);
-		}
-
 		LOG.info("Disposed " + getShortName() + "Connector");
 	}
 
@@ -1484,10 +1440,6 @@ public abstract class IcsConnector implements Connector, MessageListener {
 				return "IcsConnector.connection intiliazation runnable";
 			}
 		});
-
-		if (getPreferences().getBoolean(context.getShortName() + "-keep-alive")) {
-			ThreadService.getInstance().scheduleOneShot(30 * 60 * 1000, keepAlive);
-		}
 
 		ScriptService.getInstance().addScriptServiceListener(scriptServiceListener);
 		refreshChatScripts();

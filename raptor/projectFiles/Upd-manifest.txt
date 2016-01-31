@@ -1,2 +1,0 @@
-Main-Class: raptor.updater.UpdateManager
-Class-Path: ./lib/swt/swt.jar 
