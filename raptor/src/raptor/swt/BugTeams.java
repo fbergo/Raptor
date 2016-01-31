@@ -599,7 +599,7 @@ public class BugTeams extends Composite {
 					player2Table.refreshTable(player2Data);
 				}
 
-				if (autoMatch2_0.getSelection() && !connector.isLoggedInUserPlayingAGame()) {
+				if (autoMatch2_0 != null && connector != null && (autoMatch2_0.getSelection() && !connector.isLoggedInUserPlayingAGame())) {
 					matchAll(2, 0);
 				}
 			}
