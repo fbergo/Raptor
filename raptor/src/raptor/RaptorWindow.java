@@ -2186,98 +2186,6 @@ public class RaptorWindow extends ApplicationWindow {
 						});
 					}
 
-					// Disable moving around in quadrants with right click.
-					// int itemIndex = -1;
-					// for (int i = 0; i < folder.getItemCount(); i++) {
-					// if (folder.getItem(i) == raptorTabItem) {
-					// itemIndex = i;
-					// }
-					// }
-					//
-					// final int finalItemIndex = itemIndex;
-					//
-					// if (itemIndex != -1 && itemIndex > 0 || itemIndex <
-					// folder.getItemCount() - 1) {
-					// new MenuItem(menu, SWT.SEPARATOR);
-					// }
-					//
-					// if (itemIndex != -1 && itemIndex > 0) {
-					// MenuItem moveLeft = new MenuItem(menu, SWT.PUSH);
-					// moveLeft.setText(local.getString("rapWinL57"));
-					// moveLeft.addListener(SWT.Selection, new Listener() {
-					// public void handleEvent(Event e) {
-					// raptorTabItem.onMoveTo(folder, finalItemIndex - 2 < 0 ? 0
-					// : finalItemIndex - 2);
-					// }
-					// });
-					// }
-					// if (itemIndex != -1 && itemIndex < folder.getItemCount()
-					// - 1) {
-					// MenuItem moveLeft = new MenuItem(menu, SWT.PUSH);
-					// moveLeft.setText(local.getString("rapWinL58"));
-					// moveLeft.addListener(SWT.Selection, new Listener() {
-					// public void handleEvent(Event e) {
-					// raptorTabItem.onMoveTo(folder, finalItemIndex + 2);
-					// }
-					// });
-					// }
-					//
-					// Quadrant[] availableQuadrants =
-					// folder.getRaptorTabItemSelection().raptorItem.getMoveToQuadrants();
-					//
-					// if (availableQuadrants.length > 0) {
-					// new MenuItem(menu, SWT.SEPARATOR);
-					// }
-					//
-					// if (OSUtils.isLikelyWindows()) {
-					// MenuItem defaultMenuItem = new MenuItem(menu,
-					// SWT.CASCADE);
-					// defaultMenuItem.setText(local.getString("rapWinL59"));
-					//
-					// Menu moveToMenu = new Menu(defaultMenuItem);
-					// defaultMenuItem.setMenu(moveToMenu);
-					//
-					// for (int i = 0; i < availableQuadrants.length; i++) {
-					// if (availableQuadrants[i] != folder.quad) {
-					// final Quadrant currentQuadrant = availableQuadrants[i];
-					// MenuItem moveToItem = new MenuItem(moveToMenu, SWT.PUSH);
-					// moveToItem.setText("Quad " + currentQuadrant.toString());
-					// moveToItem.addListener(SWT.Selection, new Listener() {
-					// public void handleEvent(Event e) {
-					// {
-					// raptorTabItem.onMoveTo(folders[currentQuadrant.ordinal()]);
-					// }
-					// }
-					// });
-					// moveToItem.setImage(Raptor.getInstance().getImage(Raptor.RESOURCES_DIR
-					// + "images/quadrantsSmall" + currentQuadrant.toString() +
-					// ".png"));
-					// new MenuItem(moveToMenu, SWT.SEPARATOR);
-					// }
-					// }
-					// } else {
-					// for (int i = 0; i < availableQuadrants.length; i++) {
-					// final Quadrant currentQuadrant = availableQuadrants[i];
-					// if (currentQuadrant != folder.quad) {
-					// MenuItem moveToItem = new MenuItem(menu, SWT.PUSH);
-					// moveToItem.setText("Move to " + currentQuadrant.name());
-					//
-					// moveToItem.addListener(SWT.Selection, new Listener() {
-					// public void handleEvent(Event e) {
-					// raptorTabItem.onMoveTo(folders[currentQuadrant.ordinal()]);
-					//
-					// }
-					// });
-					// }
-					// }
-					// }
-
-					// final MenuItem imageMenuItem = new MenuItem(menu,
-					// SWT.NONE);
-					// imageMenuItem.setImage(Raptor.getInstance().getImage(
-					// Raptor.RESOURCES_DIR + "images/quadrantsSmall" +
-					// folder.quad.toString() + ".png"));
-
 					menu.setLocation(folder.toDisplay(e.x, e.y));
 					menu.setVisible(true);
 					while (!menu.isDisposed() && menu.isVisible()) {
@@ -2316,30 +2224,6 @@ public class RaptorWindow extends ApplicationWindow {
 					if (dropFolder != null && dropFolder != dragStartItem.raptorParent) {
 						// Moving between quadrants is disabled. It causes too
 						// many issues in the latest SWT.
-
-						// // Handles dragging and dropping into different
-						// folders.
-						//
-						// boolean canMove = false;
-						// for (int i = 0; i <
-						// dragStartItem.raptorItem.getMoveToQuadrants().length;
-						// i++) {
-						// if (dragStartItem.raptorItem.getMoveToQuadrants()[i]
-						// == dropFolder.quad) {
-						// canMove = true;
-						// break;
-						// }
-						// }
-						//
-						// if (canMove) {
-						// dragStartItem.onMoveTo(dropFolder);
-						// } else {
-						// Raptor.getInstance()
-						// .alert(local.getString("rapWinL60") + dropFolder.quad
-						// + local.getString("rapWinL61")
-						// +
-						// Arrays.toString(dragStartItem.raptorItem.getMoveToQuadrants()));
-						// }
 					} else if (dropFolder != null && dropFolder == dragStartItem.raptorParent) {
 						// Handles dragging and dropping within the same folder.
 

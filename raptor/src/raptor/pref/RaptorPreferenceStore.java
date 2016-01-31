@@ -655,7 +655,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 						+ "match $person 1 0 losers,match $person 2 0 losers,match $person 3 0 losers,separator,"
 						+ "match $person 1 0 suicide,match $person 2 0 suicide,match $person 3 0 suicide,separator,"
 						+ "match $person 1 0 zh,match $person 3 0 zh,match $person 5 0 zh,separator,"
-						+ "match $person 1 0 wildfr,match $person 2 0 wildfr,match $person 3 0 wildfr");
+						+ "match $person 1 0 wild fr,match $person 2 0 wild fr,match $person 3 0 wild fr");
 
 		setDefault(FICS_PERSON_LIST_COMMANDS,
 				"+censor $person,-censor $person,separator,+notify $person,-notify $person,separator,+gnotify $person,-gnotify $person,separator,+noplay $person,-noplay $person");

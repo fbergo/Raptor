@@ -135,12 +135,6 @@ public class Raptor implements PreferenceKeys {
 
 			if (L10n.noSavedLocaleFile)
 				L10n.updateLanguage(true);
-			// Runtime.getRuntime().addShutdownHook(new Thread() {
-			// @Override
-			// public void run() {
-			// getInstance().shutdown();
-			// }
-			// });
 
 			display.addListener(SWT.Close, new Listener() {
 				public void handleEvent(Event event) {
@@ -176,22 +170,6 @@ public class Raptor implements PreferenceKeys {
 							}
 						});
 			}
-
-			// ThreadService.getInstance().run(new Runnable() {
-			//
-			// @Override
-			// public void run() {
-			// if (!OSUtils.isLikelyOSX() &&
-			// !getInstance().getPreferences().getBoolean("ready-to-update")
-			// && getInstance().getPreferences().getBoolean("app-update"))
-			// CheckUpdates.checkUpdates();
-			// else if
-			// (getInstance().getPreferences().getBoolean("ready-to-update"))
-			// getInstance().getPreferences().setValue("ready-to-update",
-			// "false");
-			// }
-			//
-			// });
 
 			display.timerExec(500, new Runnable() {
 				public void run() {
@@ -675,19 +653,8 @@ public class Raptor implements PreferenceKeys {
 		preferences = new RaptorPreferenceStore();
 		install();
 
-		// Make sure all of the Singleton services get loaded.
 		ThreadService.getInstance();
-		// DictionaryService.getInstance();
-		// MemoService.getInstance();
-		// ThemeService.getInstance();
-		// UserTagService.getInstance();
-		// EcoService.getInstance();
 		ConnectorService.getInstance();
-		// SoundService.getInstance();
-		// ScriptService.getInstance();
-		// ActionScriptService.getInstance();
-		// UCIEngineService.getInstance();
-		// AliasService.getInstance();
 	}
 
 	/**
