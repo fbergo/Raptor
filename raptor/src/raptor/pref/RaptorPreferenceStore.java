@@ -580,7 +580,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(HIGHLIGHT_SHOW_ON_MOVE_LIST_MOVES, true);
 		setDefault(HIGHLIGHT_SHOW_ON_MY_PREMOVES, true);
 		setDefault(HIGHLIGHT_SHOW_ON_MY_MOVES, false);
-		setDefault(HIGHLIGHT_FADE_AWAY_MODE, false);
+		setDefault(HIGHLIGHT_FADE_AWAY_MODE, true);
 		setDefault(HIGHLIGHT_ANIMATION_DELAY, 1000L);
 		setDefault(HIGHLIGHT_WIDTH_PERCENTAGE, 3);
 
