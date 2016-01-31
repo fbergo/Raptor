@@ -255,7 +255,8 @@ public class ChatConsole extends Composite implements PreferenceKeys {
 	}
 
 	protected boolean isShowingPingTime() {
-		return getPreferences().getBoolean(PreferenceKeys.FICS_SHOW_PING_WIDGET)
+		return getPreferences() != null && getPreferences().getBoolean(PreferenceKeys.FICS_SHOW_PING_WIDGET)
+				&& getController() != null && getController().getConnector() != null
 				&& getController().getConnector().isConnected();
 	}
 }
