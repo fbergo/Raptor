@@ -169,10 +169,10 @@ public class BughouseSuggestController extends ObserveController {
 			});
 
 			item = new MenuItem(menu, SWT.PUSH);
-			item.setText("Suggest \""
+			item.setText("Suggest "
 					+ GameUtils.getPieceRepresentation(GameUtils
 							.getColoredPiece(QUEEN, color)) + "@"
-					+ GameUtils.getSan(square) + "\"");
+					+ GameUtils.getSan(square));
 			item.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
 					connector.sendMessage(connector.getPartnerTellPrefix()
