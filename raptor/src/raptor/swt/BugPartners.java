@@ -297,10 +297,7 @@ public class BugPartners extends Composite {
 	}
 
 	protected boolean passesFilterCriteria(Bugger bugger) {
-		if (StringUtils.equalsIgnoreCase(bugger.getName(), getConnector()
-				.getUserName())) {
-			return false;
-		} else if (UserTagService.getInstance().isUserInTag("No Partner",
+		if (UserTagService.getInstance().isUserInTag("No Partner",
 				bugger.getName())) {
 			return false;
 		}
