@@ -103,6 +103,10 @@
 				<include name="*.properties" />
 			</fileset>
 		</copy>
+		
+		<jar jarfile="${install.dir}/Raptor.jar" manifest="${projectFiles.dir}/Manifest.txt" basedir="${classes.dir}">
+		    <include name="**/*" />
+		</jar>
 	</target>
 
 	<target name="windows64Zip" depends="init" description="Builds the Raptor.zip for windows64.">
