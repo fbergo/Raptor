@@ -1064,26 +1064,30 @@ public abstract class IcsConnector implements Connector, MessageListener {
 		RaptorStringTokenizer tok = new RaptorStringTokenizer(preference, "`", true);
 		while (tok.hasMoreTokens()) {
 			String type = tok.nextToken();
-			String value = tok.nextToken();
-			@SuppressWarnings("unused")
-			String quadString = tok.nextToken();
+			if (tok.hasMoreTokens()) {
+				String value = tok.nextToken();
+				if (tok.hasMoreTokens()) {
+					@SuppressWarnings("unused")
+					String quadString = tok.nextToken();
 
-			if (type.equals("Channel")) {
-				if (!Raptor.getInstance().getWindow().containsChannelItem(this, value)) {
-					ChatUtils.openChannelTab(this, value, false);
+					if (type.equals("Channel")) {
+						if (!Raptor.getInstance().getWindow().containsChannelItem(this, value)) {
+							ChatUtils.openChannelTab(this, value, false);
+						}
+					} else if (type.equals("RegEx")) {
+						if (!Raptor.getInstance().getWindow().containsRegExItem(this, value)) {
+							ChatUtils.openRegularExpressionTab(this, value, false);
+						}
+					} else if (type.equals("SeekTableWindowItem")) {
+						SWTUtils.openSeekTableWindowItem(this);
+					} else if (type.equals("BugWhoWindowItem")) {
+						SWTUtils.openBugWhoWindowItem(this);
+					} else if (type.equals("BugButtonsWindowItem")) {
+						SWTUtils.openBugButtonsWindowItem(this);
+					} else if (type.equals("GamesWindowItem")) {
+						SWTUtils.openGamesWindowItem(this);
+					}
 				}
-			} else if (type.equals("RegEx")) {
-				if (!Raptor.getInstance().getWindow().containsRegExItem(this, value)) {
-					ChatUtils.openRegularExpressionTab(this, value, false);
-				}
-			} else if (type.equals("SeekTableWindowItem")) {
-				SWTUtils.openSeekTableWindowItem(this);
-			} else if (type.equals("BugWhoWindowItem")) {
-				SWTUtils.openBugWhoWindowItem(this);
-			} else if (type.equals("BugButtonsWindowItem")) {
-				SWTUtils.openBugButtonsWindowItem(this);
-			} else if (type.equals("GamesWindowItem")) {
-				SWTUtils.openGamesWindowItem(this);
 			}
 		}
 
@@ -1443,7 +1447,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 
 		ScriptService.getInstance().addScriptServiceListener(scriptServiceListener);
 		refreshChatScripts();
-		
+
 		isLoggingIn = true;
 
 		fireConnecting();
