@@ -1557,6 +1557,87 @@ public class RaptorWindow extends ApplicationWindow {
 			});
 		}
 		windowMenu.add(layoutsMenu);
+		
+		final MenuManager themesMenu = new MenuManager(local.getString("rapWinL24"));
+		windowMenu.add(themesMenu);
+		themesMenu.add(new Action(local.getString("rapWinL25")) {
+			@Override
+			public void run() {
+				String themeName = Raptor.getInstance().promptForText(local.getString("rapWinL26"));
+				if (StringUtils.isNotBlank(themeName)) {
+					final Theme newTheme = ThemeService.getInstance().saveCurrentAsTheme(themeName);
+					themesMenu.add(new Action(newTheme.getName()) {
+						@Override
+						public void run() {
+							if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
+								ThemeService.getInstance().applyTheme(newTheme);
+							}
+						}
+					});
+				}
+			}
+		});
+		themesMenu.add(new Action(local.getString("rapWinL17")) {
+			@Override
+			public void run() {
+				DirectoryDialog fd = new DirectoryDialog(getShell(), SWT.OPEN);
+				fd.setFilterPath("");
+
+				fd.setText(local.getString("rapWinL27"));
+				final String directory = fd.open();
+
+				if (!StringUtils.isBlank(directory)) {
+					final String themeName = Raptor.getInstance().promptForText(local.getString("rapWinL28"));
+					if (StringUtils.isNotBlank(themeName)) {
+						ThemeService.getInstance().exportCurrentTheme(themeName, directory);
+						Raptor.getInstance().alert("Exported " + directory + "/" + themeName + ".properties");
+
+					}
+				}
+			}
+		});
+		themesMenu.add(new Action(local.getString("rapWinL20")) {
+			@Override
+			public void run() {
+				FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
+				fd.setFilterPath("");
+
+				fd.setText(local.getString("rapWinL29"));
+				String[] filterExt = { "*.properties" };
+				fd.setFilterExtensions(filterExt);
+				final String selected = fd.open();
+
+				if (!StringUtils.isBlank(selected)) {
+					final Theme theme = ThemeService.getInstance().importTheme(selected);
+					themesMenu.add(new Action(theme.getName()) {
+						@Override
+						public void run() {
+							if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
+								ThemeService.getInstance().applyTheme(theme);
+							}
+						}
+					});
+					Raptor.getInstance().alert("Added theme " + theme.getName());
+				}
+
+			}
+		});
+
+		themesMenu.add(new Separator());
+
+		String[] themeNames = ThemeService.getInstance().getThemeNames();
+		for (String themeName : themeNames) {
+			final Theme theme = ThemeService.getInstance().getTheme(themeName);
+
+			themesMenu.add(new Action(theme.getName()) {
+				@Override
+				public void run() {
+					if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
+						ThemeService.getInstance().applyTheme(theme);
+					}
+				}
+			});
+		}
 
 		final MenuManager zoomMenu = new MenuManager(local.getString("rapWinZoomMenu"));
 		windowMenu.add(zoomMenu);
@@ -1664,87 +1745,6 @@ public class RaptorWindow extends ApplicationWindow {
 						new ChatEvent("", ChatType.INTERNAL, local.getString("rapWinZoomFactorSet") + " 325%"));
 			}
 		});
-
-		final MenuManager themesMenu = new MenuManager(local.getString("rapWinL24"));
-		windowMenu.add(themesMenu);
-		themesMenu.add(new Action(local.getString("rapWinL25")) {
-			@Override
-			public void run() {
-				String themeName = Raptor.getInstance().promptForText(local.getString("rapWinL26"));
-				if (StringUtils.isNotBlank(themeName)) {
-					final Theme newTheme = ThemeService.getInstance().saveCurrentAsTheme(themeName);
-					themesMenu.add(new Action(newTheme.getName()) {
-						@Override
-						public void run() {
-							if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
-								ThemeService.getInstance().applyTheme(newTheme);
-							}
-						}
-					});
-				}
-			}
-		});
-		themesMenu.add(new Action(local.getString("rapWinL17")) {
-			@Override
-			public void run() {
-				DirectoryDialog fd = new DirectoryDialog(getShell(), SWT.OPEN);
-				fd.setFilterPath("");
-
-				fd.setText(local.getString("rapWinL27"));
-				final String directory = fd.open();
-
-				if (!StringUtils.isBlank(directory)) {
-					final String themeName = Raptor.getInstance().promptForText(local.getString("rapWinL28"));
-					if (StringUtils.isNotBlank(themeName)) {
-						ThemeService.getInstance().exportCurrentTheme(themeName, directory);
-						Raptor.getInstance().alert("Exported " + directory + "/" + themeName + ".properties");
-
-					}
-				}
-			}
-		});
-		themesMenu.add(new Action(local.getString("rapWinL20")) {
-			@Override
-			public void run() {
-				FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
-				fd.setFilterPath("");
-
-				fd.setText(local.getString("rapWinL29"));
-				String[] filterExt = { "*.properties" };
-				fd.setFilterExtensions(filterExt);
-				final String selected = fd.open();
-
-				if (!StringUtils.isBlank(selected)) {
-					final Theme theme = ThemeService.getInstance().importTheme(selected);
-					themesMenu.add(new Action(theme.getName()) {
-						@Override
-						public void run() {
-							if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
-								ThemeService.getInstance().applyTheme(theme);
-							}
-						}
-					});
-					Raptor.getInstance().alert("Added theme " + theme.getName());
-				}
-
-			}
-		});
-
-		themesMenu.add(new Separator());
-
-		String[] themeNames = ThemeService.getInstance().getThemeNames();
-		for (String themeName : themeNames) {
-			final Theme theme = ThemeService.getInstance().getTheme(themeName);
-
-			themesMenu.add(new Action(theme.getName()) {
-				@Override
-				public void run() {
-					if (Raptor.getInstance().confirm(local.getString("rapWinL62"))) {
-						ThemeService.getInstance().applyTheme(theme);
-					}
-				}
-			});
-		}
 	}
 
 	public void buildHelpMenu(MenuManager helpMenu) {
