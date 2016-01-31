@@ -610,7 +610,7 @@ public class RaptorPreferenceStore extends PreferenceStore implements Preference
 		setDefault(CHAT_UNDERLINE_COMMANDS, true);
 		setDefault(PROCESS_SPEECH_MAX_TIME_SECONDS, 15);
 
-		setDefault(CHAT_COMMAND_LINE_SPELL_CHECK, !OSUtils.isLikelyLinux());
+		setDefault(CHAT_COMMAND_LINE_SPELL_CHECK, OSUtils.isLikelyLinux());
 
 		PreferenceConverter.setDefault(this, CHAT_INPUT_FONT,
 				new FontData[] { new FontData(defaultMonospacedFontName, defaultLargeFontSize, 0) });
