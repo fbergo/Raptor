@@ -197,6 +197,12 @@ public class BugTeams extends Composite {
 		player1Table.addColumn(local.getString("bugTeams.name"), SWT.LEFT, 50, false, null);
 		player1Table.addColumn(local.getString("bugTeams.status"), SWT.LEFT, 30, false, null);
 		player1Table.addRaptorTableListener(new RaptorTableAdapter() {
+
+			@Override
+			public void rowDoubleClicked(MouseEvent event, String[] rowData) {
+				match(rowData[1], 2, 0);
+			}
+
 			@Override
 			public void rowRightClicked(MouseEvent event, String[] rowData) {
 				Menu menu = new Menu(BugTeams.this.getShell(), SWT.POP_UP);
@@ -219,6 +225,11 @@ public class BugTeams extends Composite {
 		player2Table.addColumn(local.getString("bugTeams.name"), SWT.LEFT, 50, false, null);
 		player2Table.addColumn(local.getString("bugTeams.status"), SWT.LEFT, 30, false, null);
 		player2Table.addRaptorTableListener(new RaptorTableAdapter() {
+
+			@Override
+			public void rowDoubleClicked(MouseEvent event, String[] rowData) {
+				match(rowData[1], 2, 0);
+			}
 
 			@Override
 			public void rowRightClicked(MouseEvent event, String[] rowData) {
@@ -507,6 +518,12 @@ public class BugTeams extends Composite {
 		}
 	}
 
+	private void match(String playerName, int time, int inc) {
+
+		service.getConnector().matchBughouse(playerName, isRated.getSelection(), time, inc);
+
+	}
+
 	private int getPlayerRating(int row, boolean isPlayer1Table) {
 		String fullText = (isPlayer1Table ? player1Table : player2Table).getRowText(row)[isPlayer1Table ? 1 : 0];
 		RaptorStringTokenizer tok = new RaptorStringTokenizer(fullText, " ");
@@ -599,7 +616,8 @@ public class BugTeams extends Composite {
 					player2Table.refreshTable(player2Data);
 				}
 
-				if (autoMatch2_0 != null && connector != null && (autoMatch2_0.getSelection() && !connector.isLoggedInUserPlayingAGame())) {
+				if (autoMatch2_0 != null && connector != null
+						&& (autoMatch2_0.getSelection() && !connector.isLoggedInUserPlayingAGame())) {
 					matchAll(2, 0);
 				}
 			}
