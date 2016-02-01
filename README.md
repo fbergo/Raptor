@@ -6,6 +6,7 @@ Downloads: (Requires Java JRE 6+ 64 bit)
  * [Raptor 1.0 Mac OSX (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0/Raptor_v1.0_OS_X_Cocoa_x86_64.dmg)
  * [Raptor 1.0 Linux (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0/Raptor_v1.0_Linux_x86_64_GTK2.zip)
  * [Raptor 1.0 Windows (64 bit)] (https://github.com/Raptor-Fics-Interface/Raptor/releases/download/v1.0/Raptor_v1.0_Windows64.zip)
+ * [Change Log] (https://github.com/Raptor-Fics-Interface/Raptor/wiki/Change-Log)
 
 ## Move to github
 Raptor has recently moved from [google code](https://code.google.com/p/raptor-chess-interface/) to github.
