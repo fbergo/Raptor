@@ -13,7 +13,6 @@ Raptor has recently moved from [google code](https://code.google.com/p/raptor-ch
 If you are a former contributor please let cday know your github user id on fics and I will gladly add you to the project.
 
 ## Release 1.0 Features
-Currently I am working on release 1.0. Features include:
 * Bundled stockfish 6.
 * Makeover of Chess Analysis tab. Now shows best 5 moves.
 * Makeover of the Bughouse tabs.
