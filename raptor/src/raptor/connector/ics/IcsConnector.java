@@ -561,7 +561,7 @@ public abstract class IcsConnector implements Connector, MessageListener {
 	 * this is 'whisper '. e.g. ('whisper ')
 	 */
 	public String getGameChatTabPrefix(String gameId) {
-		return "whisper ";
+		return "xwhisper " + gameId + " ";
 	}
 
 	public String[][] getGameIdActions(String gameId) {
